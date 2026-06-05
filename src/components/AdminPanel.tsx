@@ -2571,6 +2571,49 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                     )}
                   </div>
 
+                  {/* Dinamik Reçete Maliyeti Gösterimi */}
+                  <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-900 space-y-1.5 font-sans mb-3 text-left">
+                    <div className="flex justify-between text-[11px] text-slate-400">
+                      <span>Ürün Satış Fiyatı:</span>
+                      <span className="font-bold text-white">
+                        {(recipes.find(r => r.id === selectedProductIdForRecipe)?.price || 0).toFixed(2)} TL
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-[11px] text-slate-400">
+                      <span>Hesaplanan Reçete Maliyeti:</span>
+                      <span className="font-bold text-rose-400">
+                        {(() => {
+                          let totalCost = 0;
+                          editingRecipeItems.forEach((item) => {
+                            const ing = ingredients.find((i) => i.id === item.ingredientId);
+                            if (ing) {
+                              const wasteCoeff = 1 + (Number(item.wastePercentage) || 0) / 100;
+                              totalCost += (Number(item.quantityRequired) || 0) * ing.costPerUnit * wasteCoeff;
+                            }
+                          });
+                          return totalCost;
+                        })().toFixed(2)} TL
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs font-bold text-emerald-400 border-t border-slate-900 pt-1.5">
+                      <span>Tahmini Brüt Kâr:</span>
+                      <span>
+                        {(() => {
+                          const price = recipes.find(r => r.id === selectedProductIdForRecipe)?.price || 0;
+                          let totalCost = 0;
+                          editingRecipeItems.forEach((item) => {
+                            const ing = ingredients.find((i) => i.id === item.ingredientId);
+                            if (ing) {
+                              const wasteCoeff = 1 + (Number(item.wastePercentage) || 0) / 100;
+                              totalCost += (Number(item.quantityRequired) || 0) * ing.costPerUnit * wasteCoeff;
+                            }
+                          });
+                          return (price - totalCost);
+                        })().toFixed(2)} TL
+                      </span>
+                    </div>
+                  </div>
+
                   <button
                     onClick={() => handleSaveRecipe(selectedProductIdForRecipe, editingRecipeItems)}
                     className="w-full gradient-primary hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition cursor-pointer text-center text-xs"
