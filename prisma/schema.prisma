@@ -1,0 +1,165 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  pinHash   String   // Hızlı giriş için 4 haneli PIN şifresi (Örn: "1234")
+  name      String
+  role      String   // "WAITER" (Garson) veya "ADMIN" (Yönetici)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  auditLogsActed     AuditLog[] @relation("ActorRelation")
+  auditLogsApproved  AuditLog[] @relation("ApproverRelation")
+  orders             Order[]
+  orderItems         OrderItem[] @relation("OrderItemWaiter")
+  workDays           WorkDay[]
+}
+
+model WorkDay {
+  id        String    @id @default(cuid())
+  startTime DateTime  @default(now())
+  endTime   DateTime?
+  status    String    @default("OPEN") // "OPEN" or "CLOSED"
+  
+  startedByUserId String?
+  startedByUser   User?   @relation(fields: [startedByUserId], references: [id])
+  
+  orders    Order[]
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  sortOrder Int       @default(0)
+  isActive  Boolean   @default(true)
+  products  Product[]
+}
+
+model Product {
+  id                String             @id @default(cuid())
+  categoryId        String
+  category          Category           @relation(fields: [categoryId], references: [id])
+  name              String
+  price             Float
+  isStockControlled Boolean            @default(false)
+  stockLevel        Float              @default(0.0)
+  isActive          Boolean            @default(true)
+  orderItems        OrderItem[]
+  stockTransactions StockTransaction[]
+  modifiers         Modifier[]         @relation("ProductModifiers")
+}
+
+model Table {
+  id            String   @id @default(cuid())
+  name          String   // Masa Adı (Örn: Masa 1)
+  area          String   // Bölge (Bahçe, Teras, Üst Kat, vb.)
+  status        String   // "EMPTY" (Boş), "OCCUPIED" (Dolu), "BILL_REQUESTED" (Hesap İstendi)
+  sortOrder     Int      @default(0)
+  activeOrderId String?  @unique
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String
+  balance   Float     @default(0.0) // Cari borç miktarı
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  
+  payments  Payment[]
+  orders    Order[]
+}
+
+model Modifier {
+  id        String    @id @default(cuid())
+  name      String
+  price     Float
+  isActive  Boolean   @default(true)
+  products  Product[] @relation("ProductModifiers")
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  tableId        String
+  totalAmount    Float       @default(0.0) // İndirimler sonrası net ödenecek miktar
+  discountAmount Float       @default(0.0) // Toplam uygulanan indirim
+  paidAmount     Float       @default(0.0) // Ödenen toplam tutar
+  status         String      // "ACTIVE", "PAID", "CANCELLED"
+  note           String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  customerId     String?
+  customer       Customer?   @relation(fields: [customerId], references: [id])
+  waiterUserId   String?
+  waiterUser     User?       @relation(fields: [waiterUserId], references: [id])
+  
+  workDayId      String?
+  workDay        WorkDay?    @relation(fields: [workDayId], references: [id])
+  
+  items          OrderItem[]
+  payments       Payment[]
+  auditLogs      AuditLog[]
+}
+
+model OrderItem {
+  id                 String   @id @default(cuid())
+  orderId            String
+  order              Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId          String
+  product            Product  @relation(fields: [productId], references: [id])
+  productName        String
+  unitPrice          Float
+  quantity           Int
+  note               String?  // Mutfak sipariş notu
+  status             String   @default("ACTIVE") // "ACTIVE", "COMPLIMENTARY" (İkram), "CANCELLED" (İptal), "PAID" (Ödenmiş ürün koruması)
+  cancelReason       String?
+  cancelledByUserId  String?
+  selectedModifiers  String?  // JSON string: Array<{ name: string, price: number }>
+  createdAt          DateTime @default(now())
+  
+  waiterUserId       String?
+  waiterUser         User?    @relation("OrderItemWaiter", fields: [waiterUserId], references: [id])
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount        Float
+  paymentMethod String   // "CASH", "CREDIT_CARD", "MEAL_CARD", "CARI"
+  createdAt     DateTime @default(now())
+  
+  customerId    String?
+  customer      Customer? @relation(fields: [customerId], references: [id])
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  actionType     String   // "ITEM_CANCEL", "ORDER_CANCEL", "TABLE_TRANSFER", "TABLE_MERGE", "DISCOUNT_APPLIED", "PRICE_OVERRIDE"
+  description    String
+  orderId        String?
+  order          Order?   @relation(fields: [orderId], references: [id])
+  actorUserId    String
+  actorUser      User     @relation("ActorRelation", fields: [actorUserId], references: [id])
+  approverUserId String?
+  approverUser   User?    @relation("ApproverRelation", fields: [approverUserId], references: [id])
+  createdAt      DateTime @default(now())
+}
+
+model StockTransaction {
+  id              String   @id @default(cuid())
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id])
+  quantityChanged Float
+  transactionType String   // "SALE", "MANUAL_CORRECTION", "RESTOCK"
+  createdAt       DateTime @default(now())
+}
