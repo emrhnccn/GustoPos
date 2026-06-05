@@ -74,6 +74,12 @@ interface TopProduct {
   total: number;
 }
 
+interface TopTable {
+  name: string;
+  orderCount: number;
+  totalRevenue: number;
+}
+
 interface CategorySale {
   name: string;
   value: number;
@@ -145,6 +151,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     personnelPerformance: PersonnelStat[];
     waiterSalesPerformance: WaiterSalesPerformance[];
     adisyonHistory: AdisyonHistoryItem[];
+    topTables?: TopTable[];
   } | null>(null);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   
@@ -1229,6 +1236,34 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* En Çok Tercih Edilen 5 Masa */}
+              <div className="glass-card p-5 rounded-2xl shadow-md">
+                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                  <span>En Çok Tercih Edilen 5 Masa</span>
+                </h3>
+                <div className="divide-y divide-slate-850">
+                  {(!reportsData.topTables || reportsData.topTables.length === 0) ? (
+                    <div className="text-center py-6 text-slate-500 italic">Masa kullanım verisi bulunamadı.</div>
+                  ) : (
+                    reportsData.topTables.map((t, i) => (
+                      <div key={i} className="flex justify-between items-center py-2.5 text-xs">
+                        <div className="flex items-center space-x-2.5">
+                          <span className="w-5 h-5 rounded bg-cyan-500/10 text-cyan-400 font-bold flex items-center justify-center text-[10px]">
+                            {i + 1}
+                          </span>
+                          <span className="font-semibold text-slate-200">{t.name} Masası</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{t.orderCount} Kere</span>
+                          <span className="font-bold text-slate-100">{t.totalRevenue.toFixed(2)} TL Ciro</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

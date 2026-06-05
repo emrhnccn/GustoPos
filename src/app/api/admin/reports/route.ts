@@ -272,6 +272,25 @@ export async function GET(request: Request) {
       }))
     })).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
+    // 9. En Çok Tercih Edilen Masalar (Top 5 Tables)
+    const tablePerformanceMap = new Map<string, { name: string; orderCount: number; totalRevenue: number }>();
+    paidOrders.forEach((order) => {
+      const tableName = tableMap.get(order.tableId) || 'Bilinmiyor';
+      const stats = tablePerformanceMap.get(order.tableId) || { name: tableName, orderCount: 0, totalRevenue: 0 };
+      stats.orderCount += 1;
+      stats.totalRevenue += order.paidAmount;
+      tablePerformanceMap.set(order.tableId, stats);
+    });
+
+    const topTables = Array.from(tablePerformanceMap.values())
+      .sort((a, b) => b.orderCount - a.orderCount)
+      .slice(0, 5)
+      .map(t => ({
+        name: t.name,
+        orderCount: t.orderCount,
+        totalRevenue: Math.round(t.totalRevenue * 100) / 100
+      }));
+
     return NextResponse.json({
       summary: {
         totalRevenue: Math.round(totalRevenue * 100) / 100,
@@ -297,9 +316,11 @@ export async function GET(request: Request) {
       personnelPerformance,
       waiterSalesPerformance,
       adisyonHistory,
+      topTables,
     });
-  } catch (error: any) {
-    console.error('Raporlama API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Raporlama API Hatası:', err);
     return NextResponse.json(
       { error: 'Rapor verileri hesaplanırken hata oluştu.' },
       { status: 500 }
