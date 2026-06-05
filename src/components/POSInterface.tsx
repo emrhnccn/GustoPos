@@ -22,6 +22,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
+  image?: string | null;
   categoryId: string;
   isStockControlled: boolean;
   stockLevel: number;
@@ -443,14 +444,24 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-slate-800/70 p-4 rounded-xl flex flex-col justify-between min-h-[100px] border transition cursor-pointer select-none relative group ${
+                  className={`active-press glass-card hover:bg-slate-800/70 p-4 rounded-xl flex flex-col justify-between min-h-[100px] border transition cursor-pointer select-none relative overflow-hidden group ${
                     isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-slate-800/60 hover:border-slate-700'
                   }`}
                 >
-                  <div className="font-heading font-bold text-slate-100 group-hover:text-white text-xs md:text-sm">
+                  {/* Subtle Background Image Overlay */}
+                  {product.image && (
+                    <div 
+                      className="absolute inset-0 pointer-events-none opacity-[0.06] group-hover:opacity-[0.09] transition-opacity duration-300 select-none bg-cover bg-center"
+                      style={{
+                        backgroundImage: `url(${product.image})`,
+                      }}
+                    />
+                  )}
+
+                  <div className="relative z-10 font-heading font-bold text-slate-100 group-hover:text-white text-xs md:text-sm">
                     {product.name}
                   </div>
-                  <div className="flex items-center justify-between mt-3">
+                  <div className="relative z-10 flex items-center justify-between mt-3">
                     <div className="font-heading font-extrabold text-indigo-300 group-hover:text-indigo-200 text-xs md:text-sm">
                       {product.price.toFixed(2)} TL
                     </div>

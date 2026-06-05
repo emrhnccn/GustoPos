@@ -175,6 +175,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     categoryId: string;
     isStockControlled: boolean;
     stockLevel: number;
+    image?: string;
   } | null>(null);
 
   // Modifier Yönetimi State'leri
@@ -1376,6 +1377,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                           categoryId: selectedMenuCategoryId,
                           isStockControlled: false,
                           stockLevel: 0,
+                          image: '',
                         })
                       }
                       className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-bold p-1.5 px-2 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
@@ -1406,7 +1408,18 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                         ) : (
                           productsList.map((prod: any) => (
                             <tr key={prod.id} className="hover:bg-slate-900/20 text-slate-300">
-                              <td className="p-3 font-semibold text-slate-200">{prod.name}</td>
+                              <td className="p-3 font-semibold text-slate-200">
+                                <div className="flex items-center space-x-2">
+                                  {prod.image && (
+                                    <img 
+                                      src={prod.image} 
+                                      alt={prod.name} 
+                                      className="w-7 h-7 rounded-lg object-cover border border-slate-800 shrink-0" 
+                                    />
+                                  )}
+                                  <span>{prod.name}</span>
+                                </div>
+                              </td>
                               <td className="p-3 text-right font-bold text-cyan-300">{prod.price.toFixed(2)} TL</td>
                               <td className="p-3 text-center">
                                 <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${
@@ -1429,6 +1442,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                                         categoryId: prod.categoryId,
                                         isStockControlled: prod.isStockControlled,
                                         stockLevel: prod.stockLevel,
+                                        image: prod.image || '',
                                       })
                                     }
                                     className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
@@ -2323,6 +2337,31 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ürün Görsel URL'si (Opsiyonel)</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={productModal.image || ''}
+                    onChange={(e) => setProductModal({ ...productModal, image: e.target.value })}
+                    placeholder="https://images.unsplash.com/... veya /resim.png"
+                    className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                  />
+                  {productModal.image && (
+                    <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-slate-800">
+                      <img 
+                        src={productModal.image} 
+                        alt="Önizleme" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f43f5e" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="17" x2="15" y2="12"/><line x1="9" y1="12" x2="15" y2="17"/></svg>';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center space-x-3 p-3 bg-slate-900/40 border border-slate-855 rounded-xl">

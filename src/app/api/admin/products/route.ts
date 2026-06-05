@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 // 1. Yeni Ürün Ekle
 export async function POST(request: Request) {
   try {
-    const { name, price, categoryId, isStockControlled, stockLevel } = await request.json();
+    const { name, price, categoryId, isStockControlled, stockLevel, image } = await request.json();
 
     if (!name || price === undefined || !categoryId) {
       return NextResponse.json(
@@ -18,6 +18,7 @@ export async function POST(request: Request) {
         name,
         price: parseFloat(price),
         categoryId,
+        image: image || null,
         isStockControlled: !!isStockControlled,
         stockLevel: parseFloat(stockLevel || 0),
         isActive: true,
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
 // 2. Ürün Güncelle
 export async function PUT(request: Request) {
   try {
-    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive } = await request.json();
+    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive, image } = await request.json();
 
     if (!id || !name || price === undefined || !categoryId) {
       return NextResponse.json(
@@ -52,6 +53,7 @@ export async function PUT(request: Request) {
         name,
         price: parseFloat(price),
         categoryId,
+        image: image !== undefined ? image : undefined,
         isStockControlled: !!isStockControlled,
         stockLevel: parseFloat(stockLevel || 0),
         isActive: isActive !== undefined ? !!isActive : true,

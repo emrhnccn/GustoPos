@@ -13,4 +13,8 @@ export default defineConfig({
   datasource: {
     url: env("DATABASE_URL"),
   },
+  // @ts-expect-error - seed property is supported by Prisma CLI at runtime but missing from typings in this version
+  seed: {
+    run: "node prisma/seed.js",
+  },
 });

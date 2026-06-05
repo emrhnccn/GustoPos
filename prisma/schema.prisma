@@ -49,6 +49,7 @@ model Product {
   category          Category           @relation(fields: [categoryId], references: [id])
   name              String
   price             Float
+  image             String?
   isStockControlled Boolean            @default(false)
   stockLevel        Float              @default(0.0)
   isActive          Boolean            @default(true)

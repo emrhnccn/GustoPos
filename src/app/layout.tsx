@@ -14,9 +14,25 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+import type { Viewport } from "next";
+
 export const metadata: Metadata = {
   title: "GustoPOS | Akıllı Cafe & Restoran Adisyon Sistemi",
   description: "Restoran ve kafeler için hızlı, güvenli, parçalı ödeme ve masa yönetimli yeni nesil POS sistemi.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "GustoPOS",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#0c0f17",
 };
 
 export default function RootLayout({
