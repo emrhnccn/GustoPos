@@ -24,9 +24,9 @@ export async function POST(request: Request) {
         isActive: true,
         modifiers: {
           connect: (modifierIds || []).map((id: string) => ({ id })),
-          create: (newModifiers || []).map((m: any) => ({
+          create: (newModifiers || []).map((m: { name: string; price?: number | string }) => ({
             name: m.name,
-            price: parseFloat(m.price || 0),
+            price: parseFloat(String(m.price || 0)),
             isActive: true,
           })),
         },
@@ -34,10 +34,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, product });
-  } catch (error: any) {
-    console.error('Ürün Ekleme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Ürün Ekleme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Ürün oluşturulurken hata oluştu.' },
+      { error: err.message || 'Ürün oluşturulurken hata oluştu.' },
       { status: 500 }
     );
   }
@@ -67,9 +68,9 @@ export async function PUT(request: Request) {
         isActive: isActive !== undefined ? !!isActive : true,
         modifiers: {
           set: (modifierIds || []).map((id: string) => ({ id })),
-          create: (newModifiers || []).map((m: any) => ({
+          create: (newModifiers || []).map((m: { name: string; price?: number | string }) => ({
             name: m.name,
-            price: parseFloat(m.price || 0),
+            price: parseFloat(String(m.price || 0)),
             isActive: true,
           })),
         },
@@ -77,10 +78,11 @@ export async function PUT(request: Request) {
     });
 
     return NextResponse.json({ success: true, product });
-  } catch (error: any) {
-    console.error('Ürün Güncelleme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Ürün Güncelleme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Ürün güncellenirken hata oluştu.' },
+      { error: err.message || 'Ürün güncellenirken hata oluştu.' },
       { status: 500 }
     );
   }
@@ -106,10 +108,11 @@ export async function DELETE(request: Request) {
     });
 
     return NextResponse.json({ success: true, message: 'Ürün başarıyla menüden kaldırıldı (pasifleştirildi).', product });
-  } catch (error: any) {
-    console.error('Ürün Silme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Ürün Silme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Ürün silinirken hata oluştu.' },
+      { error: err.message || 'Ürün silinirken hata oluştu.' },
       { status: 500 }
     );
   }

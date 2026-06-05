@@ -922,11 +922,14 @@ export async function requestTableBill(tableId: string) {
  * Sipariş toplam tutarını (net) ara toplamdan indirim miktarını düşerek yeniden hesaplar.
  */
 async function recalculateOrderTotal(tx: any, orderId: string): Promise<void> {
-  const activeItems = await tx.orderItem.findMany({
-    where: { orderId, status: 'ACTIVE' },
+  const chargeableItems = await tx.orderItem.findMany({
+    where: {
+      orderId,
+      status: { in: ['ACTIVE', 'PAID'] }
+    },
   });
 
-  const subtotal = activeItems.reduce(
+  const subtotal = chargeableItems.reduce(
     (sum: number, item: any) => {
       const modifiers = item.selectedModifiers ? JSON.parse(item.selectedModifiers) : [];
       const modifiersTotal = modifiers.reduce((mSum: number, m: any) => mSum + m.price, 0);

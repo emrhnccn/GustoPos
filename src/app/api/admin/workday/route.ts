@@ -92,7 +92,7 @@ export async function POST(request: Request) {
 
       // Açık adisyon kontrolü
       const activeOrdersCount = await db.order.count({
-        where: { status: 'ACTIVE' }
+        where: { status: 'ACTIVE', workDayId: existingOpen.id }
       });
 
       if (activeOrdersCount > 0) {
