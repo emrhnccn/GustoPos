@@ -1,7 +1,7 @@
 export interface UserSession {
   id: string;
   name: string;
-  role: 'WAITER' | 'ADMIN';
+  role: 'WAITER' | 'ADMIN' | 'MANAGER' | 'CASHIER';
 }
 
 export async function fetchTables() {

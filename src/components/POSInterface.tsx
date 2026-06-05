@@ -291,8 +291,8 @@ export default function POSInterface({
       }
 
       const adminUser = await authRes.json();
-      if (adminUser.role !== 'ADMIN') {
-        setAuthError('Bu işlem için YÖNETİCİ yetkisi gerekmektedir!');
+      if (adminUser.role !== 'ADMIN' && adminUser.role !== 'MANAGER') {
+        setAuthError('Bu işlem için YÖNETİCİ veya MÜDÜR yetkisi gerekmektedir!');
         return;
       }
 

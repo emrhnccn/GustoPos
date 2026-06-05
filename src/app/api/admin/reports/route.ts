@@ -291,11 +291,84 @@ export async function GET(request: Request) {
         totalRevenue: Math.round(t.totalRevenue * 100) / 100
       }));
 
+    // 10. Reçete Maliyet Analizi & Kâr Marjları (Cost & Margin Analysis)
+    const allProducts = await db.product.findMany({
+      where: { isActive: true },
+      include: {
+        recipeItems: {
+          include: {
+            ingredient: true
+          }
+        }
+      }
+    });
+
+    const productCostMap = new Map<string, number>();
+    const costAnalysis = allProducts.map((p) => {
+      let unitCost = 0;
+      p.recipeItems.forEach((ri) => {
+        const wasteCoeff = 1 + ri.wastePercentage / 100;
+        unitCost += ri.quantityRequired * ri.ingredient.costPerUnit * wasteCoeff;
+      });
+      unitCost = Math.round(unitCost * 100) / 100;
+      productCostMap.set(p.id, unitCost);
+
+      const margin = p.price - unitCost;
+      const marginPercentage = p.price > 0 ? Math.round((margin / p.price) * 100) : 0;
+
+      return {
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        cost: unitCost,
+        margin: Math.round(margin * 100) / 100,
+        marginPercentage
+      };
+    });
+
+    // Satılan Malın Maliyeti (COGS) Hesabı
+    let totalCogs = 0;
+    paidOrders.forEach((order) => {
+      order.items.forEach((item) => {
+        const unitCost = productCostMap.get(item.productId) || 0;
+        totalCogs += unitCost * item.quantity;
+      });
+    });
+    totalCogs = Math.round(totalCogs * 100) / 100;
+
+    // 11. İptal Raporu (Cancellations)
+    const cancellationLogs = await db.auditLog.findMany({
+      where: {
+        ...logWhere,
+        actionType: { in: ['ITEM_CANCEL', 'ORDER_CANCEL'] }
+      },
+      include: {
+        actorUser: { select: { name: true, role: true } },
+        approverUser: { select: { name: true, role: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    // 12. İndirim Raporu (Discounts)
+    const discountLogs = await db.auditLog.findMany({
+      where: {
+        ...logWhere,
+        actionType: 'DISCOUNT_APPLIED'
+      },
+      include: {
+        actorUser: { select: { name: true, role: true } },
+        approverUser: { select: { name: true, role: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
     return NextResponse.json({
       summary: {
         totalRevenue: Math.round(totalRevenue * 100) / 100,
         totalOrders: paidOrders.length,
         totalDiscounts: Math.round(totalDiscounts * 100) / 100,
+        totalCogs,
+        netProfit: Math.round((totalRevenue - totalCogs) * 100) / 100
       },
       paymentMethods: {
         cash: Math.round(paymentMethods.CASH * 100) / 100,
@@ -317,6 +390,9 @@ export async function GET(request: Request) {
       waiterSalesPerformance,
       adisyonHistory,
       topTables,
+      costAnalysis,
+      cancellationLogs,
+      discountLogs
     });
   } catch (error: unknown) {
     const err = error as Error;

@@ -124,8 +124,8 @@ export default function POSApplication() {
         />
       )}
 
-      {viewMode === 'ADMIN' && user && user.role === 'ADMIN' && (
-        <AdminPanel onClose={handleBackToFloorPlan} />
+      {viewMode === 'ADMIN' && user && (user.role === 'ADMIN' || user.role === 'MANAGER') && (
+        <AdminPanel user={user} onClose={handleBackToFloorPlan} />
       )}
     </main>
   );

@@ -750,6 +750,14 @@ export async function addSplitPayment(
 
     // Hesap tamamen kapandı mı? (0.01 TL hassasiyet payı ile)
     if (newRemaining <= 0.01) {
+      // Reçetedeki stokları tüketelim
+      const activeItems = await tx.orderItem.findMany({
+        where: { orderId: order.id, status: 'ACTIVE' }
+      });
+      for (const item of activeItems) {
+        await consumeRecipeIngredients(tx, item.productId, item.quantity);
+      }
+
       // Bütün active order item'ları PAID durumuna çekelim ki arşive düzgün gitsin
       await tx.orderItem.updateMany({
         where: { orderId: order.id, status: 'ACTIVE' },
@@ -817,6 +825,7 @@ export async function payPartialItems(
           where: { id: item.id },
           data: { status: 'PAID' }
         });
+        await consumeRecipeIngredients(tx, item.productId, payInfo.quantityToPay);
       } else {
         // Kısmi öde - Kalemi böl
         // 1. Mevcut kalemi azalt (ACTIVE olarak kalır)
@@ -838,6 +847,7 @@ export async function payPartialItems(
             createdAt: item.createdAt
           }
         });
+        await consumeRecipeIngredients(tx, item.productId, payInfo.quantityToPay);
       }
     }
 
@@ -955,3 +965,41 @@ async function recalculateOrderTotal(tx: any, orderId: string): Promise<void> {
     },
   });
 }
+
+/**
+ * Reçeteye bağlı malzemelerin stok seviyelerini fire oranını katarak düşürür.
+ */
+export async function consumeRecipeIngredients(tx: any, productId: string, quantity: number) {
+  // Ürünün reçete kalemlerini getir
+  const recipeItems = await tx.recipeItem.findMany({
+    where: { productId },
+    include: { ingredient: true }
+  });
+
+  for (const item of recipeItems) {
+    // Toplam gereken miktar (fire dahil)
+    // wastePercentage örn: 5.0 ise, 1 + 5/100 = 1.05 ile çarpılır
+    const totalRequired = item.quantityRequired * quantity * (1 + item.wastePercentage / 100);
+
+    // Stok düşür
+    await tx.ingredient.update({
+      where: { id: item.ingredientId },
+      data: {
+        stockLevel: {
+          decrement: totalRequired
+        }
+      }
+    });
+
+    // Stok hareket kaydı oluştur
+    await tx.ingredientTransaction.create({
+      data: {
+        ingredientId: item.ingredientId,
+        quantityChanged: -totalRequired,
+        transactionType: 'SALE_CONSUMPTION',
+        notes: `${quantity} adet ürün satışı nedeniyle reçeteden düşüldü.`
+      }
+    });
+  }
+}
+

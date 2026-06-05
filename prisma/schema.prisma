@@ -56,6 +56,7 @@ model Product {
   orderItems        OrderItem[]
   stockTransactions StockTransaction[]
   modifiers         Modifier[]         @relation("ProductModifiers")
+  recipeItems       RecipeItem[]
 }
 
 model Table {
@@ -164,3 +165,70 @@ model StockTransaction {
   transactionType String   // "SALE", "MANUAL_CORRECTION", "RESTOCK"
   createdAt       DateTime @default(now())
 }
+
+model Ingredient {
+  id                String                 @id @default(cuid())
+  name              String
+  unit              String                 // "kg", "lt", "adet", "g", "ml" vb.
+  stockLevel        Float                  @default(0.0)
+  costPerUnit       Float                  @default(0.0)
+  minStockLevel     Float                  @default(0.0)
+  isActive          Boolean                @default(true)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  
+  recipeItems       RecipeItem[]
+  stockTransactions IngredientTransaction[]
+  supplierPayments  SupplierPayment[]
+}
+
+model RecipeItem {
+  id               String     @id @default(cuid())
+  productId        String
+  product          Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ingredientId     String
+  ingredient       Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantityRequired Float      // 1 adet ürün için gerekli miktar (örn: 0.150 kg veya 1 adet)
+  wastePercentage  Float      @default(0.0) // Fire oranı yüzdesi (örn: 5% için 5.0)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  @@unique([productId, ingredientId])
+}
+
+model IngredientTransaction {
+  id              String     @id @default(cuid())
+  ingredientId    String
+  ingredient      Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantityChanged Float
+  transactionType String     // "PURCHASE", "SALE_CONSUMPTION", "WASTE_ADJUSTMENT", "MANUAL_CORRECTION"
+  cost            Float?     // Opsiyonel: Malzeme alımındaki birim maliyet
+  notes           String?
+  createdAt       DateTime   @default(now())
+}
+
+model Supplier {
+  id        String            @id @default(cuid())
+  name      String
+  phone     String?
+  balance   Float             @default(0.0) // Tedarikçiye olan borç bakiyemiz
+  isActive  Boolean           @default(true)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  
+  payments  SupplierPayment[]
+}
+
+model SupplierPayment {
+  id            String      @id @default(cuid())
+  supplierId    String
+  supplier      Supplier    @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  ingredientId  String?
+  ingredient    Ingredient? @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
+  amount        Float       // Fatura veya ödeme tutarı
+  type          String      // "INVOICE" (Alış Faturası - borç artırır), "PAYMENT" (Ödeme Yapıldı - borç azaltır)
+  paymentMethod String?     // "CASH", "CREDIT_CARD", "BANK_TRANSFER" (Sadece type PAYMENT için)
+  note          String?
+  createdAt     DateTime    @default(now())
+}
+

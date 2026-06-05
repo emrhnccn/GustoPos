@@ -48,11 +48,13 @@ import {
   saveAdminTable,
   deleteAdminTable,
   sortAdminTable,
-  fetchCustomerStatement
+  fetchCustomerStatement,
+  UserSession
 } from '@/lib/api';
 
 interface AdminPanelProps {
   onClose: () => void;
+  user: UserSession;
 }
 
 interface ReportSummary {
@@ -138,8 +140,8 @@ interface AuditLog {
   approverUser: { name: string; role: string } | null;
 }
 
-export default function AdminPanel({ onClose }: AdminPanelProps) {
-  const [activeTab, setActiveTab] = useState<'REPORTS' | 'MENU' | 'MODIFIERS' | 'TABLES' | 'CARI' | 'LOGS' | 'DAILY_OPS' | 'USERS'>('REPORTS');
+export default function AdminPanel({ onClose, user }: AdminPanelProps) {
+  const [activeTab, setActiveTab] = useState<'REPORTS' | 'MENU' | 'MODIFIERS' | 'TABLES' | 'CARI' | 'LOGS' | 'DAILY_OPS' | 'USERS' | 'INVENTORY' | 'SUPPLIERS'>('REPORTS');
   const [reportsData, setReportsData] = useState<{
     summary: ReportSummary;
     paymentMethods: PaymentMethods;
@@ -152,6 +154,9 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     waiterSalesPerformance: WaiterSalesPerformance[];
     adisyonHistory: AdisyonHistoryItem[];
     topTables?: TopTable[];
+    costAnalysis?: any[];
+    cancellationLogs?: any[];
+    discountLogs?: any[];
   } | null>(null);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   
@@ -210,6 +215,23 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     collections: any[];
   } | null>(null);
   const [cariDetailLoading, setCariDetailLoading] = useState<boolean>(false);
+
+  // Stok & Reçete (INVENTORY) State'leri
+  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [recipes, setRecipes] = useState<any[]>([]); // products with recipes
+  const [selectedProductIdForRecipe, setSelectedProductIdForRecipe] = useState<string>('');
+  const [editingRecipeItems, setEditingRecipeItems] = useState<Array<{ ingredientId: string; quantityRequired: number; wastePercentage: number }>>([]);
+  const [ingredientModal, setIngredientModal] = useState<{ id?: string; name: string; unit: string; stockLevel: number; costPerUnit: number; minStockLevel: number } | null>(null);
+  const [stockAdjustmentModal, setStockAdjustmentModal] = useState<{ id: string; name: string; unit: string; adjustmentQty: string; adjustmentNotes: string } | null>(null);
+  const [reportsSubTab, setReportsSubTab] = useState<'OVERVIEW' | 'COST' | 'CANCELLATIONS' | 'DISCOUNTS'>('OVERVIEW');
+
+  // Tedarikçi (SUPPLIERS) State'leri
+  const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [supplierPayments, setSupplierPayments] = useState<any[]>([]);
+  const [selectedSupplierIdForDetails, setSelectedSupplierIdForDetails] = useState<string>('');
+  const [supplierModal, setSupplierModal] = useState<{ id?: string; name: string; phone: string } | null>(null);
+  const [supplierInvoiceModal, setSupplierInvoiceModal] = useState<{ supplierId: string; supplierName: string; amount: string; ingredientId?: string; quantity?: string; note?: string } | null>(null);
+  const [supplierPaymentModal, setSupplierPaymentModal] = useState<{ supplierId: string; supplierName: string; amount: string; paymentMethod: 'CASH' | 'CREDIT_CARD' | 'BANK_TRANSFER'; note?: string } | null>(null);
 
   // Adisyon Detay Modalı State (Analizler altındaki liste için)
   const [selectedAdisyon, setSelectedAdisyon] = useState<AdisyonHistoryItem | null>(null);
@@ -282,6 +304,22 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
       } else if (activeTab === 'CARI') {
         const custs = await fetchCustomers();
         setCustomers(custs);
+      } else if (activeTab === 'INVENTORY') {
+        const ingRes = await fetch('/api/admin/ingredients');
+        const ingData = await ingRes.json();
+        setIngredients(ingData);
+
+        const recRes = await fetch('/api/admin/recipes');
+        const recData = await recRes.json();
+        setRecipes(recData);
+      } else if (activeTab === 'SUPPLIERS') {
+        const supRes = await fetch('/api/admin/suppliers');
+        const supData = await supRes.json();
+        setSuppliers(supData);
+
+        const payRes = await fetch('/api/admin/supplier-payments');
+        const payData = await payRes.json();
+        setSupplierPayments(payData);
       }
     } catch (err) {
       console.error('Yönetim paneli verileri yüklenemedi:', err);
@@ -293,6 +331,25 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   useEffect(() => {
     loadData();
   }, [activeTab, dateRange, viewingWorkDay]);
+
+  useEffect(() => {
+    if (selectedProductIdForRecipe) {
+      const prod = recipes.find(r => r.id === selectedProductIdForRecipe);
+      if (prod) {
+        setEditingRecipeItems(
+          (prod.recipeItems || []).map((ri: any) => ({
+            ingredientId: ri.ingredientId,
+            quantityRequired: ri.quantityRequired,
+            wastePercentage: ri.wastePercentage,
+          }))
+        );
+      } else {
+        setEditingRecipeItems([]);
+      }
+    } else {
+      setEditingRecipeItems([]);
+    }
+  }, [selectedProductIdForRecipe, recipes]);
 
   // Cari Ekstre Detaylarını Getir
   const handleViewCariDetails = async (customerId: string) => {
@@ -551,6 +608,257 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     }
   };
 
+  // Malzeme (Ingredient) Kaydetme
+  const handleSaveIngredient = async () => {
+    if (!ingredientModal || !ingredientModal.name.trim() || !ingredientModal.unit.trim()) {
+      setActionError('Malzeme adı ve birim zorunludur.');
+      return;
+    }
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/ingredients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: ingredientModal.id,
+          name: ingredientModal.name,
+          unit: ingredientModal.unit,
+          stockLevel: Number(ingredientModal.stockLevel) || 0,
+          costPerUnit: Number(ingredientModal.costPerUnit) || 0,
+          minStockLevel: Number(ingredientModal.minStockLevel) || 0,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Malzeme kaydedilemedi.');
+      }
+      setActionSuccess(ingredientModal.id ? 'Malzeme başarıyla güncellendi!' : 'Yeni malzeme başarıyla eklendi!');
+      setIngredientModal(null);
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      setActionError(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Malzeme (Ingredient) Silme
+  const handleDeleteIngredient = async (id: string, name: string) => {
+    if (!confirm(`"${name}" malzemesini silmek istediğinize emin misiniz?`)) return;
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch(`/api/admin/ingredients?id=${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Malzeme silinemedi.');
+      }
+      setActionSuccess('Malzeme başarıyla silindi.');
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Stok Düzeltme (Stock Adjustment)
+  const handleStockAdjustment = async () => {
+    if (!stockAdjustmentModal) return;
+    const qtyVal = parseFloat(stockAdjustmentModal.adjustmentQty);
+    if (isNaN(qtyVal) || qtyVal === 0) {
+      setActionError('Lütfen geçerli bir miktar girin (Sıfır olamaz).');
+      return;
+    }
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/ingredients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: stockAdjustmentModal.id,
+          isAdjustment: true,
+          adjustmentQty: qtyVal,
+          adjustmentNotes: stockAdjustmentModal.adjustmentNotes || 'Manuel stok düzeltmesi.',
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Stok düzeltilemedi.');
+      }
+      setActionSuccess('Stok seviyesi başarıyla güncellendi!');
+      setStockAdjustmentModal(null);
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      setActionError(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Reçete Kaydetme
+  const handleSaveRecipe = async (productId: string, items: Array<{ ingredientId: string; quantityRequired: number; wastePercentage: number }>) => {
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/recipes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId,
+          items,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Reçete kaydedilemedi.');
+      }
+      setActionSuccess('Ürün reçetesi başarıyla kaydedildi!');
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Reçete kaydedilirken hata oluştu.');
+    }
+  };
+
+  // Tedarikçi (Supplier) Kaydetme
+  const handleSaveSupplier = async () => {
+    if (!supplierModal || !supplierModal.name.trim()) {
+      setActionError('Tedarikçi adı zorunludur.');
+      return;
+    }
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/suppliers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: supplierModal.id,
+          name: supplierModal.name,
+          phone: supplierModal.phone,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Tedarikçi kaydedilemedi.');
+      }
+      setActionSuccess(supplierModal.id ? 'Tedarikçi güncellendi!' : 'Yeni tedarikçi başarıyla eklendi!');
+      setSupplierModal(null);
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      setActionError(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Tedarikçi (Supplier) Silme
+  const handleDeleteSupplier = async (id: string, name: string) => {
+    if (!confirm(`"${name}" tedarikçisini silmek istediğinize emin misiniz?`)) return;
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch(`/api/admin/suppliers?id=${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Tedarikçi silinemedi.');
+      }
+      setActionSuccess('Tedarikçi başarıyla silindi.');
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Tedarikçi Fatura Girişi (Invoice - borç artırır)
+  const handleSaveSupplierInvoice = async () => {
+    if (!supplierInvoiceModal || !supplierInvoiceModal.amount) {
+      setActionError('Fatura tutarı zorunludur.');
+      return;
+    }
+    const amt = parseFloat(supplierInvoiceModal.amount);
+    if (isNaN(amt) || amt <= 0) {
+      setActionError('Lütfen geçerli bir fatura tutarı girin.');
+      return;
+    }
+    let qty = undefined;
+    if (supplierInvoiceModal.ingredientId) {
+      qty = parseFloat(supplierInvoiceModal.quantity || '0');
+      if (isNaN(qty) || qty <= 0) {
+        setActionError('Malzeme alımı için geçerli bir miktar girilmelidir.');
+        return;
+      }
+    }
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/supplier-payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          supplierId: supplierInvoiceModal.supplierId,
+          amount: amt,
+          type: 'INVOICE',
+          ingredientId: supplierInvoiceModal.ingredientId || null,
+          quantity: qty,
+          note: supplierInvoiceModal.note || '',
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Fatura kaydedilemedi.');
+      }
+      setActionSuccess('Alış faturası başarıyla kaydedildi!');
+      setSupplierInvoiceModal(null);
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      setActionError(err.message || 'Hata oluştu.');
+    }
+  };
+
+  // Tedarikçi Ödeme Girişi (Payment - borç azaltır)
+  const handleSaveSupplierPayment = async () => {
+    if (!supplierPaymentModal || !supplierPaymentModal.amount) {
+      setActionError('Ödeme tutarı zorunludur.');
+      return;
+    }
+    const amt = parseFloat(supplierPaymentModal.amount);
+    if (isNaN(amt) || amt <= 0) {
+      setActionError('Lütfen geçerli bir ödeme tutarı girin.');
+      return;
+    }
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await fetch('/api/admin/supplier-payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          supplierId: supplierPaymentModal.supplierId,
+          amount: amt,
+          type: 'PAYMENT',
+          paymentMethod: supplierPaymentModal.paymentMethod,
+          note: supplierPaymentModal.note || '',
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Ödeme kaydedilemedi.');
+      }
+      setActionSuccess('Tedarikçi ödemesi başarıyla kaydedildi!');
+      setSupplierPaymentModal(null);
+      await loadData();
+      setTimeout(() => setActionSuccess(''), 3000);
+    } catch (err: any) {
+      setActionError(err.message || 'Hata oluştu.');
+    }
+  };
+
   const maxHourRevenue = reportsData
     ? Math.max(...reportsData.hourlySales.map(h => h.total), 1)
     : 1;
@@ -643,24 +951,48 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
           </button>
 
           <button
-            onClick={() => setActiveTab('USERS')}
+            onClick={() => setActiveTab('INVENTORY')}
             className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'INVENTORY' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Users className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Personel Yönetimi</span>
+            <Package className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Stok & Reçete</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('LOGS')}
+            onClick={() => setActiveTab('SUPPLIERS')}
             className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'SUPPLIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <History className="w-3.5 h-3.5" />
-            <span>Log Defteri</span>
+            <DollarSign className="w-3.5 h-3.5 text-rose-400" />
+            <span>Tedarikçi & Ödeme</span>
           </button>
+
+          {user.role === 'ADMIN' && (
+            <>
+              <button
+                onClick={() => setActiveTab('USERS')}
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Users className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Personel Yönetimi</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('LOGS')}
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
+                  activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <History className="w-3.5 h-3.5" />
+                <span>Log Defteri</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -692,14 +1024,52 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                   setViewingWorkDay(null);
                   setDateRange({ startDate: '', endDate: '' });
                 }}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold transition shadow-md"
+                className="bg-indigo-650 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold transition shadow-md"
               >
                 Aktif Güne Geri Dön
               </button>
             </div>
           )}
 
-          {/* Tarih Filtresi */}
+          {/* Rapor Alt Sekme Seçiciler */}
+          <div className="flex bg-slate-950/40 border border-slate-850 p-1 rounded-xl w-fit space-x-1">
+            <button
+              onClick={() => setReportsSubTab('OVERVIEW')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                reportsSubTab === 'OVERVIEW' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Genel Raporlar
+            </button>
+            <button
+              onClick={() => setReportsSubTab('COST')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                reportsSubTab === 'COST' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Maliyet Analizi
+            </button>
+            <button
+              onClick={() => setReportsSubTab('CANCELLATIONS')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                reportsSubTab === 'CANCELLATIONS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              İptal Raporu
+            </button>
+            <button
+              onClick={() => setReportsSubTab('DISCOUNTS')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
+                reportsSubTab === 'DISCOUNTS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              İndirim Raporu
+            </button>
+          </div>
+
+          {reportsSubTab === 'OVERVIEW' && (
+            <>
+              {/* Tarih Filtresi */}
           <div className="glass-card p-4 rounded-2xl shadow-md flex items-end space-x-4">
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-1">Başlangıç Tarihi</label>
@@ -728,45 +1098,64 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
           </div>
 
           {/* Z Raporu Özeti */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="glass-card p-5 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-emerald-500">
-              <div className="absolute right-4 top-4 text-emerald-500 bg-emerald-500/10 p-2.5 rounded-xl">
-                <TrendingUp className="w-6 h-6" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-emerald-500">
+              <div className="absolute right-3 top-3 text-emerald-500 bg-emerald-500/10 p-2 rounded-xl">
+                <TrendingUp className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
-              <h2 className="text-2xl font-heading font-black text-white mt-2">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
                 {reportsData.summary.totalRevenue.toFixed(2)} TL
               </h2>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-indigo-500">
-              <div className="absolute right-4 top-4 text-indigo-500 bg-indigo-500/10 p-2.5 rounded-xl">
-                <ShoppingBag className="w-6 h-6" />
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-indigo-500">
+              <div className="absolute right-3 top-3 text-indigo-500 bg-indigo-500/10 p-2 rounded-xl">
+                <ShoppingBag className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
-              <h2 className="text-2xl font-heading font-black text-white mt-2">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
                 {reportsData.summary.totalOrders} adet
               </h2>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-amber-500">
-              <div className="absolute right-4 top-4 text-amber-500 bg-amber-500/10 p-2.5 rounded-xl">
-                <Percent className="w-6 h-6" />
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-amber-500">
+              <div className="absolute right-3 top-3 text-amber-500 bg-amber-500/10 p-2 rounded-xl">
+                <Percent className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
-              <h2 className="text-2xl font-heading font-black text-white mt-2">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
                 {reportsData.summary.totalDiscounts.toFixed(2)} TL
               </h2>
             </div>
 
-            {/* Veresiye Cari Satış Toplamı */}
-            <div className="glass-card p-5 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-cyan-500">
-              <div className="absolute right-4 top-4 text-cyan-500 bg-cyan-500/10 p-2.5 rounded-xl">
-                <UserCheck className="w-6 h-6" />
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-cyan-500">
+              <div className="absolute right-3 top-3 text-cyan-500 bg-cyan-500/10 p-2 rounded-xl">
+                <UserCheck className="w-5 h-5" />
               </div>
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Cari (Veresiye) Satış</p>
-              <h2 className="text-2xl font-heading font-black text-white mt-2">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Cari Satış</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
                 {(reportsData.paymentMethods.cari || 0).toFixed(2)} TL
+              </h2>
+            </div>
+
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-rose-500">
+              <div className="absolute right-3 top-3 text-rose-500 bg-rose-500/10 p-2 rounded-xl">
+                <DollarSign className="w-5 h-5" />
+              </div>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Ürün Maliyeti (COGS)</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
+                {((reportsData.summary as any).totalCogs || 0).toFixed(2)} TL
+              </h2>
+            </div>
+
+            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-purple-500">
+              <div className="absolute right-3 top-3 text-purple-500 bg-purple-500/10 p-2 rounded-xl">
+                <Star className="w-5 h-5" />
+              </div>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Kâr</p>
+              <h2 className="text-xl font-heading font-black text-white mt-2">
+                {((reportsData.summary as any).netProfit || 0).toFixed(2)} TL
               </h2>
             </div>
           </div>
@@ -1362,6 +1751,156 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
               </table>
             </div>
           </div>
+            </>
+          )}
+
+          {reportsSubTab === 'COST' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
+                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                  <TrendingUp className="w-4 h-4 text-cyan-400" />
+                  <span>Ürün Reçete Maliyet & Marj Analizi</span>
+                </h3>
+                <div className="overflow-x-auto scrollbar-thin">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                        <th className="p-3">Ürün Adı</th>
+                        <th className="p-3 text-right">Satış Fiyatı</th>
+                        <th className="p-3 text-right">Reçete Maliyeti</th>
+                        <th className="p-3 text-right">Birim Kâr</th>
+                        <th className="p-3 text-center">Kâr Marjı (%)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-850">
+                      {(!reportsData.costAnalysis || reportsData.costAnalysis.length === 0) ? (
+                        <tr>
+                          <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                            Ürün reçete verisi bulunmamaktadır. Reçete sekmesinden ürünlere reçete bağlayın.
+                          </td>
+                        </tr>
+                      ) : (
+                        reportsData.costAnalysis.map((c: any) => {
+                          const isLowMargin = c.marginPercentage < 25;
+                          const isHighMargin = c.marginPercentage >= 50;
+                          return (
+                            <tr key={c.id} className="hover:bg-slate-900/20 transition text-slate-300">
+                              <td className="p-3 font-semibold text-slate-200">{c.name}</td>
+                              <td className="p-3 text-right font-bold text-slate-100">{c.price.toFixed(2)} TL</td>
+                              <td className="p-3 text-right font-bold text-rose-300">{c.cost.toFixed(2)} TL</td>
+                              <td className="p-3 text-right font-bold text-emerald-400">{c.margin.toFixed(2)} TL</td>
+                              <td className="p-3 text-center">
+                                <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                                  isHighMargin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                  isLowMargin ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                                  'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                }`}>
+                                  {c.marginPercentage}%
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {reportsSubTab === 'CANCELLATIONS' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
+                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-400" />
+                  <span>Sipariş / Ürün İptal Günlüğü (Audited)</span>
+                </h3>
+                <div className="overflow-x-auto scrollbar-thin">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                        <th className="p-3">Zaman</th>
+                        <th className="p-3">İşlem Tipi</th>
+                        <th className="p-3">Talep Eden (Garson)</th>
+                        <th className="p-3">Onaylayan (Müdür)</th>
+                        <th className="p-3">Detaylar / İptal Nedeni</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-850">
+                      {(!reportsData.cancellationLogs || reportsData.cancellationLogs.length === 0) ? (
+                        <tr>
+                          <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                            İptal kaydı bulunmamaktadır.
+                          </td>
+                        </tr>
+                      ) : (
+                        reportsData.cancellationLogs.map((log: any) => (
+                          <tr key={log.id} className="hover:bg-slate-900/20 transition text-slate-300">
+                            <td className="p-3 font-mono text-slate-500">
+                              {new Date(log.createdAt).toLocaleString('tr-TR')}
+                            </td>
+                            <td className="p-3">
+                              <span className="bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold px-2 py-0.5 rounded text-[9px]">
+                                {log.actionType}
+                              </span>
+                            </td>
+                            <td className="p-3 font-medium text-slate-200">{log.actorUser.name}</td>
+                            <td className="p-3 text-emerald-400 font-semibold">{log.approverUser?.name || '-'}</td>
+                            <td className="p-3 font-medium text-slate-300">{log.description}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {reportsSubTab === 'DISCOUNTS' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
+                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                  <Percent className="w-4 h-4 text-amber-400" />
+                  <span>Uygulanan İndirimler Günlüğü</span>
+                </h3>
+                <div className="overflow-x-auto scrollbar-thin">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                        <th className="p-3">Zaman</th>
+                        <th className="p-3">Uygulayan</th>
+                        <th className="p-3">Onaylayan</th>
+                        <th className="p-3">Detaylar / Tutar</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-850">
+                      {(!reportsData.discountLogs || reportsData.discountLogs.length === 0) ? (
+                        <tr>
+                          <td colSpan={4} className="p-6 text-center text-slate-500 italic">
+                            İndirim kaydı bulunmamaktadır.
+                          </td>
+                        </tr>
+                      ) : (
+                        reportsData.discountLogs.map((log: any) => (
+                          <tr key={log.id} className="hover:bg-slate-900/20 transition text-slate-300">
+                            <td className="p-3 font-mono text-slate-500">
+                              {new Date(log.createdAt).toLocaleString('tr-TR')}
+                            </td>
+                            <td className="p-3 font-medium text-slate-200">{log.actorUser.name}</td>
+                            <td className="p-3 text-emerald-400 font-semibold">{log.approverUser?.name || '-'}</td>
+                            <td className="p-3 font-medium text-slate-300">{log.description}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       ) : activeTab === 'LOGS' ? (
         /* Garson Log Defteri */
@@ -1838,6 +2377,352 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      ) : activeTab === 'INVENTORY' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-xs font-sans">
+          {/* Malzeme Tanımları ve Stok Seviyeleri */}
+          <div className="lg:col-span-2 glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+              <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
+                <Package className="w-4 h-4 text-cyan-400" />
+                <span>Stok Malzemeleri Seviyeleri</span>
+              </h3>
+              <button
+                onClick={() => setIngredientModal({ name: '', unit: 'kg', stockLevel: 0, costPerUnit: 0, minStockLevel: 0 })}
+                className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Malzeme Ekle</span>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-x-auto scrollbar-thin">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                    <th className="p-3">Malzeme Adı</th>
+                    <th className="p-3">Birim</th>
+                    <th className="p-3 text-right">Birim Maliyeti</th>
+                    <th className="p-3 text-center">Mevcut Stok</th>
+                    <th className="p-3 text-center">Min. Stok Uyarısı</th>
+                    <th className="p-3 text-center">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-850">
+                  {ingredients.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-6 text-center text-slate-500 italic">
+                        Kayıtlı stok malzemesi bulunmuyor. Yeni malzeme ekleyin.
+                      </td>
+                    </tr>
+                  ) : (
+                    ingredients.map((ing) => {
+                      const isLowStock = ing.stockLevel <= ing.minStockLevel;
+                      return (
+                        <tr key={ing.id} className="hover:bg-slate-900/20 text-slate-300">
+                          <td className="p-3 font-semibold text-slate-200">{ing.name}</td>
+                          <td className="p-3 text-slate-400">{ing.unit}</td>
+                          <td className="p-3 text-right font-bold text-rose-300">{ing.costPerUnit.toFixed(2)} TL</td>
+                          <td className={`p-3 text-center font-extrabold ${isLowStock ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
+                            {ing.stockLevel.toFixed(3)}
+                          </td>
+                          <td className="p-3 text-center font-semibold text-slate-400">{ing.minStockLevel.toFixed(3)}</td>
+                          <td className="p-3 text-center">
+                            <div className="flex items-center justify-center space-x-2">
+                              <button
+                                onClick={() => setStockAdjustmentModal({ id: ing.id, name: ing.name, unit: ing.unit, adjustmentQty: '', adjustmentNotes: '' })}
+                                className="bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold py-1 px-2 rounded text-[10px]"
+                                title="Stok Seviyesi Düzelt"
+                              >
+                                Düzelt
+                              </button>
+                              <button
+                                onClick={() => setIngredientModal({ id: ing.id, name: ing.name, unit: ing.unit, stockLevel: ing.stockLevel, costPerUnit: ing.costPerUnit, minStockLevel: ing.minStockLevel })}
+                                className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteIngredient(ing.id, ing.name)}
+                                className="hover:bg-rose-500/20 p-1 text-rose-400 rounded transition"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Ürün Reçete Eşleştirme */}
+          <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+              <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
+                <Layers className="w-4 h-4 text-indigo-400" />
+                <span>Ürün Reçete Eşleştirme</span>
+              </h3>
+            </div>
+
+            <div className="space-y-4 flex-1 flex flex-col">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Eşleştirilecek Ürün Seçin:</label>
+                <select
+                  value={selectedProductIdForRecipe}
+                  onChange={(e) => setSelectedProductIdForRecipe(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                >
+                  <option value="">-- Ürün Seçin --</option>
+                  {recipes.map((prod) => (
+                    <option key={prod.id} value={prod.id}>
+                      {prod.name} ({prod.category?.name || ''})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedProductIdForRecipe ? (
+                <div className="flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-3 flex-1 overflow-y-auto max-h-[300px] scrollbar-thin pr-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] text-slate-400">Reçete Kalemleri:</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (ingredients.length === 0) return;
+                          setEditingRecipeItems([...editingRecipeItems, { ingredientId: ingredients[0].id, quantityRequired: 0, wastePercentage: 0 }]);
+                        }}
+                        className="text-indigo-400 hover:text-indigo-300 font-bold text-[10px] flex items-center space-x-0.5"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Satır Ekle</span>
+                      </button>
+                    </div>
+
+                    {editingRecipeItems.length === 0 ? (
+                      <div className="text-center py-6 text-slate-500 italic bg-slate-900/30 rounded-xl">Reçete tanımlanmamış. Satır ekleyip kaydedin.</div>
+                    ) : (
+                      editingRecipeItems.map((item, idx) => (
+                        <div key={idx} className="bg-slate-950 border border-slate-900 p-2.5 rounded-xl space-y-2 relative">
+                          <button
+                            type="button"
+                            onClick={() => setEditingRecipeItems(editingRecipeItems.filter((_, i) => i !== idx))}
+                            className="absolute top-1 right-2 text-rose-400 hover:text-rose-300 font-extrabold text-[12px]"
+                          >
+                            ×
+                          </button>
+                          
+                          <div className="grid grid-cols-1 gap-2">
+                            <div>
+                              <label className="block text-[9px] text-slate-500 mb-0.5">Malzeme</label>
+                              <select
+                                value={item.ingredientId}
+                                onChange={(e) => {
+                                  const list = [...editingRecipeItems];
+                                  list[idx].ingredientId = e.target.value;
+                                  setEditingRecipeItems(list);
+                                }}
+                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                              >
+                                {ingredients.map(ing => (
+                                  <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="block text-[9px] text-slate-500 mb-0.5">Gerekli Mik. ({ingredients.find(i => i.id === item.ingredientId)?.unit || ''})</label>
+                                <input
+                                  type="number"
+                                  step="0.0001"
+                                  value={item.quantityRequired === 0 ? '' : item.quantityRequired}
+                                  onChange={(e) => {
+                                    const list = [...editingRecipeItems];
+                                    list[idx].quantityRequired = parseFloat(e.target.value) || 0;
+                                    setEditingRecipeItems(list);
+                                  }}
+                                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] text-slate-500 mb-0.5">Fire (%)</label>
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  value={item.wastePercentage === 0 ? '' : item.wastePercentage}
+                                  onChange={(e) => {
+                                    const list = [...editingRecipeItems];
+                                    list[idx].wastePercentage = parseFloat(e.target.value) || 0;
+                                    setEditingRecipeItems(list);
+                                  }}
+                                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => handleSaveRecipe(selectedProductIdForRecipe, editingRecipeItems)}
+                    className="w-full gradient-primary hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition cursor-pointer text-center text-xs"
+                  >
+                    Reçeteyi Kaydet
+                  </button>
+                </div>
+              ) : (
+                <div className="flex-1 flex items-center justify-center border border-dashed border-slate-850 rounded-2xl p-6 text-slate-500 italic text-center">
+                  Reçetesini düzenlemek istediğiniz ürünü yukarıdaki listeden seçin.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : activeTab === 'SUPPLIERS' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-xs font-sans">
+          {/* Tedarikçi Listesi ve Borç Bakiyeleri */}
+          <div className="lg:col-span-2 glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+              <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
+                <Users className="w-4 h-4 text-rose-400" />
+                <span>Tedarikçi Cari Bakiyeleri</span>
+              </h3>
+              <button
+                onClick={() => setSupplierModal({ name: '', phone: '' })}
+                className="bg-indigo-650 hover:bg-indigo-550 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Tedarikçi Ekle</span>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-x-auto scrollbar-thin">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                    <th className="p-3">Tedarikçi Adı</th>
+                    <th className="p-3">Telefon</th>
+                    <th className="p-3 text-right">Borç Bakiyemiz</th>
+                    <th className="p-3 text-center">İşlem Yap</th>
+                    <th className="p-3 text-center">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-850">
+                  {suppliers.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                        Kayıtlı tedarikçi bulunmuyor. Yeni tedarikçi ekleyin.
+                      </td>
+                    </tr>
+                  ) : (
+                    suppliers.map((sup) => (
+                      <tr key={sup.id} className={`hover:bg-slate-900/20 text-slate-300 transition ${selectedSupplierIdForDetails === sup.id ? 'bg-slate-900/40' : ''}`} onClick={() => setSelectedSupplierIdForDetails(sup.id)}>
+                        <td className="p-3 font-semibold text-slate-200 cursor-pointer">{sup.name}</td>
+                        <td className="p-3 text-slate-400 font-mono">{sup.phone || '-'}</td>
+                        <td className="p-3 text-right font-extrabold text-rose-400">{sup.balance.toFixed(2)} TL</td>
+                        <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-center space-x-2">
+                            <button
+                              onClick={() => setSupplierInvoiceModal({ supplierId: sup.id, supplierName: sup.name, amount: '', ingredientId: '', quantity: '', note: '' })}
+                              className="bg-indigo-600/30 hover:bg-indigo-650 text-indigo-300 font-bold py-1 px-2 rounded-lg text-[9px] transition"
+                            >
+                              + Fatura Girişi
+                            </button>
+                            <button
+                              onClick={() => setSupplierPaymentModal({ supplierId: sup.id, supplierName: sup.name, amount: '', paymentMethod: 'CASH', note: '' })}
+                              className="bg-emerald-600/30 hover:bg-emerald-650 text-emerald-300 font-bold py-1 px-2 rounded-lg text-[9px] transition"
+                            >
+                              $ Ödeme Yap
+                            </button>
+                          </div>
+                        </td>
+                        <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-center space-x-2">
+                            <button
+                              onClick={() => setSupplierModal({ id: sup.id, name: sup.name, phone: sup.phone || '' })}
+                              className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteSupplier(sup.id, sup.name)}
+                              className="hover:bg-rose-500/20 p-1 text-rose-400 rounded transition"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Tedarikçi Ekstresi / Geçmiş İşlemler */}
+          <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+              <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
+                <DollarSign className="w-4 h-4 text-emerald-400" />
+                <span>Tedarikçi Cari Ekstresi</span>
+              </h3>
+            </div>
+
+            <div className="space-y-4 flex-1 flex flex-col">
+              {selectedSupplierIdForDetails ? (
+                <div className="flex-1 flex flex-col justify-between space-y-4">
+                  <div className="text-xs font-bold text-slate-300">
+                    {suppliers.find(s => s.id === selectedSupplierIdForDetails)?.name || ''} - Cari Hesap Hareketleri:
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto max-h-[300px] scrollbar-thin pr-1 space-y-2">
+                    {supplierPayments.filter(sp => sp.supplierId === selectedSupplierIdForDetails).length === 0 ? (
+                      <div className="text-center py-8 text-slate-500 italic bg-slate-900/30 rounded-xl">Cari hareket bulunmuyor.</div>
+                    ) : (
+                      supplierPayments
+                        .filter(sp => sp.supplierId === selectedSupplierIdForDetails)
+                        .map((sp) => {
+                          const isInvoice = sp.type === 'INVOICE';
+                          return (
+                            <div key={sp.id} className="bg-slate-950/40 border border-slate-900 p-2.5 rounded-xl space-y-1 relative">
+                              <div className="flex justify-between text-[9px] text-slate-500">
+                                <span>{new Date(sp.createdAt).toLocaleString('tr-TR')}</span>
+                                <span className={isInvoice ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
+                                  {isInvoice ? 'Alış Faturası' : 'Yapılan Ödeme'}
+                                </span>
+                              </div>
+                              <div className="flex justify-between text-xs font-bold">
+                                <span className="text-slate-300">{sp.note || (isInvoice ? 'Malzeme Alımı' : 'Cari Ödeme')}</span>
+                                <span className={isInvoice ? 'text-rose-400' : 'text-emerald-400'}>
+                                  {isInvoice ? '+' : '-'}{sp.amount.toFixed(2)} TL
+                                </span>
+                              </div>
+                              {sp.ingredient && (
+                                <div className="text-[9px] text-slate-400 mt-1">
+                                  Alınan: {sp.ingredient.name}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex-1 flex items-center justify-center border border-dashed border-slate-850 rounded-2xl p-6 text-slate-500 italic text-center">
+                  Cari hareketlerini izlemek istediğiniz tedarikçinin satırına tıklayın.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : null}
@@ -2889,13 +3774,23 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                   </button>
                 </div>
                 <div className="flex items-center space-x-3 mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${u.role === 'ADMIN' ? 'bg-rose-500' : 'bg-indigo-500'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                    u.role === 'ADMIN' ? 'bg-rose-500' : u.role === 'MANAGER' ? 'bg-amber-500' : u.role === 'CASHIER' ? 'bg-emerald-500' : 'bg-indigo-500'
+                  }`}>
                     {u.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-200">{u.name}</h4>
-                    <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' : 'bg-indigo-500/10 text-indigo-400'}`}>
-                      {u.role === 'ADMIN' ? 'Yönetici' : 'Garson'}
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
+                      u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' : 
+                      u.role === 'MANAGER' ? 'bg-amber-500/10 text-amber-400' : 
+                      u.role === 'CASHIER' ? 'bg-emerald-500/10 text-emerald-400' : 
+                      'bg-indigo-500/10 text-indigo-400'
+                    }`}>
+                      {u.role === 'ADMIN' ? 'Yönetici (Admin)' : 
+                       u.role === 'MANAGER' ? 'Müdür (Manager)' : 
+                       u.role === 'CASHIER' ? 'Kasiyer' : 
+                       'Garson'}
                     </span>
                   </div>
                 </div>
@@ -2953,6 +3848,8 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                   className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
                 >
                   <option value="WAITER">Garson</option>
+                  <option value="CASHIER">Kasiyer</option>
+                  <option value="MANAGER">Müdür (Manager)</option>
                   <option value="ADMIN">Yönetici (Admin)</option>
                 </select>
               </div>
@@ -2999,6 +3896,399 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                     }
                   }}
                   className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* INGREDIENT MODAL */}
+      {ingredientModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
+              <Package className="w-5 h-5 text-indigo-400" />
+              <span>{ingredientModal.id ? 'Malzemeyi Düzenle' : 'Yeni Malzeme Ekle'}</span>
+            </h3>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Malzeme Adı</label>
+                <input
+                  type="text"
+                  value={ingredientModal.name}
+                  onChange={(e) => setIngredientModal({ ...ingredientModal, name: e.target.value })}
+                  placeholder="Örn: Süt, Kahve Çekirdeği, Un"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Birim (Örn: kg, lt, adet)</label>
+                <input
+                  type="text"
+                  value={ingredientModal.unit}
+                  onChange={(e) => setIngredientModal({ ...ingredientModal, unit: e.target.value })}
+                  placeholder="Örn: kg, lt, adet"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {!ingredientModal.id && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Başlangıç Stok Miktarı</label>
+                  <input
+                    type="number"
+                    value={ingredientModal.stockLevel === 0 ? '' : ingredientModal.stockLevel}
+                    onChange={(e) => setIngredientModal({ ...ingredientModal, stockLevel: parseFloat(e.target.value) || 0 })}
+                    placeholder="0.00"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Birim Maliyeti (TL)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={ingredientModal.costPerUnit === 0 ? '' : ingredientModal.costPerUnit}
+                  onChange={(e) => setIngredientModal({ ...ingredientModal, costPerUnit: parseFloat(e.target.value) || 0 })}
+                  placeholder="0.00 TL"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Minimum Stok Uyarısı Limiti</label>
+                <input
+                  type="number"
+                  value={ingredientModal.minStockLevel === 0 ? '' : ingredientModal.minStockLevel}
+                  onChange={(e) => setIngredientModal({ ...ingredientModal, minStockLevel: parseFloat(e.target.value) || 0 })}
+                  placeholder="0.00"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setIngredientModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handleSaveIngredient}
+                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STOCK ADJUSTMENT MODAL */}
+      {stockAdjustmentModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
+              <Package className="w-5 h-5 text-cyan-400" />
+              <span>Stok Seviyesi Düzelt</span>
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-4">
+              <strong>{stockAdjustmentModal.name}</strong> malzemesinin stok seviyesini artı veya eksi yönde değiştirin.
+            </p>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                  Miktar Değişimi ({stockAdjustmentModal.unit})
+                </label>
+                <input
+                  type="number"
+                  step="0.001"
+                  value={stockAdjustmentModal.adjustmentQty}
+                  onChange={(e) => setStockAdjustmentModal({ ...stockAdjustmentModal, adjustmentQty: e.target.value })}
+                  placeholder="Örn: +5 veya -2.5"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Açıklama / Not</label>
+                <input
+                  type="text"
+                  value={stockAdjustmentModal.adjustmentNotes}
+                  onChange={(e) => setStockAdjustmentModal({ ...stockAdjustmentModal, adjustmentNotes: e.target.value })}
+                  placeholder="Örn: Fire tespiti, Sayım eksiği"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setStockAdjustmentModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handleStockAdjustment}
+                  className="flex-1 bg-cyan-650 hover:bg-cyan-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUPPLIER MODAL */}
+      {supplierModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
+              <Users className="w-5 h-5 text-indigo-400" />
+              <span>{supplierModal.id ? 'Tedarikçi Bilgilerini Düzenle' : 'Yeni Tedarikçi Ekle'}</span>
+            </h3>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Tedarikçi Adı / Ünvanı</label>
+                <input
+                  type="text"
+                  value={supplierModal.name}
+                  onChange={(e) => setSupplierModal({ ...supplierModal, name: e.target.value })}
+                  placeholder="Örn: Öz Karadeniz Gıda, Metro Toptancı"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Telefon (Opsiyonel)</label>
+                <input
+                  type="text"
+                  value={supplierModal.phone}
+                  onChange={(e) => setSupplierModal({ ...supplierModal, phone: e.target.value })}
+                  placeholder="Örn: 0212 555 4433"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setSupplierModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handleSaveSupplier}
+                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUPPLIER INVOICE MODAL */}
+      {supplierInvoiceModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
+              <Plus className="w-5 h-5 text-indigo-400" />
+              <span>Yeni Fatura / Borç Girişi</span>
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-4">
+              <strong>{supplierInvoiceModal.supplierName}</strong> tedarikçisine olan borç bakiyemizi artırır.
+            </p>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Fatura / Alış Tutarı (TL)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={supplierInvoiceModal.amount}
+                  onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, amount: e.target.value })}
+                  placeholder="0.00"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Malzeme Alımıyla İlişkilendir (Opsiyonel)</label>
+                <select
+                  value={supplierInvoiceModal.ingredientId || ''}
+                  onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, ingredientId: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                >
+                  <option value="">-- Malzeme Seçin --</option>
+                  {ingredients.map(ing => (
+                    <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
+                  ))}
+                </select>
+              </div>
+
+              {supplierInvoiceModal.ingredientId && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                    Satın Alınan Miktar ({ingredients.find(i => i.id === supplierInvoiceModal.ingredientId)?.unit || ''})
+                  </label>
+                  <input
+                    type="number"
+                    step="0.001"
+                    value={supplierInvoiceModal.quantity || ''}
+                    onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, quantity: e.target.value })}
+                    placeholder="0.00"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Fatura Notu / Açıklama</label>
+                <input
+                  type="text"
+                  value={supplierInvoiceModal.note || ''}
+                  onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, note: e.target.value })}
+                  placeholder="Örn: Haftalık süt tedariği"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setSupplierInvoiceModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handleSaveSupplierInvoice}
+                  className="flex-1 bg-indigo-650 hover:bg-indigo-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUPPLIER PAYMENT MODAL */}
+      {supplierPaymentModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
+              <DollarSign className="w-5 h-5 text-emerald-400" />
+              <span>Tedarikçi Cari Borç Ödemesi</span>
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-4">
+              <strong>{supplierPaymentModal.supplierName}</strong> firmasına yapılan ödemeyi kaydeder, borcumuzu düşürür.
+            </p>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ödenen Tutar (TL)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={supplierPaymentModal.amount}
+                  onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, amount: e.target.value })}
+                  placeholder="0.00"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ödeme Yöntemi</label>
+                <select
+                  value={supplierPaymentModal.paymentMethod}
+                  onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, paymentMethod: e.target.value as any })}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                >
+                  <option value="CASH">Nakit</option>
+                  <option value="CREDIT_CARD">Kredi Kartı</option>
+                  <option value="BANK_TRANSFER">Banka Havalesi / EFT</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Açıklama / Not</label>
+                <input
+                  type="text"
+                  value={supplierPaymentModal.note || ''}
+                  onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, note: e.target.value })}
+                  placeholder="Örn: Garanti Bankasından havale yapıldı"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                />
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setSupplierPaymentModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handleSaveSupplierPayment}
+                  className="flex-1 bg-emerald-650 hover:bg-emerald-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>

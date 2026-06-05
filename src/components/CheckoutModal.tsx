@@ -99,6 +99,11 @@ export default function CheckoutModal({
   // Yazdırma Önizleme Modalı State
   const [showReceipt, setShowReceipt] = useState<boolean>(false);
 
+  // Garson ödeme kısıtlama onayı state'leri
+  const [paymentAuthModalOpen, setPaymentAuthModalOpen] = useState<boolean>(false);
+  const [paymentAuthPin, setPaymentAuthPin] = useState<string>('');
+  const [paymentAuthError, setPaymentAuthError] = useState<string>('');
+
   // Cari müşterileri yükle
   useEffect(() => {
     async function loadCustomers() {
@@ -193,7 +198,14 @@ export default function CheckoutModal({
   };
 
   // Ödeme İşlemini Kaydet
-  const handlePaymentSubmit = async () => {
+  const handlePaymentSubmit = async (bypassWaiterCheck: boolean = false) => {
+    if (user.role === 'WAITER' && !bypassWaiterCheck) {
+      setPaymentAuthModalOpen(true);
+      setPaymentAuthPin('');
+      setPaymentAuthError('');
+      return;
+    }
+
     let finalAmount = 0;
     let itemsToPayPayload = undefined;
 
@@ -263,6 +275,30 @@ export default function CheckoutModal({
     }
   };
 
+  const handlePaymentAuthSubmit = async () => {
+    setPaymentAuthError('');
+    try {
+      const authRes = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: paymentAuthPin }),
+      });
+      if (!authRes.ok) {
+        setPaymentAuthError('Hatalı yetkili PIN kodu!');
+        return;
+      }
+      const authUser = await authRes.json();
+      if (authUser.role !== 'CASHIER' && authUser.role !== 'MANAGER' && authUser.role !== 'ADMIN') {
+        setPaymentAuthError('Ödeme almak için yetkiniz bulunmuyor! Kasiyer, Müdür veya Yönetici PIN kodu girin.');
+        return;
+      }
+      setPaymentAuthModalOpen(false);
+      await handlePaymentSubmit(true);
+    } catch (err) {
+      setPaymentAuthError('Yetkilendirme sırasında hata oluştu.');
+    }
+  };
+
   // İndirim Onayı
   const handleDiscountSubmit = async () => {
     setAuthError('');
@@ -286,8 +322,8 @@ export default function CheckoutModal({
       }
 
       const adminUser = await authRes.json();
-      if (adminUser.role !== 'ADMIN') {
-        setAuthError('Bu işlem için YÖNETİCİ yetkisi gerekmektedir!');
+      if (adminUser.role !== 'ADMIN' && adminUser.role !== 'MANAGER') {
+        setAuthError('Bu işlem için YÖNETİCİ veya MÜDÜR yetkisi gerekmektedir!');
         return;
       }
 
@@ -643,7 +679,7 @@ export default function CheckoutModal({
           </button>
 
           <button
-            onClick={handlePaymentSubmit}
+            onClick={() => handlePaymentSubmit(false)}
             disabled={(isSplitBilling ? getSelectedSplitAmount() <= 0 : !paymentAmountInput) || isLoading}
             className="active-press bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl flex flex-col items-center justify-center space-y-1 transition text-[10px] cursor-pointer shadow-lg shadow-emerald-600/10"
           >
@@ -847,6 +883,61 @@ export default function CheckoutModal({
               <Printer className="w-4 h-4" />
               <span>Yazıcıya Gönder</span>
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* WAITER PAYMENT AUTH MODAL */}
+      {paymentAuthModalOpen && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
+            <h3 className="font-heading font-bold text-base text-white mb-2 flex items-center space-x-2">
+              <Lock className="w-5 h-5 text-indigo-400" />
+              <span>Ödeme Yetki Onayı</span>
+            </h3>
+            <p className="text-[11px] text-slate-400 mb-4 font-sans">
+              Garsonların ödeme alması kısıtlanmıştır. Lütfen ödemeyi tamamlamak için bir <strong>Kasiyer, Müdür veya Yönetici PIN</strong> kodu girin.
+            </p>
+
+            <div className="space-y-4 font-sans">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">Yetkili PIN Kodu</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={paymentAuthPin}
+                  onChange={(e) => setPaymentAuthPin(e.target.value)}
+                  placeholder="••••"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-center text-lg font-bold tracking-widest text-slate-100 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              {paymentAuthError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-xs">
+                  {paymentAuthError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setPaymentAuthModalOpen(false);
+                    setPaymentAuthPin('');
+                    setPaymentAuthError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  İptal
+                </button>
+                <button
+                  onClick={handlePaymentAuthSubmit}
+                  disabled={paymentAuthPin.length < 4}
+                  className="flex-1 gradient-primary hover:bg-indigo-500 disabled:opacity-50 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  Onayla
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
