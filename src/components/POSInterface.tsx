@@ -444,7 +444,7 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-slate-800/70 p-4 rounded-xl flex flex-col justify-between min-h-[100px] border transition cursor-pointer select-none relative overflow-hidden group ${
+                  className={`active-press glass-card hover:bg-slate-800/70 p-4 rounded-xl flex flex-col items-center justify-center text-center min-h-[105px] border transition cursor-pointer select-none relative overflow-hidden group ${
                     isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-slate-800/60 hover:border-slate-700'
                   }`}
                 >
@@ -458,20 +458,23 @@ export default function POSInterface({
                     />
                   )}
 
-                  <div className="relative z-10 font-heading font-bold text-slate-100 group-hover:text-white text-xs md:text-sm">
+                  {/* Stock Level Badge - Absolute Top-Right */}
+                  {product.isStockControlled && (
+                    <span className={`absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded-full font-bold z-20 ${
+                      product.stockLevel <= 15 ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {product.stockLevel}
+                    </span>
+                  )}
+
+                  {/* Product Name - Centered & Highly Prominent */}
+                  <div className="relative z-10 font-heading font-black text-white text-xs md:text-sm tracking-tight leading-snug">
                     {product.name}
                   </div>
-                  <div className="relative z-10 flex items-center justify-between mt-3">
-                    <div className="font-heading font-extrabold text-indigo-300 group-hover:text-indigo-200 text-xs md:text-sm">
-                      {product.price.toFixed(2)} TL
-                    </div>
-                    {product.isStockControlled && (
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
-                        product.stockLevel <= 15 ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
-                      }`}>
-                        Stok: {product.stockLevel}
-                      </span>
-                    )}
+
+                  {/* Product Price - Centered directly under Name */}
+                  <div className="relative z-10 font-heading font-extrabold text-indigo-300 group-hover:text-indigo-200 text-xs md:text-sm mt-1.5">
+                    {product.price.toFixed(2)} TL
                   </div>
                 </div>
               );
