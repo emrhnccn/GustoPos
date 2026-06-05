@@ -6,6 +6,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const startDateParam = searchParams.get('startDate');
     const endDateParam = searchParams.get('endDate');
+    const workDayIdParam = searchParams.get('workDayId');
 
     const dateFilter: any = {};
     if (startDateParam) {
@@ -16,8 +17,21 @@ export async function GET(request: Request) {
     }
 
     const orderWhere: any = { status: 'PAID' };
-    if (startDateParam || endDateParam) {
+    if (workDayIdParam) {
+      orderWhere.workDayId = workDayIdParam;
+    } else if (startDateParam || endDateParam) {
       orderWhere.updatedAt = dateFilter;
+    } else {
+      // Varsayılan: Aktif açık günü bul ve sadece onun siparişlerini göster
+      const activeWorkDay = await db.workDay.findFirst({
+        where: { status: 'OPEN' }
+      });
+      if (activeWorkDay) {
+        orderWhere.workDayId = activeWorkDay.id;
+      } else {
+        // Açık gün yoksa ve filtre de yoksa ciro sıfır gözükmesi için boş dönelim
+        orderWhere.workDayId = 'non-existent-active-workday';
+      }
     }
 
     // 1. Kapatılmış (ödenmiş) tüm siparişleri ve ödemeleri getir
@@ -137,8 +151,33 @@ export async function GET(request: Request) {
 
     // 6. Personel Performansı (Log sayılarına göre)
     const logWhere: any = {};
-    if (startDateParam || endDateParam) {
+    if (workDayIdParam) {
+      const targetWorkDay = await db.workDay.findUnique({
+        where: { id: workDayIdParam }
+      });
+      if (targetWorkDay) {
+        logWhere.createdAt = {
+          gte: targetWorkDay.startTime,
+          lte: targetWorkDay.endTime || new Date()
+        };
+      } else {
+        logWhere.id = 'non-existent-log-id';
+      }
+    } else if (startDateParam || endDateParam) {
       logWhere.createdAt = dateFilter;
+    } else {
+      // Varsayılan: Aktif açık günü bul
+      const activeWorkDay = await db.workDay.findFirst({
+        where: { status: 'OPEN' }
+      });
+      if (activeWorkDay) {
+        logWhere.createdAt = {
+          gte: activeWorkDay.startTime,
+          lte: new Date()
+        };
+      } else {
+        logWhere.id = 'non-existent-log-id'; // empty logs if no active day
+      }
     }
     
     const logs = await db.auditLog.findMany({

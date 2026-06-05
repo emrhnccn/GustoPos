@@ -207,6 +207,9 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   // Adisyon Detay Modalı State (Analizler altındaki liste için)
   const [selectedAdisyon, setSelectedAdisyon] = useState<AdisyonHistoryItem | null>(null);
 
+  // Geçmiş Rapor İnceleme State'i
+  const [viewingWorkDay, setViewingWorkDay] = useState<any | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [actionError, setActionError] = useState<string>('');
   const [actionSuccess, setActionSuccess] = useState<string>('');
@@ -218,10 +221,14 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     try {
       if (activeTab === 'REPORTS') {
         let url = '/api/admin/reports';
-        if (dateRange.startDate || dateRange.endDate) {
-          const params = new URLSearchParams();
+        const params = new URLSearchParams();
+        if (viewingWorkDay) {
+          params.append('workDayId', viewingWorkDay.id);
+        } else {
           if (dateRange.startDate) params.append('startDate', dateRange.startDate);
           if (dateRange.endDate) params.append('endDate', dateRange.endDate);
+        }
+        if (params.toString()) {
           url += `?${params.toString()}`;
         }
         const res = await fetch(url);
@@ -278,7 +285,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
 
   useEffect(() => {
     loadData();
-  }, [activeTab, dateRange]);
+  }, [activeTab, dateRange, viewingWorkDay]);
 
   // Cari Ekstre Detaylarını Getir
   const handleViewCariDetails = async (customerId: string) => {
@@ -566,7 +573,10 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
         {/* Tab Seçiciler */}
         <div className="flex bg-slate-950/80 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full scrollbar-thin">
           <button
-            onClick={() => setActiveTab('REPORTS')}
+            onClick={() => {
+              setViewingWorkDay(null);
+              setActiveTab('REPORTS');
+            }}
             className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
               activeTab === 'REPORTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
             }`}
@@ -661,6 +671,27 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
       ) : activeTab === 'REPORTS' && reportsData ? (
         <div className="space-y-6 animate-fade-in">
           
+          {/* Geçmiş Rapor İnceleme Uyarısı */}
+          {viewingWorkDay && (
+            <div className="bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-2xl flex items-center justify-between shadow-md">
+              <div className="flex items-center space-x-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span className="text-xs text-slate-200">
+                  Şu anda <strong>{new Date(viewingWorkDay.startTime).toLocaleDateString('tr-TR')}</strong> tarihli geçmiş günün Z raporunu inceliyorsunuz.
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setViewingWorkDay(null);
+                  setDateRange({ startDate: '', endDate: '' });
+                }}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold transition shadow-md"
+              >
+                Aktif Güne Geri Dön
+              </button>
+            </div>
+          )}
+
           {/* Tarih Filtresi */}
           <div className="glass-card p-4 rounded-2xl shadow-md flex items-end space-x-4">
             <div>
@@ -2655,6 +2686,19 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
               <p className="text-xs text-slate-400 mt-1">
                 Restoran operasyonunu başlatmak için gün başı, kapatmak için gün sonu yapmalısınız.
               </p>
+              {activeWorkDay && (
+                <div className="mt-3 flex items-center space-x-4 bg-slate-950/40 border border-slate-800 p-3 rounded-xl max-w-md">
+                  <div className="text-xs">
+                    <span className="text-slate-400">Açılış Zamanı: </span>
+                    <span className="text-white font-semibold">{new Date(activeWorkDay.startTime).toLocaleString('tr-TR')}</span>
+                  </div>
+                  <div className="h-4 w-[1px] bg-slate-800"></div>
+                  <div className="text-xs">
+                    <span className="text-slate-400">Aktif Gün Cirosu: </span>
+                    <span className="text-emerald-400 font-extrabold text-sm ml-1">{activeWorkDay.revenue?.toFixed(2) || '0.00'} TL</span>
+                  </div>
+                </div>
+              )}
             </div>
             
             {activeWorkDay ? (
@@ -2722,17 +2766,19 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                     <th className="pb-3 font-semibold">Bitiş</th>
                     <th className="pb-3 font-semibold">Durum</th>
                     <th className="pb-3 font-semibold text-center">İşlem Gören Adisyon</th>
+                    <th className="pb-3 font-semibold text-right">Günlük Ciro</th>
+                    <th className="pb-3 font-semibold text-center">Rapor Detayı</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/50">
                   {workDays.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-slate-500 italic">Henüz hiç gün kaydı yok.</td>
+                      <td colSpan={7} className="py-8 text-center text-slate-500 italic">Henüz hiç gün kaydı yok.</td>
                     </tr>
                   ) : (
                     workDays.map((wd) => (
-                      <tr key={wd.id} className="hover:bg-slate-800/20 transition">
-                        <td className="py-3 text-slate-300 font-medium">{new Date(wd.startTime).toLocaleDateString('tr-TR')}</td>
+                      <tr key={wd.id} className="hover:bg-slate-900/15 transition text-slate-300">
+                        <td className="py-3 font-medium text-slate-200">{new Date(wd.startTime).toLocaleDateString('tr-TR')}</td>
                         <td className="py-3 text-slate-400">{new Date(wd.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
                         <td className="py-3 text-slate-400">{wd.endTime ? new Date(wd.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '-'}</td>
                         <td className="py-3">
@@ -2742,7 +2788,19 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                             <span className="bg-slate-800 text-slate-400 px-2 py-1 rounded font-semibold">KAPALI</span>
                           )}
                         </td>
-                        <td className="py-3 text-center text-slate-300 font-bold">{wd._count?.orders || 0}</td>
+                        <td className="py-3 text-center font-bold text-slate-300">{wd._count?.orders || 0}</td>
+                        <td className="py-3 text-right text-emerald-400 font-extrabold">{wd.revenue?.toFixed(2) || '0.00'} TL</td>
+                        <td className="py-3 text-center">
+                          <button
+                            onClick={() => {
+                              setViewingWorkDay(wd);
+                              setActiveTab('REPORTS');
+                            }}
+                            className="bg-indigo-600/20 hover:bg-indigo-650 text-indigo-300 hover:text-white text-[10px] font-bold px-3 py-1 rounded-xl transition cursor-pointer"
+                          >
+                            Raporu İncele
+                          </button>
+                        </td>
                       </tr>
                     ))
                   )}
