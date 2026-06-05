@@ -176,7 +176,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     isStockControlled: boolean;
     stockLevel: number;
     image?: string;
+    modifierIds?: string[];
+    newModifiers?: Array<{ name: string; price: number }>;
   } | null>(null);
+
+  const [newModName, setNewModName] = useState<string>('');
+  const [newModPrice, setNewModPrice] = useState<string>('0');
 
   // Modifier Yönetimi State'leri
   const [modifiers, setModifiers] = useState<any[]>([]);
@@ -239,6 +244,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
       } else if (activeTab === 'MENU') {
         const data = await fetchCategories();
         setMenuCategories(data);
+        try {
+          const mods = await fetchModifiers();
+          setModifiers(mods);
+        } catch (err) {
+          console.error("Modifiers failed to load in Menu tab", err);
+        }
         if (data.length > 0) {
           if (!selectedMenuCategoryId || !data.find((c: any) => c.id === selectedMenuCategoryId)) {
             setSelectedMenuCategoryId(data[0].id);
@@ -337,6 +348,55 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     } catch (err: any) {
       setActionError(err.message || 'Ürün kaydedilirken hata oluştu.');
     }
+  };
+
+  const handleAddNewModInline = () => {
+    if (!productModal) return;
+    if (!newModName.trim()) {
+      alert("Seçenek adı boş olamaz!");
+      return;
+    }
+    const priceVal = parseFloat(newModPrice || '0');
+    if (isNaN(priceVal) || priceVal < 0) {
+      alert("Lütfen geçerli bir fiyat girin!");
+      return;
+    }
+    
+    const currentNewMods = productModal.newModifiers || [];
+    setProductModal({
+      ...productModal,
+      newModifiers: [
+        ...currentNewMods,
+        { name: newModName.trim(), price: priceVal }
+      ]
+    });
+    setNewModName('');
+    setNewModPrice('0');
+  };
+
+  const handleToggleModifierInProduct = (id: string) => {
+    if (!productModal) return;
+    const currentIds = productModal.modifierIds || [];
+    if (currentIds.includes(id)) {
+      setProductModal({
+        ...productModal,
+        modifierIds: currentIds.filter(x => x !== id)
+      });
+    } else {
+      setProductModal({
+        ...productModal,
+        modifierIds: [...currentIds, id]
+      });
+    }
+  };
+
+  const handleRemoveNewModInline = (index: number) => {
+    if (!productModal) return;
+    const currentNewMods = productModal.newModifiers || [];
+    setProductModal({
+      ...productModal,
+      newModifiers: currentNewMods.filter((_, i) => i !== index)
+    });
   };
 
   // Ürün Silme
@@ -1370,7 +1430,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                     </h3>
                     <button
                       disabled={!selectedMenuCategoryId}
-                      onClick={() =>
+                      onClick={() => {
                         setProductModal({
                           name: '',
                           price: 0,
@@ -1378,8 +1438,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                           isStockControlled: false,
                           stockLevel: 0,
                           image: '',
-                        })
-                      }
+                          modifierIds: [],
+                          newModifiers: [],
+                        });
+                        setNewModName('');
+                        setNewModPrice('0');
+                      }}
                       className="bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-bold p-1.5 px-2 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
@@ -1434,7 +1498,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                               <td className="p-3 text-center">
                                 <div className="flex items-center justify-center space-x-2">
                                   <button
-                                    onClick={() =>
+                                    onClick={() => {
                                       setProductModal({
                                         id: prod.id,
                                         name: prod.name,
@@ -1443,8 +1507,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                                         isStockControlled: prod.isStockControlled,
                                         stockLevel: prod.stockLevel,
                                         image: prod.image || '',
-                                      })
-                                    }
+                                        modifierIds: prod.modifiers?.map((m: any) => m.id) || [],
+                                        newModifiers: [],
+                                      });
+                                      setNewModName('');
+                                      setNewModPrice('0');
+                                    }}
                                     className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
                                   >
                                     <Edit3 className="w-3.5 h-3.5" />
@@ -2388,6 +2456,85 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                   />
                 </div>
               )}
+
+              {/* Ek Seçenekler (Modifiers) Bölümü */}
+              <div className="border-t border-slate-800/80 pt-3">
+                <label className="block text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-2">
+                  Ürün Ek Seçenekleri (Modifiers)
+                </label>
+
+                {/* Mevcut Seçenekler Checklist */}
+                {modifiers.length > 0 && (
+                  <div className="mb-3">
+                    <span className="block text-[10px] text-slate-400 mb-1">Mevcut Seçeneklerden Bağla:</span>
+                    <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 max-h-[110px] overflow-y-auto grid grid-cols-2 gap-2 scrollbar-thin">
+                      {modifiers.map((mod) => {
+                        const isChecked = (productModal.modifierIds || []).includes(mod.id);
+                        return (
+                          <label key={mod.id} className="flex items-center space-x-2 p-1.5 rounded-lg hover:bg-slate-800/50 cursor-pointer text-[10px] font-medium text-slate-300">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleToggleModifierInProduct(mod.id)}
+                              className="accent-indigo-500 rounded"
+                            />
+                            <span className="truncate">{mod.name} (+{mod.price} TL)</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Inline Yeni Eklenen Geçici Seçenekler Listesi */}
+                {(productModal.newModifiers || []).length > 0 && (
+                  <div className="mb-3">
+                    <span className="block text-[10px] text-slate-400 mb-1">Yeni Eklenecek Seçenekler:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {(productModal.newModifiers || []).map((m, idx) => (
+                        <span key={idx} className="bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded-lg flex items-center text-[10px] font-semibold">
+                          <span>{m.name} (+{m.price} TL)</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveNewModInline(idx)}
+                            className="ml-1.5 text-rose-400 hover:text-rose-300 font-black cursor-pointer"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Hızlı Yeni Seçenek Tanımlama Girişleri */}
+                <div className="bg-slate-950/40 border border-slate-850 p-2.5 rounded-xl">
+                  <span className="block text-[10px] font-semibold text-slate-400 mb-1.5">Yeni Seçenek Oluştur & Ekle:</span>
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      value={newModName}
+                      onChange={(e) => setNewModName(e.target.value)}
+                      placeholder="Seçenek adı (örn: Muzlu)"
+                      className="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[10px] text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                    />
+                    <input
+                      type="number"
+                      value={newModPrice === '0' ? '' : newModPrice}
+                      onChange={(e) => setNewModPrice(e.target.value)}
+                      placeholder="+0 TL"
+                      className="w-16 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[10px] text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddNewModInline}
+                      className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg transition text-[10px] cursor-pointer"
+                    >
+                      Ekle
+                    </button>
+                  </div>
+                </div>
+              </div>
 
               {actionError && (
                 <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-[10px]">

@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 // 1. Yeni Ürün Ekle
 export async function POST(request: Request) {
   try {
-    const { name, price, categoryId, isStockControlled, stockLevel, image } = await request.json();
+    const { name, price, categoryId, isStockControlled, stockLevel, image, modifierIds, newModifiers } = await request.json();
 
     if (!name || price === undefined || !categoryId) {
       return NextResponse.json(
@@ -22,6 +22,14 @@ export async function POST(request: Request) {
         isStockControlled: !!isStockControlled,
         stockLevel: parseFloat(stockLevel || 0),
         isActive: true,
+        modifiers: {
+          connect: (modifierIds || []).map((id: string) => ({ id })),
+          create: (newModifiers || []).map((m: any) => ({
+            name: m.name,
+            price: parseFloat(m.price || 0),
+            isActive: true,
+          })),
+        },
       },
     });
 
@@ -38,7 +46,7 @@ export async function POST(request: Request) {
 // 2. Ürün Güncelle
 export async function PUT(request: Request) {
   try {
-    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive, image } = await request.json();
+    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive, image, modifierIds, newModifiers } = await request.json();
 
     if (!id || !name || price === undefined || !categoryId) {
       return NextResponse.json(
@@ -57,6 +65,14 @@ export async function PUT(request: Request) {
         isStockControlled: !!isStockControlled,
         stockLevel: parseFloat(stockLevel || 0),
         isActive: isActive !== undefined ? !!isActive : true,
+        modifiers: {
+          set: (modifierIds || []).map((id: string) => ({ id })),
+          create: (newModifiers || []).map((m: any) => ({
+            name: m.name,
+            price: parseFloat(m.price || 0),
+            isActive: true,
+          })),
+        },
       },
     });
 
