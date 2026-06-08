@@ -83,7 +83,7 @@ export default function POSApplication() {
   return (
     <main className="flex-1 flex flex-col w-full h-full min-h-screen relative">
       {viewMode === 'LOGIN' && (
-        <PinLogin onLoginSuccess={handleLoginSuccess} />
+        <PinLogin onLoginSuccessAction={handleLoginSuccess} />
       )}
 
       {viewMode === 'FLOOR_PLAN' && user && (
@@ -97,10 +97,10 @@ export default function POSApplication() {
             <FloorPlan
               user={user}
               tables={tables}
-              onLogout={handleLogout}
-              onSelectTable={handleSelectTable}
-              onOpenAdmin={() => setViewMode('ADMIN')}
-              refreshData={loadTables}
+              onLogoutAction={handleLogout}
+              onSelectTableAction={handleSelectTable}
+              onOpenAdminAction={() => setViewMode('ADMIN')}
+              refreshDataAction={loadTables}
             />
           )}
         </>
@@ -110,8 +110,8 @@ export default function POSApplication() {
         <POSInterface
           user={user}
           table={selectedTable}
-          onBack={handleBackToFloorPlan}
-          refreshData={loadTables}
+          onBackAction={handleBackToFloorPlan}
+          refreshDataAction={loadTables}
         />
       )}
 
@@ -120,7 +120,7 @@ export default function POSApplication() {
           user={user}
           table={selectedTable}
           onCloseAction={handleBackToFloorPlan}
-          refreshData={loadTables}
+          refreshDataAction={loadTables}
         />
       )}
 

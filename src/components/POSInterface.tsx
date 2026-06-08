@@ -67,8 +67,8 @@ interface TableData {
 interface POSInterfaceProps {
   user: UserSession;
   table: TableData;
-  onBack: () => void;
-  refreshData: () => Promise<void>;
+  onBackAction: () => void;
+  refreshDataAction: () => Promise<void>;
 }
 
 interface NewOrderItem {
@@ -83,8 +83,8 @@ interface NewOrderItem {
 export default function POSInterface({
   user,
   table,
-  onBack,
-  refreshData,
+  onBackAction,
+  refreshDataAction,
 }: POSInterfaceProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategoryId, setActiveCategoryId] = useState<string>('favorites');
@@ -260,12 +260,12 @@ export default function POSInterface({
     setErrorMessage('');
     try {
       await addSiparis(table.id, newItems, user.id);
-      await refreshData();
+      await refreshDataAction();
       setSuccessMessage('Sipariş mutfağa başarıyla iletildi!');
       setNewItems([]);
       setTimeout(() => {
         setSuccessMessage('');
-        onBack();
+        onBackAction();
       }, 1500);
     } catch (err: any) {
       setErrorMessage(err.message || 'Sipariş gönderilirken bir hata oluştu.');
@@ -317,7 +317,7 @@ export default function POSInterface({
         setSuccessMessage('Ürün ikram olarak işaretlendi.');
       }
 
-      await refreshData();
+      await refreshDataAction();
       setTimeout(() => setSuccessMessage(''), 3000);
       closeAdminAuth();
     } catch (err: any) {
@@ -373,7 +373,7 @@ export default function POSInterface({
         <div className="flex flex-col space-y-3 pb-3 border-b border-slate-800 mb-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={onBack}
+              onClick={onBackAction}
               className="active-press flex items-center space-x-2 text-slate-400 hover:text-white transition duration-200 cursor-pointer"
             >
               <ArrowLeft className="w-5 h-5" />

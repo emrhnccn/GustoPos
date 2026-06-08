@@ -57,14 +57,14 @@ interface CheckoutModalProps {
   user: UserSession;
   table: TableData;
   onCloseAction: () => void;
-  refreshData: () => Promise<void>;
+  refreshDataAction: () => Promise<void>;
 }
 
 export default function CheckoutModal({
   user,
   table,
   onCloseAction,
-  refreshData,
+  refreshDataAction,
 }: CheckoutModalProps) {
   const order = table.activeOrder;
   const remaining = order ? order.totalAmount - order.paidAmount : 0;
@@ -254,7 +254,7 @@ export default function CheckoutModal({
         selectedMethod === 'CARI' ? selectedCustomerId : undefined,
         itemsToPayPayload
       );
-      await refreshData();
+      await refreshDataAction();
       
       setPaymentAmountInput('');
       setIsSplitBilling(false);
@@ -329,7 +329,7 @@ export default function CheckoutModal({
 
       // İndirimi uygula
       await applyDiscountApi(order.id, discountType, val, adminUser.id, user.id);
-      await refreshData();
+      await refreshDataAction();
 
       setSuccessMessage('İndirim başarıyla uygulandı.');
       setTimeout(() => setSuccessMessage(''), 3000);

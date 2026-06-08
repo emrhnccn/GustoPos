@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Coffee, Lock, Delete, Play, Users } from 'lucide-react';
+import { Lock, Delete, Play, Users } from 'lucide-react';
 import { loginWithPin, UserSession } from '@/lib/api';
+import Image from 'next/image';
 
 interface PinLoginProps {
-  onLoginSuccess: (user: UserSession) => void;
+  onLoginSuccessAction: (user: UserSession) => void;
 }
 
-export default function PinLogin({ onLoginSuccess }: PinLoginProps) {
+export default function PinLogin({ onLoginSuccessAction }: PinLoginProps) {
   const [pin, setPin] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,7 +44,7 @@ export default function PinLogin({ onLoginSuccess }: PinLoginProps) {
     setErrorMsg('');
     try {
       const user = await loginWithPin(enteredPin);
-      onLoginSuccess(user);
+      onLoginSuccessAction(user);
     } catch (err: any) {
       setErrorMsg(err.message || 'Hatalı PIN Kodu!');
       setPin(''); // Hatalı girişte PIN'i temizle
@@ -56,11 +57,17 @@ export default function PinLogin({ onLoginSuccess }: PinLoginProps) {
     <div className="flex-1 flex items-center justify-center p-4 min-h-screen">
       <div className="glass-panel w-full max-w-sm rounded-3xl p-6 md:p-8 shadow-2xl border-indigo-500/10 flex flex-col items-center animate-scale-in">
         
-        {/* Logo ve Başlık */}
-        <div className="gradient-primary p-4 rounded-2xl shadow-xl shadow-indigo-500/20 mb-3 animate-pulse">
-          <Coffee className="w-8 h-8 text-white" />
+        {/* Logo */}
+        <div className="mb-4 flex flex-col items-center animate-pulse">
+          <Image 
+            src="/logo.png" 
+            alt="GustoPOS Logo" 
+            width={200} 
+            height={80} 
+            className="object-contain"
+            priority
+          />
         </div>
-        <h1 className="font-heading text-2xl font-black tracking-tight text-white mb-1">GustoPOS</h1>
         <p className="text-xs text-slate-400 mb-6 flex items-center space-x-1">
           <Users className="w-3.5 h-3.5 text-slate-500" />
           <span>Lütfen 4 Haneli PIN Kodunuzu Girin</span>

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
-  Coffee, 
   ChevronRight, 
   Clock, 
   ArrowRightLeft, 
@@ -17,9 +16,11 @@ import {
   FileText,
   Maximize,
   Minimize,
-  AlertTriangle
+  AlertTriangle,
+  Coffee
 } from 'lucide-react';
 import { UserSession, requestTableBillApi, transferOrMergeTables } from '@/lib/api';
+import Image from 'next/image';
 
 interface TableOrder {
   id: string;
@@ -51,20 +52,20 @@ interface TableData {
 
 interface FloorPlanProps {
   user: UserSession;
-  onLogout: () => void;
-  onSelectTable: (table: TableData, mode: 'order' | 'checkout') => void;
-  onOpenAdmin: () => void;
+  onLogoutAction: () => void;
+  onSelectTableAction: (table: TableData, mode: 'order' | 'checkout') => void;
+  onOpenAdminAction: () => void;
   tables: TableData[];
-  refreshData: () => Promise<void>;
+  refreshDataAction: () => Promise<void>;
 }
 
 export default function FloorPlan({
   user,
-  onLogout,
-  onSelectTable,
-  onOpenAdmin,
+  onLogoutAction,
+  onSelectTableAction,
+  onOpenAdminAction,
   tables,
-  refreshData,
+  refreshDataAction,
 }: FloorPlanProps) {
   const [activeArea, setActiveArea] = useState<string>('Tümü');
   const [selectedOpTable, setSelectedOpTable] = useState<TableData | null>(null);
@@ -95,7 +96,7 @@ export default function FloorPlan({
   // Otomatik yenileme (15 saniyede bir)
   useEffect(() => {
     const interval = setInterval(() => {
-      refreshData();
+      refreshDataAction();
     }, 15000);
     return () => clearInterval(interval);
   }, []);
@@ -162,7 +163,7 @@ export default function FloorPlan({
         }
 
         await transferOrMergeTables('transfer', sourceTableId, targetTable.id, user.id, itemsToMove);
-        await refreshData();
+        await refreshDataAction();
         setSuccessMsg(`${sourceTable.name} başarıyla ${targetTable.name} masasına taşındı!`);
         setTimeout(() => setSuccessMsg(''), 3000);
       } catch (err: any) {
@@ -218,7 +219,7 @@ export default function FloorPlan({
   const handleRequestBill = async (table: TableData) => {
     try {
       await requestTableBillApi(table.id);
-      await refreshData();
+      await refreshDataAction();
       setSuccessMsg(`${table.name} hesabı istendi olarak işaretlendi.`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err: any) {
@@ -258,7 +259,7 @@ export default function FloorPlan({
         await transferOrMergeTables('transfer', selectedOpTable.id, targetTableId, user.id, itemsToMove);
       }
 
-      await refreshData();
+      await refreshDataAction();
       setSuccessMsg(action === 'merge' ? 'Masalar başarıyla birleştirildi!' : 'Masa başarıyla taşındı!');
       setTimeout(() => setSuccessMsg(''), 3000);
       closeOpModal();
@@ -287,7 +288,7 @@ export default function FloorPlan({
 
     try {
       await transferOrMergeTables('transfer', selectedOpTable.id, targetTableId, user.id, itemsToMove);
-      await refreshData();
+      await refreshDataAction();
       setSuccessMsg('Seçilen ürünler başarıyla aktarıldı!');
       setTimeout(() => setSuccessMsg(''), 3000);
       closeOpModal();
@@ -329,11 +330,15 @@ export default function FloorPlan({
       {/* Header Panel */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 glass-card p-4 rounded-2xl shadow-xl">
         <div className="flex items-center space-x-3">
-          <div className="gradient-primary p-3 rounded-xl shadow-lg shadow-indigo-500/30">
-            <Coffee className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="font-heading text-2xl font-bold tracking-tight text-white">GustoPOS</h1>
+          <Image 
+            src="/logo.png" 
+            alt="GustoPOS Logo" 
+            width={140} 
+            height={50} 
+            className="object-contain"
+            priority
+          />
+          <div className="hidden sm:block border-l border-slate-700 pl-3 ml-1">
             <p className="text-xs text-slate-400">Cafe & Restoran Masa Planı</p>
           </div>
         </div>
@@ -360,7 +365,7 @@ export default function FloorPlan({
 
           {user.role === 'ADMIN' && (
             <button
-              onClick={onOpenAdmin}
+              onClick={onOpenAdminAction}
               className="active-press flex items-center space-x-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs px-3 py-2 rounded-xl transition duration-200 cursor-pointer shadow-md shadow-cyan-600/20"
             >
               <Settings className="w-4 h-4" />
@@ -369,7 +374,7 @@ export default function FloorPlan({
           )}
 
           <button
-            onClick={onLogout}
+            onClick={onLogoutAction}
             className="active-press flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs px-3 py-2 rounded-xl border border-slate-700/80 transition duration-200 cursor-pointer"
           >
             <LogOut className="w-4 h-4 text-rose-400" />
@@ -473,7 +478,7 @@ export default function FloorPlan({
                   : ''
               }`}
               onClick={() => {
-                onSelectTable(table, 'order');
+                onSelectTableAction(table, 'order');
               }}
             >
               {/* Table Name and Area Badge */}
@@ -538,7 +543,7 @@ export default function FloorPlan({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onSelectTable(table, 'order');
+                      onSelectTableAction(table, 'order');
                     }}
                     className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-1 rounded-md transition font-semibold"
                   >
@@ -549,7 +554,7 @@ export default function FloorPlan({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onSelectTable(table, 'checkout');
+                      onSelectTableAction(table, 'checkout');
                     }}
                     className="flex-1 bg-emerald-500/25 hover:bg-emerald-500/45 text-emerald-200 text-[10px] py-1 rounded-md transition font-semibold"
                   >
