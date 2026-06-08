@@ -333,9 +333,9 @@ export default function FloorPlan({
           <Image 
             src="/logo.png" 
             alt="GustoPOS Logo" 
-            width={140} 
-            height={50} 
-            className="object-contain"
+            width={300} 
+            height={100} 
+            className="w-[180px] md:w-[220px] h-auto object-contain drop-shadow-md"
             priority
           />
           <div className="hidden sm:block border-l border-slate-700 pl-3 ml-1">

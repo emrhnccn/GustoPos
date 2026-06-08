@@ -62,9 +62,9 @@ export default function PinLogin({ onLoginSuccessAction }: PinLoginProps) {
           <Image 
             src="/logo.png" 
             alt="GustoPOS Logo" 
-            width={200} 
-            height={80} 
-            className="object-contain"
+            width={500} 
+            height={200} 
+            className="w-[280px] md:w-[360px] h-auto object-contain drop-shadow-xl"
             priority
           />
         </div>
