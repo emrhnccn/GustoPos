@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
+import BackgroundOrbs from "@/components/BackgroundOrbs";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -46,6 +47,7 @@ export default function RootLayout({
       className={`${outfit.variable} ${inter.variable} dark h-full antialiased`}
     >
       <body className="min-h-full font-sans bg-[#0c0f17] text-slate-100 flex flex-col">
+        <BackgroundOrbs />
         {children}
       </body>
     </html>

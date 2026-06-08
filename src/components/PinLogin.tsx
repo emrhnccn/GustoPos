@@ -53,7 +53,7 @@ export default function PinLogin({ onLoginSuccess }: PinLoginProps) {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 bg-[#0c0f17] min-h-screen">
+    <div className="flex-1 flex items-center justify-center p-4 min-h-screen">
       <div className="glass-panel w-full max-w-sm rounded-3xl p-6 md:p-8 shadow-2xl border-indigo-500/10 flex flex-col items-center animate-scale-in">
         
         {/* Logo ve Başlık */}
