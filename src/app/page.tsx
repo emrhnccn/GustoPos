@@ -119,13 +119,13 @@ export default function POSApplication() {
         <CheckoutModal
           user={user}
           table={selectedTable}
-          onClose={handleBackToFloorPlan}
+          onCloseAction={handleBackToFloorPlan}
           refreshData={loadTables}
         />
       )}
 
       {viewMode === 'ADMIN' && user && (user.role === 'ADMIN' || user.role === 'MANAGER') && (
-        <AdminPanel user={user} onClose={handleBackToFloorPlan} />
+        <AdminPanel user={user} onCloseAction={handleBackToFloorPlan} />
       )}
     </main>
   );

@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getCachedModifiers, invalidateModifiers } from '@/lib/cache';
 
 export async function GET() {
   try {
+    // Admin modifiers GET: ürün ilişkileri dahil (cache'siz, çünkü products join içeriyor)
     const modifiers = await db.modifier.findMany({
       where: { isActive: true },
       orderBy: { name: 'asc' },
@@ -13,8 +15,9 @@ export async function GET() {
       }
     });
     return NextResponse.json(modifiers);
-  } catch (error: any) {
-    console.error('Modifiers GET API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Modifiers GET API Hatası:', err);
     return NextResponse.json({ error: 'Ek seçenekler yüklenemedi.' }, { status: 500 });
   }
 }
@@ -42,6 +45,7 @@ export async function POST(request: Request) {
           }
         }
       });
+      invalidateModifiers();
       return NextResponse.json(newModifier);
     }
 
@@ -64,6 +68,7 @@ export async function POST(request: Request) {
           }
         }
       });
+      invalidateModifiers();
       return NextResponse.json(updated);
     }
 
@@ -74,6 +79,7 @@ export async function POST(request: Request) {
         where: { id },
         data: { isActive: false },
       });
+      invalidateModifiers();
       return NextResponse.json(deleted);
     }
 

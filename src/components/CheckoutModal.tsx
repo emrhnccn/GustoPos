@@ -56,14 +56,14 @@ interface TableData {
 interface CheckoutModalProps {
   user: UserSession;
   table: TableData;
-  onClose: () => void;
+  onCloseAction: () => void;
   refreshData: () => Promise<void>;
 }
 
 export default function CheckoutModal({
   user,
   table,
-  onClose,
+  onCloseAction,
   refreshData,
 }: CheckoutModalProps) {
   const order = table.activeOrder;
@@ -263,7 +263,7 @@ export default function CheckoutModal({
       if (res.isClosed || res.remaining <= 0) {
         setSuccessMessage('Hesap tamamen kapandı. Masa boşaltıldı!');
         setTimeout(() => {
-          onClose();
+          onCloseAction();
         }, 1500);
       } else {
         setTimeout(() => setSuccessMessage(''), 3000);
@@ -358,7 +358,7 @@ export default function CheckoutModal({
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
           <button
-            onClick={onClose}
+            onClick={onCloseAction}
             className="active-press flex items-center space-x-2 text-slate-400 hover:text-white transition duration-200 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />

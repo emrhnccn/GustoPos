@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { invalidateProducts } from '@/lib/cache';
 
 // 1. Yeni Ürün Ekle
 export async function POST(request: Request) {
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
       },
     });
 
+    invalidateProducts();
     return NextResponse.json({ success: true, product });
   } catch (error: unknown) {
     const err = error as Error;
@@ -77,6 +79,7 @@ export async function PUT(request: Request) {
       },
     });
 
+    invalidateProducts();
     return NextResponse.json({ success: true, product });
   } catch (error: unknown) {
     const err = error as Error;
@@ -107,6 +110,7 @@ export async function DELETE(request: Request) {
       data: { isActive: false },
     });
 
+    invalidateProducts();
     return NextResponse.json({ success: true, message: 'Ürün başarıyla menüden kaldırıldı (pasifleştirildi).', product });
   } catch (error: unknown) {
     const err = error as Error;

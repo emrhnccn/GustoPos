@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  TrendingUp, 
-  ShoppingBag, 
-  Percent, 
-  AlertTriangle, 
-  History, 
-  FileSpreadsheet, 
-  Activity, 
+import {
+  ArrowLeft,
+  TrendingUp,
+  ShoppingBag,
+  Percent,
+  AlertTriangle,
+  History,
+  FileSpreadsheet,
+  Activity,
   Calendar,
   Layers,
   ArrowRight,
@@ -29,13 +29,13 @@ import {
   X,
   FileText
 } from 'lucide-react';
-import { 
-  fetchAdminReports, 
-  fetchAuditLogs, 
-  fetchCategories, 
-  saveProduct, 
-  deleteProduct, 
-  saveCategory, 
+import {
+  fetchAdminReports,
+  fetchAuditLogs,
+  fetchCategories,
+  saveProduct,
+  deleteProduct,
+  saveCategory,
   deleteCategory,
   fetchCustomers,
   saveCustomer,
@@ -53,7 +53,7 @@ import {
 } from '@/lib/api';
 
 interface AdminPanelProps {
-  onClose: () => void;
+  onCloseAction: () => void;
   user: UserSession;
 }
 
@@ -110,7 +110,7 @@ interface WaiterSalesPerformance {
   role: string;
   ordersCount: number;
   totalSales: number;
-  items: Array<{name: string, quantity: number, total: number}>;
+  items: Array<{ name: string, quantity: number, total: number }>;
 }
 
 interface AdisyonHistoryItem {
@@ -140,7 +140,7 @@ interface AuditLog {
   approverUser: { name: string; role: string } | null;
 }
 
-export default function AdminPanel({ onClose, user }: AdminPanelProps) {
+export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<'REPORTS' | 'MENU' | 'MODIFIERS' | 'TABLES' | 'CARI' | 'LOGS' | 'DAILY_OPS' | 'USERS' | 'INVENTORY' | 'SUPPLIERS'>('REPORTS');
   const [reportsData, setReportsData] = useState<{
     summary: ReportSummary;
@@ -159,7 +159,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
     discountLogs?: any[];
   } | null>(null);
   const [logs, setLogs] = useState<AuditLog[]>([]);
-  
+
   // Raporlar için Tarih Filtresi
   const [dateRange, setDateRange] = useState<{ startDate: string; endDate: string }>({ startDate: '', endDate: '' });
 
@@ -175,7 +175,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
   const [users, setUsers] = useState<any[]>([]);
   const [userModal, setUserModal] = useState<{ id?: string; name: string; pinHash: string; role: string; isActive: boolean } | null>(null);
   const [expandedWaiterIndex, setExpandedWaiterIndex] = useState<number | null>(null);
-  
+
   // Menü Yönetimi State'leri
   const [menuCategories, setMenuCategories] = useState<any[]>([]);
   const [selectedMenuCategoryId, setSelectedMenuCategoryId] = useState<string>('');
@@ -207,7 +207,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
   const [customers, setCustomers] = useState<any[]>([]);
   const [customerModal, setCustomerModal] = useState<{ id?: string; name: string; phone: string; balance?: number } | null>(null);
   const [collectionModal, setCollectionModal] = useState<{ id: string; name: string; amount: string; paymentMethod: 'CASH' | 'CREDIT_CARD' } | null>(null);
-  
+
   // Cari Ekstre Modalı State'leri
   const [selectedCariStatement, setSelectedCariStatement] = useState<{
     customer: any;
@@ -432,7 +432,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
       alert("Lütfen geçerli bir fiyat girin!");
       return;
     }
-    
+
     const currentNewMods = productModal.newModifiers || [];
     setProductModal({
       ...productModal,
@@ -869,7 +869,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 glass-card p-4 rounded-2xl shadow-xl">
         <div className="flex items-center space-x-3 flex-wrap">
           <button
-            onClick={onClose}
+            onClick={onCloseAction}
             className="active-press p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition duration-200 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -892,9 +892,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
               setViewingWorkDay(null);
               setActiveTab('REPORTS');
             }}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'REPORTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'REPORTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
             <span>Analiz Raporları</span>
@@ -902,9 +901,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('MENU')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'MENU' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MENU' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Ürün/Kategori</span>
@@ -912,9 +910,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('MODIFIERS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'MODIFIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MODIFIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <Star className="w-3.5 h-3.5" />
             <span>Ek Seçenekler</span>
@@ -922,9 +919,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('TABLES')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'TABLES' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'TABLES' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <Layers className="w-3.5 h-3.5 text-cyan-400" />
             <span>Masa Yönetimi</span>
@@ -932,9 +928,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('CARI')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'CARI' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'CARI' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Cari Hesap Defteri</span>
@@ -942,9 +937,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('DAILY_OPS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'DAILY_OPS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'DAILY_OPS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <Activity className="w-3.5 h-3.5 text-amber-400" />
             <span>Gün İşlemleri</span>
@@ -952,9 +946,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('INVENTORY')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'INVENTORY' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'INVENTORY' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <Package className="w-3.5 h-3.5 text-cyan-400" />
             <span>Stok & Reçete</span>
@@ -962,9 +955,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('SUPPLIERS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-              activeTab === 'SUPPLIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'SUPPLIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             <DollarSign className="w-3.5 h-3.5 text-rose-400" />
             <span>Tedarikçi & Ödeme</span>
@@ -974,9 +966,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
             <>
               <button
                 onClick={() => setActiveTab('USERS')}
-                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-                  activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-                }`}
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                  }`}
               >
                 <Users className="w-3.5 h-3.5 text-indigo-400" />
                 <span>Personel Yönetimi</span>
@@ -984,9 +975,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
 
               <button
                 onClick={() => setActiveTab('LOGS')}
-                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-                  activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
-                }`}
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                  }`}
               >
                 <History className="w-3.5 h-3.5" />
                 <span>Log Defteri</span>
@@ -1009,7 +999,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
         </div>
       ) : activeTab === 'REPORTS' && reportsData ? (
         <div className="space-y-6 animate-fade-in">
-          
+
           {/* Geçmiş Rapor İnceleme Uyarısı */}
           {viewingWorkDay && (
             <div className="bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-2xl flex items-center justify-between shadow-md">
@@ -1035,33 +1025,29 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
           <div className="flex bg-slate-950/40 border border-slate-850 p-1 rounded-xl w-fit space-x-1">
             <button
               onClick={() => setReportsSubTab('OVERVIEW')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                reportsSubTab === 'OVERVIEW' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'OVERVIEW' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               Genel Raporlar
             </button>
             <button
               onClick={() => setReportsSubTab('COST')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                reportsSubTab === 'COST' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'COST' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               Maliyet Analizi
             </button>
             <button
               onClick={() => setReportsSubTab('CANCELLATIONS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                reportsSubTab === 'CANCELLATIONS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'CANCELLATIONS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               İptal Raporu
             </button>
             <button
               onClick={() => setReportsSubTab('DISCOUNTS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                reportsSubTab === 'DISCOUNTS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'DISCOUNTS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                }`}
             >
               İndirim Raporu
             </button>
@@ -1070,687 +1056,686 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
           {reportsSubTab === 'OVERVIEW' && (
             <>
               {/* Tarih Filtresi */}
-          <div className="glass-card p-4 rounded-2xl shadow-md flex items-end space-x-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Başlangıç Tarihi</label>
-              <input 
-                type="date" 
-                value={dateRange.startDate} 
-                onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Bitiş Tarihi</label>
-              <input 
-                type="date" 
-                value={dateRange.endDate} 
-                onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-            <button
-              onClick={() => setDateRange({ startDate: '', endDate: '' })}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2.5 rounded-xl font-medium transition h-[38px]"
-            >
-              Filtreyi Temizle
-            </button>
-          </div>
-
-          {/* Z Raporu Özeti */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-emerald-500">
-              <div className="absolute right-3 top-3 text-emerald-500 bg-emerald-500/10 p-2 rounded-xl">
-                <TrendingUp className="w-5 h-5" />
+              <div className="glass-card p-4 rounded-2xl shadow-md flex items-end space-x-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Başlangıç Tarihi</label>
+                  <input
+                    type="date"
+                    value={dateRange.startDate}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
+                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Bitiş Tarihi</label>
+                  <input
+                    type="date"
+                    value={dateRange.endDate}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
+                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+                <button
+                  onClick={() => setDateRange({ startDate: '', endDate: '' })}
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2.5 rounded-xl font-medium transition h-[38px]"
+                >
+                  Filtreyi Temizle
+                </button>
               </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {reportsData.summary.totalRevenue.toFixed(2)} TL
-              </h2>
-            </div>
 
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-indigo-500">
-              <div className="absolute right-3 top-3 text-indigo-500 bg-indigo-500/10 p-2 rounded-xl">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {reportsData.summary.totalOrders} adet
-              </h2>
-            </div>
-
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-amber-500">
-              <div className="absolute right-3 top-3 text-amber-500 bg-amber-500/10 p-2 rounded-xl">
-                <Percent className="w-5 h-5" />
-              </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {reportsData.summary.totalDiscounts.toFixed(2)} TL
-              </h2>
-            </div>
-
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-cyan-500">
-              <div className="absolute right-3 top-3 text-cyan-500 bg-cyan-500/10 p-2 rounded-xl">
-                <UserCheck className="w-5 h-5" />
-              </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Cari Satış</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {(reportsData.paymentMethods.cari || 0).toFixed(2)} TL
-              </h2>
-            </div>
-
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-rose-500">
-              <div className="absolute right-3 top-3 text-rose-500 bg-rose-500/10 p-2 rounded-xl">
-                <DollarSign className="w-5 h-5" />
-              </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Ürün Maliyeti (COGS)</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {((reportsData.summary as any).totalCogs || 0).toFixed(2)} TL
-              </h2>
-            </div>
-
-            <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-purple-500">
-              <div className="absolute right-3 top-3 text-purple-500 bg-purple-500/10 p-2 rounded-xl">
-                <Star className="w-5 h-5" />
-              </div>
-              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Kâr</p>
-              <h2 className="text-xl font-heading font-black text-white mt-2">
-                {((reportsData.summary as any).netProfit || 0).toFixed(2)} TL
-              </h2>
-            </div>
-          </div>
-
-          {/* İNTERAKTİF PREMİUM GRAFİKLER */}
-          {(() => {
-            const hourlySales = reportsData.hourlySales || [];
-            const categorySales = reportsData.categorySales || [];
-            
-            // 1. Saatlik Yoğunluk Grafiği Hesaplamaları
-            const maxHour = Math.max(...hourlySales.map(h => h.total), 1);
-            const hourWidth = 500;
-            const hourHeight = 220;
-            const paddingL = 50;
-            const paddingR = 20;
-            const paddingT = 25;
-            const paddingB = 35;
-            
-            const cWidth = hourWidth - paddingL - paddingR;
-            const cHeight = hourHeight - paddingT - paddingB;
-            
-            const hourPoints = hourlySales.map((h, i) => {
-              const x = paddingL + (i / 23) * cWidth;
-              const y = paddingT + cHeight - (h.total / maxHour) * cHeight;
-              return { x, y, hour: h.hour, total: h.total };
-            });
-            
-            const areaPath = hourPoints.length > 0 
-              ? `M ${hourPoints[0].x} ${paddingT + cHeight} ` + 
-                hourPoints.map(p => `L ${p.x} ${p.y}`).join(' ') + 
-                ` L ${hourPoints[hourPoints.length - 1].x} ${paddingT + cHeight} Z`
-              : '';
-              
-            const linePath = hourPoints.length > 0
-              ? `M ${hourPoints[0].x} ${hourPoints[0].y} ` + hourPoints.map(p => `L ${p.x} ${p.y}`).join(' ')
-              : '';
-
-            // 2. Kategori Grafiği Hesaplamaları
-            const totalCatSales = categorySales.reduce((sum, c) => sum + c.value, 0);
-            const donutR = 55;
-            const donutCx = 110;
-            const donutCy = 110;
-            const donutC = 2 * Math.PI * donutR; // ~345.575
-            
-            let cumulativePercent = 0;
-            
-            const catColors = [
-              '#6366f1', // Indigo
-              '#06b6d4', // Cyan
-              '#10b981', // Emerald
-              '#f59e0b', // Amber
-              '#d946ef', // Fuchsia
-              '#8b5cf6', // Violet
-              '#f43f5e', // Rose
-              '#3b82f6', // Blue
-            ];
-            const catTextColors = [
-              'text-indigo-400',
-              'text-cyan-400',
-              'text-emerald-400',
-              'text-amber-400',
-              'text-fuchsia-400',
-              'text-violet-400',
-              'text-rose-400',
-              'text-blue-400',
-            ];
-            const catBgColors = [
-              'bg-indigo-500/10',
-              'bg-cyan-500/10',
-              'bg-emerald-500/10',
-              'bg-amber-500/10',
-              'bg-fuchsia-500/10',
-              'bg-violet-500/10',
-              'bg-rose-500/10',
-              'bg-blue-500/10',
-            ];
-
-            return (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
-                {/* Saatlik Yoğunluk Grafiği */}
-                <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col relative overflow-hidden">
-                  <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                    <Activity className="w-4 h-4 text-cyan-400" />
-                    <span>Saatlik Ciro Yoğunluğu (Peak Hours)</span>
-                  </h3>
-                  
-                  <div className="relative flex-1 min-h-[220px] flex items-center justify-center bg-slate-950/45 rounded-xl border border-slate-900 p-2">
-                    <svg viewBox={`0 0 ${hourWidth} ${hourHeight}`} className="w-full h-full overflow-visible">
-                      <defs>
-                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-                        </linearGradient>
-                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                          <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#6366f1" floodOpacity="0.4" />
-                        </filter>
-                      </defs>
-
-                      {/* Yatay Izgara Çizgileri ve Y Eksen Değerleri */}
-                      {[0, 0.25, 0.5, 0.75, 1].map((pct, idx) => {
-                        const y = paddingT + cHeight * (1 - pct);
-                        const labelValue = (maxHour * pct).toFixed(0);
-                        return (
-                          <g key={idx} className="opacity-70">
-                            <line 
-                              x1={paddingL} 
-                              y1={y} 
-                              x2={hourWidth - paddingR} 
-                              y2={y} 
-                              stroke="#1e293b" 
-                              strokeWidth="1" 
-                              strokeDasharray="3 3" 
-                            />
-                            <text 
-                              x={paddingL - 8} 
-                              y={y + 3} 
-                              fill="#94a3b8" 
-                              fontSize="8" 
-                              fontWeight="600" 
-                              textAnchor="end"
-                            >
-                              {labelValue} TL
-                            </text>
-                          </g>
-                        );
-                      })}
-
-                      {/* Area Fill */}
-                      {areaPath && (
-                        <path 
-                          d={areaPath} 
-                          fill="url(#areaGrad)" 
-                          className="chart-fade-in"
-                        />
-                      )}
-
-                      {/* Line Stroke */}
-                      {linePath && (
-                        <path 
-                          d={linePath} 
-                          fill="none" 
-                          stroke="#6366f1" 
-                          strokeWidth="2.5" 
-                          filter="url(#glow)"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="chart-draw-path"
-                        />
-                      )}
-
-                      {/* X Ekseni Çizgisi */}
-                      <line 
-                        x1={paddingL} 
-                        y1={paddingT + cHeight} 
-                        x2={hourWidth - paddingR} 
-                        y2={paddingT + cHeight} 
-                        stroke="#334155" 
-                        strokeWidth="1.5" 
-                      />
-
-                      {/* X Ekseni Etiketleri */}
-                      {hourPoints.filter((_, idx) => idx % 4 === 0 || idx === 23).map((p, idx) => (
-                        <text 
-                          key={idx} 
-                          x={p.x} 
-                          y={hourHeight - 12} 
-                          fill="#64748b" 
-                          fontSize="9" 
-                          fontWeight="bold" 
-                          textAnchor="middle"
-                        >
-                          {p.hour}
-                        </text>
-                      ))}
-
-                      {/* Dikey Kılavuz Çizgisi ve Nokta (Hover Durumunda) */}
-                      {hoveredHourIndex !== null && hourPoints[hoveredHourIndex] && (
-                        <g>
-                          <line 
-                            x1={hourPoints[hoveredHourIndex].x} 
-                            y1={paddingT} 
-                            x2={hourPoints[hoveredHourIndex].x} 
-                            y2={paddingT + cHeight} 
-                            stroke="rgba(99, 102, 241, 0.4)" 
-                            strokeWidth="1.5" 
-                            strokeDasharray="2 2" 
-                          />
-                          <circle 
-                            cx={hourPoints[hoveredHourIndex].x} 
-                            cy={hourPoints[hoveredHourIndex].y} 
-                            r="5.5" 
-                            fill="#6366f1" 
-                            stroke="#ffffff" 
-                            strokeWidth="2" 
-                            filter="url(#glow)" 
-                          />
-                        </g>
-                      )}
-
-                      {/* İnteraktif Hover Tetikleyicileri (Görünmez Dikdörtgenler) */}
-                      {hourPoints.map((p, idx) => {
-                        const rectW = cWidth / 24;
-                        const rectX = p.x - rectW / 2;
-                        return (
-                          <rect
-                            key={idx}
-                            x={rectX}
-                            y={paddingT}
-                            width={rectW}
-                            height={cHeight}
-                            fill="transparent"
-                            className="cursor-pointer"
-                            onMouseEnter={() => setHoveredHourIndex(idx)}
-                            onMouseLeave={() => setHoveredHourIndex(null)}
-                          />
-                        );
-                      })}
-                    </svg>
-
-                    {/* Tooltip HTML */}
-                    {hoveredHourIndex !== null && hourPoints[hoveredHourIndex] && (
-                      <div 
-                        className="absolute bg-slate-950/95 border border-indigo-500/30 text-white p-2.5 rounded-xl shadow-xl backdrop-blur-md text-[10px] pointer-events-none z-10 transition-all duration-150 animate-scale-in"
-                        style={{
-                          left: `${(hourPoints[hoveredHourIndex].x / hourWidth) * 100}%`,
-                          top: `${(hourPoints[hoveredHourIndex].y / hourHeight) * 100 - 32}%`,
-                          transform: 'translateX(-50%)',
-                        }}
-                      >
-                        <div className="font-bold text-slate-400">{hourPoints[hoveredHourIndex].hour} Dilimi</div>
-                        <div className="font-extrabold text-indigo-300 text-xs mt-0.5">
-                          {hourPoints[hoveredHourIndex].total.toFixed(2)} TL
-                        </div>
-                      </div>
-                    )}
+              {/* Z Raporu Özeti */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-emerald-500">
+                  <div className="absolute right-3 top-3 text-emerald-500 bg-emerald-500/10 p-2 rounded-xl">
+                    <TrendingUp className="w-5 h-5" />
                   </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {reportsData.summary.totalRevenue.toFixed(2)} TL
+                  </h2>
                 </div>
 
-                {/* Kategori Bazlı Dağılım */}
-                <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col">
-                  <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                    <Layers className="w-4 h-4 text-purple-400" />
-                    <span>Kategori Bazlı Ciro Dağılımı</span>
-                  </h3>
-                  
-                  <div className="flex-1 flex flex-col sm:flex-row items-center justify-around gap-6 bg-slate-950/45 rounded-xl border border-slate-900 p-4">
-                    {/* Donut Chart SVG */}
-                    <div className="relative w-[170px] h-[170px] shrink-0 flex items-center justify-center">
-                      <svg viewBox="0 0 220 220" className="w-full h-full transform -rotate-90">
-                        {totalCatSales === 0 ? (
-                          // Satış Yoksa Boş Halka Çiz
-                          <circle
-                            cx={donutCx}
-                            cy={donutCy}
-                            r={donutR}
-                            stroke="#1e293b"
-                            strokeWidth="10"
-                            fill="transparent"
-                          />
-                        ) : (
-                          categorySales.map((cat, idx) => {
-                            const pct = cat.value / totalCatSales;
-                            const dashSize = pct * donutC;
-                            const offset = -cumulativePercent * donutC;
-                            cumulativePercent += pct;
-                            
-                            const isHovered = hoveredCategoryIndex === idx;
-                            
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-indigo-500">
+                  <div className="absolute right-3 top-3 text-indigo-500 bg-indigo-500/10 p-2 rounded-xl">
+                    <ShoppingBag className="w-5 h-5" />
+                  </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {reportsData.summary.totalOrders} adet
+                  </h2>
+                </div>
+
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-amber-500">
+                  <div className="absolute right-3 top-3 text-amber-500 bg-amber-500/10 p-2 rounded-xl">
+                    <Percent className="w-5 h-5" />
+                  </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {reportsData.summary.totalDiscounts.toFixed(2)} TL
+                  </h2>
+                </div>
+
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-cyan-500">
+                  <div className="absolute right-3 top-3 text-cyan-500 bg-cyan-500/10 p-2 rounded-xl">
+                    <UserCheck className="w-5 h-5" />
+                  </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Cari Satış</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {(reportsData.paymentMethods.cari || 0).toFixed(2)} TL
+                  </h2>
+                </div>
+
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-rose-500">
+                  <div className="absolute right-3 top-3 text-rose-500 bg-rose-500/10 p-2 rounded-xl">
+                    <DollarSign className="w-5 h-5" />
+                  </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Ürün Maliyeti (COGS)</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {((reportsData.summary as any).totalCogs || 0).toFixed(2)} TL
+                  </h2>
+                </div>
+
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-purple-500">
+                  <div className="absolute right-3 top-3 text-purple-500 bg-purple-500/10 p-2 rounded-xl">
+                    <Star className="w-5 h-5" />
+                  </div>
+                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Kâr</p>
+                  <h2 className="text-xl font-heading font-black text-white mt-2">
+                    {((reportsData.summary as any).netProfit || 0).toFixed(2)} TL
+                  </h2>
+                </div>
+              </div>
+
+              {/* İNTERAKTİF PREMİUM GRAFİKLER */}
+              {(() => {
+                const hourlySales = reportsData.hourlySales || [];
+                const categorySales = reportsData.categorySales || [];
+
+                // 1. Saatlik Yoğunluk Grafiği Hesaplamaları
+                const maxHour = Math.max(...hourlySales.map(h => h.total), 1);
+                const hourWidth = 500;
+                const hourHeight = 220;
+                const paddingL = 50;
+                const paddingR = 20;
+                const paddingT = 25;
+                const paddingB = 35;
+
+                const cWidth = hourWidth - paddingL - paddingR;
+                const cHeight = hourHeight - paddingT - paddingB;
+
+                const hourPoints = hourlySales.map((h, i) => {
+                  const x = paddingL + (i / 23) * cWidth;
+                  const y = paddingT + cHeight - (h.total / maxHour) * cHeight;
+                  return { x, y, hour: h.hour, total: h.total };
+                });
+
+                const areaPath = hourPoints.length > 0
+                  ? `M ${hourPoints[0].x} ${paddingT + cHeight} ` +
+                  hourPoints.map(p => `L ${p.x} ${p.y}`).join(' ') +
+                  ` L ${hourPoints[hourPoints.length - 1].x} ${paddingT + cHeight} Z`
+                  : '';
+
+                const linePath = hourPoints.length > 0
+                  ? `M ${hourPoints[0].x} ${hourPoints[0].y} ` + hourPoints.map(p => `L ${p.x} ${p.y}`).join(' ')
+                  : '';
+
+                // 2. Kategori Grafiği Hesaplamaları
+                const totalCatSales = categorySales.reduce((sum, c) => sum + c.value, 0);
+                const donutR = 55;
+                const donutCx = 110;
+                const donutCy = 110;
+                const donutC = 2 * Math.PI * donutR; // ~345.575
+
+                let cumulativePercent = 0;
+
+                const catColors = [
+                  '#6366f1', // Indigo
+                  '#06b6d4', // Cyan
+                  '#10b981', // Emerald
+                  '#f59e0b', // Amber
+                  '#d946ef', // Fuchsia
+                  '#8b5cf6', // Violet
+                  '#f43f5e', // Rose
+                  '#3b82f6', // Blue
+                ];
+                const catTextColors = [
+                  'text-indigo-400',
+                  'text-cyan-400',
+                  'text-emerald-400',
+                  'text-amber-400',
+                  'text-fuchsia-400',
+                  'text-violet-400',
+                  'text-rose-400',
+                  'text-blue-400',
+                ];
+                const catBgColors = [
+                  'bg-indigo-500/10',
+                  'bg-cyan-500/10',
+                  'bg-emerald-500/10',
+                  'bg-amber-500/10',
+                  'bg-fuchsia-500/10',
+                  'bg-violet-500/10',
+                  'bg-rose-500/10',
+                  'bg-blue-500/10',
+                ];
+
+                return (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
+                    {/* Saatlik Yoğunluk Grafiği */}
+                    <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col relative overflow-hidden">
+                      <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                        <Activity className="w-4 h-4 text-cyan-400" />
+                        <span>Saatlik Ciro Yoğunluğu (Peak Hours)</span>
+                      </h3>
+
+                      <div className="relative flex-1 min-h-[220px] flex items-center justify-center bg-slate-950/45 rounded-xl border border-slate-900 p-2">
+                        <svg viewBox={`0 0 ${hourWidth} ${hourHeight}`} className="w-full h-full overflow-visible">
+                          <defs>
+                            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
+                              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                            </linearGradient>
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                              <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#6366f1" floodOpacity="0.4" />
+                            </filter>
+                          </defs>
+
+                          {/* Yatay Izgara Çizgileri ve Y Eksen Değerleri */}
+                          {[0, 0.25, 0.5, 0.75, 1].map((pct, idx) => {
+                            const y = paddingT + cHeight * (1 - pct);
+                            const labelValue = (maxHour * pct).toFixed(0);
                             return (
+                              <g key={idx} className="opacity-70">
+                                <line
+                                  x1={paddingL}
+                                  y1={y}
+                                  x2={hourWidth - paddingR}
+                                  y2={y}
+                                  stroke="#1e293b"
+                                  strokeWidth="1"
+                                  strokeDasharray="3 3"
+                                />
+                                <text
+                                  x={paddingL - 8}
+                                  y={y + 3}
+                                  fill="#94a3b8"
+                                  fontSize="8"
+                                  fontWeight="600"
+                                  textAnchor="end"
+                                >
+                                  {labelValue} TL
+                                </text>
+                              </g>
+                            );
+                          })}
+
+                          {/* Area Fill */}
+                          {areaPath && (
+                            <path
+                              d={areaPath}
+                              fill="url(#areaGrad)"
+                              className="chart-fade-in"
+                            />
+                          )}
+
+                          {/* Line Stroke */}
+                          {linePath && (
+                            <path
+                              d={linePath}
+                              fill="none"
+                              stroke="#6366f1"
+                              strokeWidth="2.5"
+                              filter="url(#glow)"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="chart-draw-path"
+                            />
+                          )}
+
+                          {/* X Ekseni Çizgisi */}
+                          <line
+                            x1={paddingL}
+                            y1={paddingT + cHeight}
+                            x2={hourWidth - paddingR}
+                            y2={paddingT + cHeight}
+                            stroke="#334155"
+                            strokeWidth="1.5"
+                          />
+
+                          {/* X Ekseni Etiketleri */}
+                          {hourPoints.filter((_, idx) => idx % 4 === 0 || idx === 23).map((p, idx) => (
+                            <text
+                              key={idx}
+                              x={p.x}
+                              y={hourHeight - 12}
+                              fill="#64748b"
+                              fontSize="9"
+                              fontWeight="bold"
+                              textAnchor="middle"
+                            >
+                              {p.hour}
+                            </text>
+                          ))}
+
+                          {/* Dikey Kılavuz Çizgisi ve Nokta (Hover Durumunda) */}
+                          {hoveredHourIndex !== null && hourPoints[hoveredHourIndex] && (
+                            <g>
+                              <line
+                                x1={hourPoints[hoveredHourIndex].x}
+                                y1={paddingT}
+                                x2={hourPoints[hoveredHourIndex].x}
+                                y2={paddingT + cHeight}
+                                stroke="rgba(99, 102, 241, 0.4)"
+                                strokeWidth="1.5"
+                                strokeDasharray="2 2"
+                              />
                               <circle
+                                cx={hourPoints[hoveredHourIndex].x}
+                                cy={hourPoints[hoveredHourIndex].y}
+                                r="5.5"
+                                fill="#6366f1"
+                                stroke="#ffffff"
+                                strokeWidth="2"
+                                filter="url(#glow)"
+                              />
+                            </g>
+                          )}
+
+                          {/* İnteraktif Hover Tetikleyicileri (Görünmez Dikdörtgenler) */}
+                          {hourPoints.map((p, idx) => {
+                            const rectW = cWidth / 24;
+                            const rectX = p.x - rectW / 2;
+                            return (
+                              <rect
                                 key={idx}
+                                x={rectX}
+                                y={paddingT}
+                                width={rectW}
+                                height={cHeight}
+                                fill="transparent"
+                                className="cursor-pointer"
+                                onMouseEnter={() => setHoveredHourIndex(idx)}
+                                onMouseLeave={() => setHoveredHourIndex(null)}
+                              />
+                            );
+                          })}
+                        </svg>
+
+                        {/* Tooltip HTML */}
+                        {hoveredHourIndex !== null && hourPoints[hoveredHourIndex] && (
+                          <div
+                            className="absolute bg-slate-950/95 border border-indigo-500/30 text-white p-2.5 rounded-xl shadow-xl backdrop-blur-md text-[10px] pointer-events-none z-10 transition-all duration-150 animate-scale-in"
+                            style={{
+                              left: `${(hourPoints[hoveredHourIndex].x / hourWidth) * 100}%`,
+                              top: `${(hourPoints[hoveredHourIndex].y / hourHeight) * 100 - 32}%`,
+                              transform: 'translateX(-50%)',
+                            }}
+                          >
+                            <div className="font-bold text-slate-400">{hourPoints[hoveredHourIndex].hour} Dilimi</div>
+                            <div className="font-extrabold text-indigo-300 text-xs mt-0.5">
+                              {hourPoints[hoveredHourIndex].total.toFixed(2)} TL
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Kategori Bazlı Dağılım */}
+                    <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col">
+                      <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                        <Layers className="w-4 h-4 text-purple-400" />
+                        <span>Kategori Bazlı Ciro Dağılımı</span>
+                      </h3>
+
+                      <div className="flex-1 flex flex-col sm:flex-row items-center justify-around gap-6 bg-slate-950/45 rounded-xl border border-slate-900 p-4">
+                        {/* Donut Chart SVG */}
+                        <div className="relative w-[170px] h-[170px] shrink-0 flex items-center justify-center">
+                          <svg viewBox="0 0 220 220" className="w-full h-full transform -rotate-90">
+                            {totalCatSales === 0 ? (
+                              // Satış Yoksa Boş Halka Çiz
+                              <circle
                                 cx={donutCx}
                                 cy={donutCy}
                                 r={donutR}
-                                stroke={catColors[idx % catColors.length]}
-                                strokeWidth={isHovered ? 15 : 10}
+                                stroke="#1e293b"
+                                strokeWidth="10"
                                 fill="transparent"
-                                strokeDasharray={`${dashSize} ${donutC - dashSize}`}
-                                strokeDashoffset={offset}
-                                className="transition-all duration-200 cursor-pointer"
-                                strokeLinecap={pct > 0.03 ? 'round' : 'butt'}
-                                onMouseEnter={() => setHoveredCategoryIndex(idx)}
-                                onMouseLeave={() => setHoveredCategoryIndex(null)}
                               />
-                            );
-                          })
-                        )}
-                      </svg>
+                            ) : (
+                              categorySales.map((cat, idx) => {
+                                const pct = cat.value / totalCatSales;
+                                const dashSize = pct * donutC;
+                                const offset = -cumulativePercent * donutC;
+                                cumulativePercent += pct;
 
-                      {/* Donut Center Text */}
-                      <div className="absolute flex flex-col items-center text-center justify-center bg-slate-950/70 w-[94px] h-[94px] rounded-full border border-slate-800/60 backdrop-blur-sm pointer-events-none select-none">
-                        {hoveredCategoryIndex !== null && categorySales[hoveredCategoryIndex] ? (
-                          <>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase truncate max-w-[80px]">
-                              {categorySales[hoveredCategoryIndex].name}
-                            </span>
-                            <span className="text-xs font-black text-white mt-0.5">
-                              {((categorySales[hoveredCategoryIndex].value / totalCatSales) * 100).toFixed(0)}%
-                            </span>
-                            <span className="text-[9px] font-bold text-indigo-300 mt-0.5">
-                              {categorySales[hoveredCategoryIndex].value.toFixed(0)} TL
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
-                              Toplam
-                            </span>
-                            <span className="text-[11px] font-black text-white mt-0.5 leading-tight">
-                              {totalCatSales.toFixed(0)} TL
-                            </span>
-                            <span className="text-[8px] font-bold text-slate-500 mt-0.5">
-                              {categorySales.length} Kategori
-                            </span>
-                          </>
-                        )}
+                                const isHovered = hoveredCategoryIndex === idx;
+
+                                return (
+                                  <circle
+                                    key={idx}
+                                    cx={donutCx}
+                                    cy={donutCy}
+                                    r={donutR}
+                                    stroke={catColors[idx % catColors.length]}
+                                    strokeWidth={isHovered ? 15 : 10}
+                                    fill="transparent"
+                                    strokeDasharray={`${dashSize} ${donutC - dashSize}`}
+                                    strokeDashoffset={offset}
+                                    className="transition-all duration-200 cursor-pointer"
+                                    strokeLinecap={pct > 0.03 ? 'round' : 'butt'}
+                                    onMouseEnter={() => setHoveredCategoryIndex(idx)}
+                                    onMouseLeave={() => setHoveredCategoryIndex(null)}
+                                  />
+                                );
+                              })
+                            )}
+                          </svg>
+
+                          {/* Donut Center Text */}
+                          <div className="absolute flex flex-col items-center text-center justify-center bg-slate-950/70 w-[94px] h-[94px] rounded-full border border-slate-800/60 backdrop-blur-sm pointer-events-none select-none">
+                            {hoveredCategoryIndex !== null && categorySales[hoveredCategoryIndex] ? (
+                              <>
+                                <span className="text-[9px] font-bold text-slate-400 uppercase truncate max-w-[80px]">
+                                  {categorySales[hoveredCategoryIndex].name}
+                                </span>
+                                <span className="text-xs font-black text-white mt-0.5">
+                                  {((categorySales[hoveredCategoryIndex].value / totalCatSales) * 100).toFixed(0)}%
+                                </span>
+                                <span className="text-[9px] font-bold text-indigo-300 mt-0.5">
+                                  {categorySales[hoveredCategoryIndex].value.toFixed(0)} TL
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                                  Toplam
+                                </span>
+                                <span className="text-[11px] font-black text-white mt-0.5 leading-tight">
+                                  {totalCatSales.toFixed(0)} TL
+                                </span>
+                                <span className="text-[8px] font-bold text-slate-500 mt-0.5">
+                                  {categorySales.length} Kategori
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Legend List */}
+                        <div className="flex-1 w-full space-y-1.5 max-h-[160px] overflow-y-auto pr-1 scrollbar-thin">
+                          {categorySales.length === 0 ? (
+                            <div className="text-center py-6 text-slate-500 italic text-[10px]">Satış kaydı bulunamadı.</div>
+                          ) : (
+                            categorySales.map((cat, idx) => {
+                              const pct = totalCatSales > 0 ? (cat.value / totalCatSales) * 100 : 0;
+                              const isHovered = hoveredCategoryIndex === idx;
+                              return (
+                                <div
+                                  key={idx}
+                                  className={`flex items-center justify-between p-1.5 rounded-lg transition-colors cursor-pointer ${isHovered ? 'bg-slate-900 text-white' : 'hover:bg-slate-900/40 text-slate-300'
+                                    }`}
+                                  onMouseEnter={() => setHoveredCategoryIndex(idx)}
+                                  onMouseLeave={() => setHoveredCategoryIndex(null)}
+                                >
+                                  <div className="flex items-center space-x-2 truncate">
+                                    <span
+                                      className="w-2.5 h-2.5 rounded shrink-0"
+                                      style={{ backgroundColor: catColors[idx % catColors.length] }}
+                                    />
+                                    <span className="text-[10px] font-bold truncate max-w-[100px]">{cat.name}</span>
+                                  </div>
+                                  <div className="text-right shrink-0 font-mono text-[9px] font-bold">
+                                    <span className="text-slate-400 mr-2">{pct.toFixed(0)}%</span>
+                                    <span className={catTextColors[idx % catTextColors.length]}>{cat.value.toFixed(1)} TL</span>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
                       </div>
                     </div>
+                  </div>
+                );
+              })()}
 
-                    {/* Legend List */}
-                    <div className="flex-1 w-full space-y-1.5 max-h-[160px] overflow-y-auto pr-1 scrollbar-thin">
-                      {categorySales.length === 0 ? (
-                        <div className="text-center py-6 text-slate-500 italic text-[10px]">Satış kaydı bulunamadı.</div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  {/* Ödeme Tipleri */}
+                  <div className="glass-card p-5 rounded-2xl shadow-md">
+                    <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                      <span>Ödeme Yöntemi Dağılımı</span>
+                    </h3>
+                    <div className="space-y-3.5">
+                      {[
+                        { label: 'Nakit (Cash)', val: reportsData.paymentMethods.cash, color: 'bg-emerald-500' },
+                        { label: 'Kredi Kartı', val: reportsData.paymentMethods.creditCard, color: 'bg-indigo-500' },
+                        { label: 'Yemek Kartı', val: reportsData.paymentMethods.mealCard, color: 'bg-cyan-500' },
+                        { label: 'Cari (Veresiye)', val: reportsData.paymentMethods.cari || 0, color: 'bg-amber-500' }
+                      ].map((pay, i) => {
+                        const pct = reportsData.summary.totalRevenue > 0
+                          ? (pay.val / reportsData.summary.totalRevenue) * 100
+                          : 0;
+                        return (
+                          <div key={i} className="space-y-1.5">
+                            <div className="flex justify-between text-xs font-semibold">
+                              <span className="text-slate-300">{pay.label}</span>
+                              <span className="text-slate-100">{pay.val.toFixed(2)} TL ({pct.toFixed(1)}%)</span>
+                            </div>
+                            <div className="w-full bg-slate-900 rounded-full h-2">
+                              <div className={`h-2 rounded-full ${pay.color}`} style={{ width: `${pct}%` }}></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Garson Satış Raporu */}
+                  <div className="glass-card p-5 rounded-2xl shadow-md">
+                    <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                      <Users className="w-4 h-4 text-emerald-400" />
+                      <span>Garson Satış & Ciro Performansı</span>
+                    </h3>
+                    <div className="divide-y divide-slate-850 text-xs">
+                      {reportsData.waiterSalesPerformance.length === 0 ? (
+                        <div className="text-center py-6 text-slate-500 italic">Kayıtlı garson satışı bulunamadı.</div>
                       ) : (
-                        categorySales.map((cat, idx) => {
-                          const pct = totalCatSales > 0 ? (cat.value / totalCatSales) * 100 : 0;
-                          const isHovered = hoveredCategoryIndex === idx;
-                          return (
-                            <div 
-                              key={idx}
-                              className={`flex items-center justify-between p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                isHovered ? 'bg-slate-900 text-white' : 'hover:bg-slate-900/40 text-slate-300'
-                              }`}
-                              onMouseEnter={() => setHoveredCategoryIndex(idx)}
-                              onMouseLeave={() => setHoveredCategoryIndex(null)}
+                        reportsData.waiterSalesPerformance.map((waiter, i) => (
+                          <div key={i} className="flex flex-col py-2">
+                            <div
+                              className="flex justify-between items-center cursor-pointer hover:bg-slate-900/40 p-2 rounded-xl transition"
+                              onClick={() => setExpandedWaiterIndex(expandedWaiterIndex === i ? null : i)}
                             >
-                              <div className="flex items-center space-x-2 truncate">
-                                <span 
-                                  className="w-2.5 h-2.5 rounded shrink-0"
-                                  style={{ backgroundColor: catColors[idx % catColors.length] }}
-                                />
-                                <span className="text-[10px] font-bold truncate max-w-[100px]">{cat.name}</span>
+                              <div>
+                                <div className="font-bold text-slate-200">{waiter.name}</div>
+                                <div className="text-[10px] text-slate-500">Kapatılan Adisyon: {waiter.ordersCount} adet</div>
                               </div>
-                              <div className="text-right shrink-0 font-mono text-[9px] font-bold">
-                                <span className="text-slate-400 mr-2">{pct.toFixed(0)}%</span>
-                                <span className={catTextColors[idx % catTextColors.length]}>{cat.value.toFixed(1)} TL</span>
+                              <div className="flex items-center space-x-2">
+                                <span className="bg-emerald-500/10 text-emerald-400 font-extrabold px-3 py-1 rounded-full text-xs">
+                                  {waiter.totalSales.toFixed(2)} TL Satış
+                                </span>
+                                {expandedWaiterIndex === i ? <ArrowUp className="w-4 h-4 text-slate-400" /> : <ArrowDown className="w-4 h-4 text-slate-400" />}
                               </div>
                             </div>
-                          );
-                        })
+                            {expandedWaiterIndex === i && (
+                              <div className="mt-2 px-2 animate-scale-in">
+                                <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3 space-y-2">
+                                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-2">Sattığı Ürünler</h4>
+                                  {waiter.items && waiter.items.length > 0 ? (
+                                    <div className="max-h-[150px] overflow-y-auto pr-1 scrollbar-thin space-y-1.5">
+                                      {waiter.items.map((item, idx) => (
+                                        <div key={idx} className="flex justify-between items-center text-[11px]">
+                                          <div className="flex items-center space-x-2">
+                                            <span className="text-slate-500 font-mono w-5">{item.quantity}x</span>
+                                            <span className="text-slate-300 font-medium">{item.name}</span>
+                                          </div>
+                                          <span className="text-emerald-400/80 font-semibold">{item.total.toFixed(2)} TL</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div className="text-[10px] text-slate-500 italic">Ürün detayı bulunamadı.</div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {/* En Çok Satan Ürünler */}
+                  <div className="glass-card p-5 rounded-2xl shadow-md">
+                    <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+                      <span>En Çok Satan 5 Ürün</span>
+                    </h3>
+                    <div className="divide-y divide-slate-850">
+                      {reportsData.topProducts.map((p, i) => (
+                        <div key={i} className="flex justify-between items-center py-2.5 text-xs">
+                          <div className="flex items-center space-x-2.5">
+                            <span className="w-5 h-5 rounded bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-[10px]">
+                              {i + 1}
+                            </span>
+                            <span className="font-semibold text-slate-200">{p.name}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{p.quantity} Adet</span>
+                            <span className="font-bold text-slate-100">{p.total.toFixed(2)} TL</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* En Çok Tercih Edilen 5 Masa */}
+                  <div className="glass-card p-5 rounded-2xl shadow-md">
+                    <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                      <span>En Çok Tercih Edilen 5 Masa</span>
+                    </h3>
+                    <div className="divide-y divide-slate-850">
+                      {(!reportsData.topTables || reportsData.topTables.length === 0) ? (
+                        <div className="text-center py-6 text-slate-500 italic">Masa kullanım verisi bulunamadı.</div>
+                      ) : (
+                        reportsData.topTables.map((t, i) => (
+                          <div key={i} className="flex justify-between items-center py-2.5 text-xs">
+                            <div className="flex items-center space-x-2.5">
+                              <span className="w-5 h-5 rounded bg-cyan-500/10 text-cyan-400 font-bold flex items-center justify-center text-[10px]">
+                                {i + 1}
+                              </span>
+                              <span className="font-semibold text-slate-200">{t.name} Masası</span>
+                            </div>
+                            <div className="text-right">
+                              <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{t.orderCount} Kere</span>
+                              <span className="font-bold text-slate-100">{t.totalRevenue.toFixed(2)} TL Ciro</span>
+                            </div>
+                          </div>
+                        ))
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-            );
-          })()}
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="space-y-6">
-              {/* Ödeme Tipleri */}
-              <div className="glass-card p-5 rounded-2xl shadow-md">
+              {/* Kapatılan Toplam Adisyonlar (Z Günlüğü) */}
+              <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
                 <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>Ödeme Yöntemi Dağılımı</span>
+                  <FileSpreadsheet className="w-4 h-4 text-indigo-400" />
+                  <span>Günlük Kapatılan Adisyon Defteri (Z Günlüğü)</span>
                 </h3>
-                <div className="space-y-3.5">
-                  {[
-                    { label: 'Nakit (Cash)', val: reportsData.paymentMethods.cash, color: 'bg-emerald-500' },
-                    { label: 'Kredi Kartı', val: reportsData.paymentMethods.creditCard, color: 'bg-indigo-500' },
-                    { label: 'Yemek Kartı', val: reportsData.paymentMethods.mealCard, color: 'bg-cyan-500' },
-                    { label: 'Cari (Veresiye)', val: reportsData.paymentMethods.cari || 0, color: 'bg-amber-500' }
-                  ].map((pay, i) => {
-                    const pct = reportsData.summary.totalRevenue > 0
-                      ? (pay.val / reportsData.summary.totalRevenue) * 100
-                      : 0;
-                    return (
-                      <div key={i} className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">{pay.label}</span>
-                          <span className="text-slate-100">{pay.val.toFixed(2)} TL ({pct.toFixed(1)}%)</span>
-                        </div>
-                        <div className="w-full bg-slate-900 rounded-full h-2">
-                          <div className={`h-2 rounded-full ${pay.color}`} style={{ width: `${pct}%` }}></div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Garson Satış Raporu */}
-              <div className="glass-card p-5 rounded-2xl shadow-md">
-                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-emerald-400" />
-                  <span>Garson Satış & Ciro Performansı</span>
-                </h3>
-                <div className="divide-y divide-slate-850 text-xs">
-                  {reportsData.waiterSalesPerformance.length === 0 ? (
-                    <div className="text-center py-6 text-slate-500 italic">Kayıtlı garson satışı bulunamadı.</div>
-                  ) : (
-                    reportsData.waiterSalesPerformance.map((waiter, i) => (
-                      <div key={i} className="flex flex-col py-2">
-                        <div 
-                          className="flex justify-between items-center cursor-pointer hover:bg-slate-900/40 p-2 rounded-xl transition"
-                          onClick={() => setExpandedWaiterIndex(expandedWaiterIndex === i ? null : i)}
-                        >
-                          <div>
-                            <div className="font-bold text-slate-200">{waiter.name}</div>
-                            <div className="text-[10px] text-slate-500">Kapatılan Adisyon: {waiter.ordersCount} adet</div>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="bg-emerald-500/10 text-emerald-400 font-extrabold px-3 py-1 rounded-full text-xs">
-                              {waiter.totalSales.toFixed(2)} TL Satış
-                            </span>
-                            {expandedWaiterIndex === i ? <ArrowUp className="w-4 h-4 text-slate-400" /> : <ArrowDown className="w-4 h-4 text-slate-400" />}
-                          </div>
-                        </div>
-                        {expandedWaiterIndex === i && (
-                          <div className="mt-2 px-2 animate-scale-in">
-                            <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3 space-y-2">
-                              <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-2">Sattığı Ürünler</h4>
-                              {waiter.items && waiter.items.length > 0 ? (
-                                <div className="max-h-[150px] overflow-y-auto pr-1 scrollbar-thin space-y-1.5">
-                                  {waiter.items.map((item, idx) => (
-                                    <div key={idx} className="flex justify-between items-center text-[11px]">
-                                      <div className="flex items-center space-x-2">
-                                        <span className="text-slate-500 font-mono w-5">{item.quantity}x</span>
-                                        <span className="text-slate-300 font-medium">{item.name}</span>
-                                      </div>
-                                      <span className="text-emerald-400/80 font-semibold">{item.total.toFixed(2)} TL</span>
-                                    </div>
-                                  ))}
-                                </div>
+                <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                        <th className="p-3">Kapatılma Zamanı</th>
+                        <th className="p-3">Masa</th>
+                        <th className="p-3">Siparişi Kapatan Garson</th>
+                        <th className="p-3">Cari İsim (Cari ise)</th>
+                        <th className="p-3 text-right">Net Tutar</th>
+                        <th className="p-3 text-center">Detay</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-850">
+                      {reportsData.adisyonHistory.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="p-6 text-center text-slate-500 italic">
+                            Kapatılmış adisyon bulunmamaktadır.
+                          </td>
+                        </tr>
+                      ) : (
+                        reportsData.adisyonHistory.map((o) => (
+                          <tr key={o.id} className="hover:bg-slate-900/20 transition text-slate-300">
+                            <td className="p-3 font-mono text-slate-500">
+                              {new Date(o.updatedAt).toLocaleTimeString('tr-TR')}
+                            </td>
+                            <td className="p-3 font-bold text-slate-200">{o.tableName}</td>
+                            <td className="p-3 text-slate-300 font-semibold">{o.waiterName}</td>
+                            <td className="p-3">
+                              {o.customerName ? (
+                                <span className="text-cyan-400 font-semibold">{o.customerName}</span>
                               ) : (
-                                <div className="text-[10px] text-slate-500 italic">Ürün detayı bulunamadı.</div>
+                                <span className="text-slate-500">-</span>
                               )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
+                            </td>
+                            <td className="p-3 text-right font-extrabold text-indigo-300">
+                              {o.paidAmount.toFixed(2)} TL
+                            </td>
+                            <td className="p-3 text-center">
+                              <button
+                                onClick={() => setSelectedAdisyon(o)}
+                                className="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 px-2.5 rounded-lg font-bold"
+                              >
+                                İncele
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-6">
-              {/* En Çok Satan Ürünler */}
-              <div className="glass-card p-5 rounded-2xl shadow-md">
+              {/* Günlük Toplam Satılan Ürün Özeti */}
+              <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
                 <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-purple-400"></span>
-                  <span>En Çok Satan 5 Ürün</span>
+                  <Package className="w-4 h-4 text-cyan-400" />
+                  <span>Günlük Satılan Toplam Ürün Raporu</span>
                 </h3>
-                <div className="divide-y divide-slate-850">
-                  {reportsData.topProducts.map((p, i) => (
-                    <div key={i} className="flex justify-between items-center py-2.5 text-xs">
-                      <div className="flex items-center space-x-2.5">
-                        <span className="w-5 h-5 rounded bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-[10px]">
-                          {i + 1}
-                        </span>
-                        <span className="font-semibold text-slate-200">{p.name}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{p.quantity} Adet</span>
-                        <span className="font-bold text-slate-100">{p.total.toFixed(2)} TL</span>
-                      </div>
-                    </div>
-                  ))}
+                <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                        <th className="p-3">Ürün Adı</th>
+                        <th className="p-3 text-center">Toplam Adet</th>
+                        <th className="p-3 text-right">Toplam Ciro</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-850">
+                      {!reportsData.productSalesSummary || reportsData.productSalesSummary.length === 0 ? (
+                        <tr>
+                          <td colSpan={3} className="p-6 text-center text-slate-500 italic">
+                            Satılan ürün kaydı bulunmamaktadır.
+                          </td>
+                        </tr>
+                      ) : (
+                        reportsData.productSalesSummary.map((p, idx) => (
+                          <tr key={idx} className="hover:bg-slate-900/20 transition text-slate-300">
+                            <td className="p-3 font-semibold text-slate-200">{p.name}</td>
+                            <td className="p-3 text-center font-extrabold text-cyan-400">{p.quantity} Adet</td>
+                            <td className="p-3 text-right font-extrabold text-emerald-400">{p.total.toFixed(2)} TL</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-
-              {/* En Çok Tercih Edilen 5 Masa */}
-              <div className="glass-card p-5 rounded-2xl shadow-md">
-                <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
-                  <span>En Çok Tercih Edilen 5 Masa</span>
-                </h3>
-                <div className="divide-y divide-slate-850">
-                  {(!reportsData.topTables || reportsData.topTables.length === 0) ? (
-                    <div className="text-center py-6 text-slate-500 italic">Masa kullanım verisi bulunamadı.</div>
-                  ) : (
-                    reportsData.topTables.map((t, i) => (
-                      <div key={i} className="flex justify-between items-center py-2.5 text-xs">
-                        <div className="flex items-center space-x-2.5">
-                          <span className="w-5 h-5 rounded bg-cyan-500/10 text-cyan-400 font-bold flex items-center justify-center text-[10px]">
-                            {i + 1}
-                          </span>
-                          <span className="font-semibold text-slate-200">{t.name} Masası</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{t.orderCount} Kere</span>
-                          <span className="font-bold text-slate-100">{t.totalRevenue.toFixed(2)} TL Ciro</span>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Kapatılan Toplam Adisyonlar (Z Günlüğü) */}
-          <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
-            <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-              <FileSpreadsheet className="w-4 h-4 text-indigo-400" />
-              <span>Günlük Kapatılan Adisyon Defteri (Z Günlüğü)</span>
-            </h3>
-            <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
-                    <th className="p-3">Kapatılma Zamanı</th>
-                    <th className="p-3">Masa</th>
-                    <th className="p-3">Siparişi Kapatan Garson</th>
-                    <th className="p-3">Cari İsim (Cari ise)</th>
-                    <th className="p-3 text-right">Net Tutar</th>
-                    <th className="p-3 text-center">Detay</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-850">
-                  {reportsData.adisyonHistory.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="p-6 text-center text-slate-500 italic">
-                        Kapatılmış adisyon bulunmamaktadır.
-                      </td>
-                    </tr>
-                  ) : (
-                    reportsData.adisyonHistory.map((o) => (
-                      <tr key={o.id} className="hover:bg-slate-900/20 transition text-slate-300">
-                        <td className="p-3 font-mono text-slate-500">
-                          {new Date(o.updatedAt).toLocaleTimeString('tr-TR')}
-                        </td>
-                        <td className="p-3 font-bold text-slate-200">{o.tableName}</td>
-                        <td className="p-3 text-slate-300 font-semibold">{o.waiterName}</td>
-                        <td className="p-3">
-                          {o.customerName ? (
-                            <span className="text-cyan-400 font-semibold">{o.customerName}</span>
-                          ) : (
-                            <span className="text-slate-500">-</span>
-                          )}
-                        </td>
-                        <td className="p-3 text-right font-extrabold text-indigo-300">
-                          {o.paidAmount.toFixed(2)} TL
-                        </td>
-                        <td className="p-3 text-center">
-                          <button
-                            onClick={() => setSelectedAdisyon(o)}
-                            className="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 px-2.5 rounded-lg font-bold"
-                          >
-                            İncele
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Günlük Toplam Satılan Ürün Özeti */}
-          <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
-            <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-              <Package className="w-4 h-4 text-cyan-400" />
-              <span>Günlük Satılan Toplam Ürün Raporu</span>
-            </h3>
-            <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
-                    <th className="p-3">Ürün Adı</th>
-                    <th className="p-3 text-center">Toplam Adet</th>
-                    <th className="p-3 text-right">Toplam Ciro</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-850">
-                  {!reportsData.productSalesSummary || reportsData.productSalesSummary.length === 0 ? (
-                    <tr>
-                      <td colSpan={3} className="p-6 text-center text-slate-500 italic">
-                        Satılan ürün kaydı bulunmamaktadır.
-                      </td>
-                    </tr>
-                  ) : (
-                    reportsData.productSalesSummary.map((p, idx) => (
-                      <tr key={idx} className="hover:bg-slate-900/20 transition text-slate-300">
-                        <td className="p-3 font-semibold text-slate-200">{p.name}</td>
-                        <td className="p-3 text-center font-extrabold text-cyan-400">{p.quantity} Adet</td>
-                        <td className="p-3 text-right font-extrabold text-emerald-400">{p.total.toFixed(2)} TL</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
             </>
           )}
 
@@ -1790,11 +1775,10 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                               <td className="p-3 text-right font-bold text-rose-300">{c.cost.toFixed(2)} TL</td>
                               <td className="p-3 text-right font-bold text-emerald-400">{c.margin.toFixed(2)} TL</td>
                               <td className="p-3 text-center">
-                                <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                                  isHighMargin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                  isLowMargin ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                                  'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                }`}>
+                                <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${isHighMargin ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                    isLowMargin ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                                      'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                  }`}>
                                   {c.marginPercentage}%
                                 </span>
                               </td>
@@ -1933,12 +1917,11 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                       {new Date(log.createdAt).toLocaleString('tr-TR')}
                     </td>
                     <td className="p-4 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                        log.actionType === 'ITEM_CANCEL' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                        log.actionType === 'TABLE_MERGE' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' :
-                        log.actionType === 'DISCOUNT_APPLIED' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                        'bg-slate-800 text-slate-300'
-                      }`}>
+                      <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${log.actionType === 'ITEM_CANCEL' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                          log.actionType === 'TABLE_MERGE' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' :
+                            log.actionType === 'DISCOUNT_APPLIED' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                              'bg-slate-800 text-slate-300'
+                        }`}>
                         {log.actionType}
                       </span>
                     </td>
@@ -1987,11 +1970,10 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                 <div
                   key={cat.id}
                   onClick={() => setSelectedMenuCategoryId(cat.id)}
-                  className={`p-3 rounded-xl border flex items-center justify-between transition cursor-pointer ${
-                    selectedMenuCategoryId === cat.id
+                  className={`p-3 rounded-xl border flex items-center justify-between transition cursor-pointer ${selectedMenuCategoryId === cat.id
                       ? 'bg-indigo-500/10 border-indigo-500/80 text-white font-semibold'
                       : 'bg-slate-900/40 border-slate-850 text-slate-400 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   <span className="truncate pr-4">
                     {cat.name} <span className="text-[10px] text-slate-500 ml-1">({cat.products.length} ürün)</span>
@@ -2080,10 +2062,10 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                               <td className="p-3 font-semibold text-slate-200">
                                 <div className="flex items-center space-x-2">
                                   {prod.image && (
-                                    <img 
-                                      src={prod.image} 
-                                      alt={prod.name} 
-                                      className="w-7 h-7 rounded-lg object-cover border border-slate-800 shrink-0" 
+                                    <img
+                                      src={prod.image}
+                                      alt={prod.name}
+                                      className="w-7 h-7 rounded-lg object-cover border border-slate-800 shrink-0"
                                     />
                                   )}
                                   <span>{prod.name}</span>
@@ -2091,9 +2073,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                               </td>
                               <td className="p-3 text-right font-bold text-cyan-300">{prod.price.toFixed(2)} TL</td>
                               <td className="p-3 text-center">
-                                <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${
-                                  prod.isStockControlled ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-500'
-                                }`}>
+                                <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${prod.isStockControlled ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-500'
+                                  }`}>
                                   {prod.isStockControlled ? 'Aktif' : 'Pasif'}
                                 </span>
                               </td>
@@ -2251,9 +2232,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                     <td className="p-3 font-semibold text-slate-200">{tbl.name}</td>
                     <td className="p-3 text-slate-400 font-semibold">{tbl.area}</td>
                     <td className="p-3 text-center">
-                      <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${
-                        tbl.status === 'EMPTY' ? 'bg-slate-800 text-slate-400' : 'bg-rose-500/20 text-rose-400'
-                      }`}>
+                      <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${tbl.status === 'EMPTY' ? 'bg-slate-800 text-slate-400' : 'bg-rose-500/20 text-rose-400'
+                        }`}>
                         {tbl.status === 'EMPTY' ? 'Boş' : 'Dolu'}
                       </span>
                     </td>
@@ -2516,7 +2496,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                           >
                             ×
                           </button>
-                          
+
                           <div className="grid grid-cols-1 gap-2">
                             <div>
                               <label className="block text-[9px] text-slate-500 mb-0.5">Malzeme</label>
@@ -2534,7 +2514,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                                 ))}
                               </select>
                             </div>
-                            
+
                             <div className="grid grid-cols-2 gap-2">
                               <div>
                                 <label className="block text-[9px] text-slate-500 mb-0.5">Gerekli Mik. ({ingredients.find(i => i.id === item.ingredientId)?.unit || ''})</label>
@@ -2885,7 +2865,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
               {/* Timeline list of Cari Orders and Cash Collections */}
               <div>
                 <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Cari Hesap Hareketleri</h4>
-                
+
                 {selectedCariStatement.orders.length === 0 && selectedCariStatement.collections.length === 0 ? (
                   <div className="text-center py-10 text-slate-500 italic border border-dashed border-slate-800 rounded-2xl">
                     Hesaba ait cari hareket bulunmuyor.
@@ -2904,7 +2884,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                         date: new Date(c.createdAt),
                         data: c
                       }));
-                      
+
                       const allMoves = [...debits, ...credits].sort((a, b) => b.date.getTime() - a.date.getTime());
 
                       return allMoves.map((move, idx) => {
@@ -2922,7 +2902,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                               </div>
                               <div className="flex justify-between items-center text-xs">
                                 <div>
-                                  Masa: <strong className="text-slate-200">{o.tableName}</strong> • 
+                                  Masa: <strong className="text-slate-200">{o.tableName}</strong> •
                                   Garson: <span className="text-slate-400 font-semibold ml-1">{o.waiterName}</span>
                                 </div>
                                 <span className="font-black text-rose-400 text-sm">+{o.totalAmount.toFixed(2)} TL</span>
@@ -2934,7 +2914,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                                   return (
                                     <div key={i} className="flex justify-between pt-1 first:pt-0">
                                       <span>
-                                        {item.quantity}x {item.productName} 
+                                        {item.quantity}x {item.productName}
                                         {mods.length > 0 && <span className="text-indigo-400 ml-1">({mods.map((m: any) => m.name).join(', ')})</span>}
                                       </span>
                                       <span className="font-bold text-slate-300">
@@ -3250,17 +3230,15 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
               <div className="flex bg-slate-950 border border-slate-800 p-1 rounded-xl">
                 <button
                   onClick={() => setCollectionModal({ ...collectionModal, paymentMethod: 'CASH' })}
-                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    collectionModal.paymentMethod === 'CASH' ? 'gradient-primary text-white' : 'text-slate-400'
-                  }`}
+                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CASH' ? 'gradient-primary text-white' : 'text-slate-400'
+                    }`}
                 >
                   Nakit
                 </button>
                 <button
                   onClick={() => setCollectionModal({ ...collectionModal, paymentMethod: 'CREDIT_CARD' })}
-                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    collectionModal.paymentMethod === 'CREDIT_CARD' ? 'gradient-primary text-white' : 'text-slate-400'
-                  }`}
+                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CREDIT_CARD' ? 'gradient-primary text-white' : 'text-slate-400'
+                    }`}
                 >
                   Kredi Kartı
                 </button>
@@ -3413,9 +3391,9 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                   />
                   {productModal.image && (
                     <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-slate-800">
-                      <img 
-                        src={productModal.image} 
-                        alt="Önizleme" 
+                      <img
+                        src={productModal.image}
+                        alt="Önizleme"
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f43f5e" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="17" x2="15" y2="12"/><line x1="9" y1="12" x2="15" y2="17"/></svg>';
@@ -3567,7 +3545,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                 <FileText className="w-5 h-5 text-indigo-400" />
                 <span>Adisyon Detayı</span>
               </h3>
-              <button 
+              <button
                 onClick={() => setSelectedAdisyon(null)}
                 className="text-slate-400 hover:text-white transition bg-slate-800 p-1.5 rounded-lg"
               >
@@ -3663,15 +3641,15 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                 </div>
               )}
             </div>
-            
+
             {activeWorkDay ? (
-              <button 
+              <button
                 onClick={async () => {
-                  if(!confirm('Gün sonu yapmak istediğinize emin misiniz?')) return;
+                  if (!confirm('Gün sonu yapmak istediğinize emin misiniz?')) return;
                   try {
                     const res = await fetch('/api/admin/workday', {
                       method: 'POST',
-                      headers: {'Content-Type': 'application/json'},
+                      headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ action: 'END' })
                     });
                     if (!res.ok) {
@@ -3691,12 +3669,12 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                 <span>Gün Sonu Yap (Kapat)</span>
               </button>
             ) : (
-              <button 
+              <button
                 onClick={async () => {
                   try {
                     const res = await fetch('/api/admin/workday', {
                       method: 'POST',
-                      headers: {'Content-Type': 'application/json'},
+                      headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ action: 'START', userId: null }) // TODO: active admin id could be passed
                     });
                     if (!res.ok) {
@@ -3785,8 +3763,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
               </h2>
               <p className="text-xs text-slate-400 mt-1">Garson ve Yöneticileri ekleyin, şifrelerini güncelleyin.</p>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => setUserModal({ name: '', pinHash: '', role: 'WAITER', isActive: true })}
               className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg transition flex items-center space-x-2 text-sm"
             >
@@ -3799,17 +3777,17 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
             {users.map((u) => (
               <div key={u.id} className="glass-card p-4 rounded-2xl shadow-md border border-slate-800 relative">
                 <div className="absolute top-4 right-4 flex space-x-2">
-                  <button 
+                  <button
                     onClick={() => setUserModal({ id: u.id, name: u.name, pinHash: u.pinHash, role: u.role, isActive: u.isActive })}
                     className="p-1.5 bg-slate-800 hover:bg-indigo-500/20 text-slate-400 hover:text-indigo-400 rounded-lg transition"
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     onClick={async () => {
-                      if(!confirm(u.name + ' adlı personeli silmek istediğinize emin misiniz?')) return;
+                      if (!confirm(u.name + ' adlı personeli silmek istediğinize emin misiniz?')) return;
                       const res = await fetch(`/api/admin/users?id=${u.id}`, { method: 'DELETE' });
-                      if(res.ok) loadData();
+                      if (res.ok) loadData();
                     }}
                     className="p-1.5 bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 rounded-lg transition"
                   >
@@ -3817,23 +3795,21 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                   </button>
                 </div>
                 <div className="flex items-center space-x-3 mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                    u.role === 'ADMIN' ? 'bg-rose-500' : u.role === 'MANAGER' ? 'bg-amber-500' : u.role === 'CASHIER' ? 'bg-emerald-500' : 'bg-indigo-500'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${u.role === 'ADMIN' ? 'bg-rose-500' : u.role === 'MANAGER' ? 'bg-amber-500' : u.role === 'CASHIER' ? 'bg-emerald-500' : 'bg-indigo-500'
+                    }`}>
                     {u.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-200">{u.name}</h4>
-                    <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
-                      u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' : 
-                      u.role === 'MANAGER' ? 'bg-amber-500/10 text-amber-400' : 
-                      u.role === 'CASHIER' ? 'bg-emerald-500/10 text-emerald-400' : 
-                      'bg-indigo-500/10 text-indigo-400'
-                    }`}>
-                      {u.role === 'ADMIN' ? 'Yönetici (Admin)' : 
-                       u.role === 'MANAGER' ? 'Müdür (Manager)' : 
-                       u.role === 'CASHIER' ? 'Kasiyer' : 
-                       'Garson'}
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' :
+                        u.role === 'MANAGER' ? 'bg-amber-500/10 text-amber-400' :
+                          u.role === 'CASHIER' ? 'bg-emerald-500/10 text-emerald-400' :
+                            'bg-indigo-500/10 text-indigo-400'
+                      }`}>
+                      {u.role === 'ADMIN' ? 'Yönetici (Admin)' :
+                        u.role === 'MANAGER' ? 'Müdür (Manager)' :
+                          u.role === 'CASHIER' ? 'Kasiyer' :
+                            'Garson'}
                     </span>
                   </div>
                 </div>
@@ -3871,7 +3847,7 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                   className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-[11px] font-semibold text-slate-300 mb-1">Giriş Şifresi (4 Haneli PIN)</label>
                 <input
@@ -3898,8 +3874,8 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
               </div>
 
               <div className="flex items-center space-x-2 pt-2">
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   id="userActive"
                   checked={userModal.isActive}
                   onChange={(e) => setUserModal({ ...userModal, isActive: e.target.checked })}
@@ -3924,17 +3900,17 @@ export default function AdminPanel({ onClose, user }: AdminPanelProps) {
                       }
                       const res = await fetch('/api/admin/users', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(userModal)
                       });
-                      if(res.ok) {
+                      if (res.ok) {
                         setUserModal(null);
                         loadData();
                       } else {
                         const err = await res.json();
                         alert(err.error);
                       }
-                    } catch(e) {
+                    } catch (e) {
                       alert('Hata');
                     }
                   }}

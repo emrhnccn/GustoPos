@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { invalidateTables } from '@/lib/cache';
 
 export async function GET() {
   try {
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
           sortOrder: nextSortOrder,
         },
       });
+      invalidateTables();
       return NextResponse.json(newTable);
     }
 
@@ -52,6 +54,7 @@ export async function POST(request: Request) {
         where: { id },
         data: { name, area },
       });
+      invalidateTables();
       return NextResponse.json(updated);
     }
 
@@ -64,6 +67,7 @@ export async function POST(request: Request) {
       }
 
       await db.table.delete({ where: { id } });
+      invalidateTables();
       return NextResponse.json({ success: true });
     }
 
@@ -103,6 +107,7 @@ export async function POST(request: Request) {
           }),
         ]);
       }
+      invalidateTables();
       return NextResponse.json({ success: true });
     }
 

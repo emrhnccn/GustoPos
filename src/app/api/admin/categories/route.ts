@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { invalidateCategories } from '@/lib/cache';
 
 // 1. Yeni Kategori Ekle
 export async function POST(request: Request) {
@@ -21,11 +22,13 @@ export async function POST(request: Request) {
       },
     });
 
+    invalidateCategories();
     return NextResponse.json({ success: true, category });
-  } catch (error: any) {
-    console.error('Kategori Ekleme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Kategori Ekleme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Kategori oluşturulurken hata oluştu.' },
+      { error: err.message || 'Kategori oluşturulurken hata oluştu.' },
       { status: 500 }
     );
   }
@@ -52,11 +55,13 @@ export async function PUT(request: Request) {
       },
     });
 
+    invalidateCategories();
     return NextResponse.json({ success: true, category });
-  } catch (error: any) {
-    console.error('Kategori Güncelleme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Kategori Güncelleme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Kategori güncellenirken hata oluştu.' },
+      { error: err.message || 'Kategori güncellenirken hata oluştu.' },
       { status: 500 }
     );
   }
@@ -75,7 +80,6 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // SQLite/Transaction ile kategoriyi ve altındaki tüm ürünleri pasife al
     const result = await db.$transaction(async (tx) => {
       const category = await tx.category.update({
         where: { id },
@@ -91,15 +95,17 @@ export async function DELETE(request: Request) {
       return category;
     });
 
+    invalidateCategories();
     return NextResponse.json({
       success: true,
       message: 'Kategori ve bağlı tüm ürünler menüden kaldırıldı (pasifleştirildi).',
       category: result,
     });
-  } catch (error: any) {
-    console.error('Kategori Silme API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Kategori Silme API Hatası:', err);
     return NextResponse.json(
-      { error: error.message || 'Kategori silinirken hata oluştu.' },
+      { error: err.message || 'Kategori silinirken hata oluştu.' },
       { status: 500 }
     );
   }

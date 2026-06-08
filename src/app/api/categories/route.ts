@@ -1,27 +1,13 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getCachedMenu } from '@/lib/cache';
 
 export async function GET() {
   try {
-    const categories = await db.category.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: 'asc' },
-      include: {
-        products: {
-          where: { isActive: true },
-          orderBy: { name: 'asc' },
-          include: {
-            modifiers: {
-              where: { isActive: true }
-            }
-          }
-        },
-      },
-    });
-
+    const categories = await getCachedMenu();
     return NextResponse.json(categories);
-  } catch (error: any) {
-    console.error('Kategoriler API Hatası:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Kategoriler API Hatası:', err);
     return NextResponse.json(
       { error: 'Kategoriler yüklenirken hata oluştu.' },
       { status: 500 }

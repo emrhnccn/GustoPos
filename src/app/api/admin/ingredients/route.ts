@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getCachedIngredients, invalidateIngredients } from '@/lib/cache';
 
-// GET: Malzemeleri listele
-export async function GET(request: Request) {
+// GET: Malzemeleri listele (cache'li)
+export async function GET() {
   try {
-    const ingredients = await db.ingredient.findMany({
-      where: { isActive: true },
-      orderBy: { name: 'asc' }
-    });
+    const ingredients = await getCachedIngredients();
     return NextResponse.json(ingredients);
   } catch (error: unknown) {
     const err = error as Error;
@@ -55,6 +53,7 @@ export async function POST(request: Request) {
           return ing;
         });
 
+        invalidateIngredients();
         return NextResponse.json({ success: true, ingredient: updated });
       }
 
@@ -70,6 +69,7 @@ export async function POST(request: Request) {
         }
       });
 
+      invalidateIngredients();
       return NextResponse.json({ success: true, ingredient: updated });
     } else {
       // YENİ EKLE
@@ -105,6 +105,7 @@ export async function POST(request: Request) {
         return ing;
       });
 
+      invalidateIngredients();
       return NextResponse.json({ success: true, ingredient: created });
     }
   } catch (error: unknown) {
@@ -129,6 +130,7 @@ export async function DELETE(request: Request) {
       data: { isActive: false }
     });
 
+    invalidateIngredients();
     return NextResponse.json({ success: true, ingredient: deleted });
   } catch (error: unknown) {
     const err = error as Error;

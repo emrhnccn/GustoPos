@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getCachedSuppliers, invalidateSuppliers } from '@/lib/cache';
 
-// GET: Tedarikçileri listele
-export async function GET(request: Request) {
+// GET: Tedarikçileri listele (cache'li)
+export async function GET() {
   try {
-    const suppliers = await db.supplier.findMany({
-      where: { isActive: true },
-      orderBy: { name: 'asc' }
-    });
+    const suppliers = await getCachedSuppliers();
     return NextResponse.json(suppliers);
   } catch (error: unknown) {
     const err = error as Error;
@@ -28,6 +26,7 @@ export async function POST(request: Request) {
         where: { id },
         data: { name, phone }
       });
+      invalidateSuppliers();
       return NextResponse.json({ success: true, supplier: updated });
     } else {
       // EKLE
@@ -37,6 +36,7 @@ export async function POST(request: Request) {
       const created = await db.supplier.create({
         data: { name, phone, balance: 0, isActive: true }
       });
+      invalidateSuppliers();
       return NextResponse.json({ success: true, supplier: created });
     }
   } catch (error: unknown) {
@@ -60,6 +60,7 @@ export async function DELETE(request: Request) {
       where: { id },
       data: { isActive: false }
     });
+    invalidateSuppliers();
     return NextResponse.json({ success: true, supplier: deleted });
   } catch (error: unknown) {
     const err = error as Error;

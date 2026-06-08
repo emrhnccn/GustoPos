@@ -34,23 +34,24 @@ export async function GET(request: Request) {
       }
     }
 
-    // 1. Kapatılmış (ödenmiş) tüm siparişleri ve ödemeleri getir
-    const paidOrders = await db.order.findMany({
-      where: orderWhere,
-      include: {
-        items: {
-          where: { status: { in: ['ACTIVE', 'PAID'] } },
-          include: { waiterUser: { select: { name: true } } }
+    // 1. Kapatılmış (ödenmiş) tüm siparişleri, kategorileri, ürünleri ve masaları paralel olarak çek
+    const [paidOrders, categories, products, allTables] = await Promise.all([
+      db.order.findMany({
+        where: orderWhere,
+        include: {
+          items: {
+            where: { status: { in: ['ACTIVE', 'PAID'] } },
+            include: { waiterUser: { select: { name: true } } }
+          },
+          payments: true,
+          waiterUser: { select: { name: true } },
+          customer: { select: { name: true } }
         },
-        payments: true,
-        waiterUser: {
-          select: { name: true }
-        },
-        customer: {
-          select: { name: true }
-        }
-      },
-    });
+      }),
+      db.category.findMany(),
+      db.product.findMany({ include: { category: true } }),
+      db.table.findMany({ select: { id: true, name: true } }),
+    ]);
 
     // 2. Özet İstatistikler
     let totalRevenue = 0;
@@ -78,14 +79,10 @@ export async function GET(request: Request) {
     const productSalesMap = new Map<string, { name: string; quantity: number; total: number }>();
     const categorySalesMap = new Map<string, number>();
 
-    // Bütün kategorileri çekip haritayı sıfırla dolduralım
-    const categories = await db.category.findMany();
+    // Bütün kategorileri haritayı sıfırla dolduralım
     categories.forEach((cat) => categorySalesMap.set(cat.name, 0));
 
-    // Ürünleri de kategori isimleri için çekelim
-    const products = await db.product.findMany({
-      include: { category: true },
-    });
+    // Ürünleri kategori isimleri için haritaya al
     const productCategoryMap = new Map(products.map((p) => [p.id, p.category.name]));
 
     paidOrders.forEach((order) => {
@@ -138,7 +135,8 @@ export async function GET(request: Request) {
       h.total = Math.round(h.total * 100) / 100;
     });
 
-    // 5. Kritik Stok Uyarısı Veren Ürünler (Limit: 15)
+    // 5. Kritik Stok Uyarısı Veren Ürünler (Limit: 15) - paralel çekildi (yukarıda)
+    // stockWarnings sorgusu burada ayrı çekilecek (koşulu farklı olduğu için Promise.all'a eklenemiyor)
     const stockWarnings = await db.product.findMany({
       where: {
         isStockControlled: true,
@@ -180,14 +178,31 @@ export async function GET(request: Request) {
       }
     }
     
-    const logs = await db.auditLog.findMany({
-      where: logWhere,
-      include: {
-        actorUser: {
-          select: { id: true, name: true, role: true }
+    // 6 & 11 & 12. Personel logları, iptal ve indirim loglarını paralel çek
+    const [logs, cancellationLogs, discountLogs] = await Promise.all([
+      db.auditLog.findMany({
+        where: logWhere,
+        include: {
+          actorUser: { select: { id: true, name: true, role: true } }
         }
-      }
-    });
+      }),
+      db.auditLog.findMany({
+        where: { ...logWhere, actionType: { in: ['ITEM_CANCEL', 'ORDER_CANCEL'] } },
+        include: {
+          actorUser: { select: { name: true, role: true } },
+          approverUser: { select: { name: true, role: true } }
+        },
+        orderBy: { createdAt: 'desc' }
+      }),
+      db.auditLog.findMany({
+        where: { ...logWhere, actionType: 'DISCOUNT_APPLIED' },
+        include: {
+          actorUser: { select: { name: true, role: true } },
+          approverUser: { select: { name: true, role: true } }
+        },
+        orderBy: { createdAt: 'desc' }
+      }),
+    ]);
     const personnelMap = new Map<string, { name: string; role: string; actionsCount: number }>();
     logs.forEach((log) => {
       const user = log.actorUser;
@@ -250,8 +265,7 @@ export async function GET(request: Request) {
       return w;
     });
 
-    // 8. Kapatılan Adisyon Günlüğü (Z Raporu listesi)
-    const allTables = await db.table.findMany({ select: { id: true, name: true } });
+    // 8. Kapatılan Adisyon Günlüğü (Z Raporu listesi) - allTables paralelde çekildi
     const tableMap = new Map(allTables.map((t) => [t.id, t.name]));
 
     const adisyonHistory = paidOrders.map((o) => ({
@@ -291,14 +305,12 @@ export async function GET(request: Request) {
         totalRevenue: Math.round(t.totalRevenue * 100) / 100
       }));
 
-    // 10. Reçete Maliyet Analizi & Kâr Marjları (Cost & Margin Analysis)
+    // 10. Reçete Maliyet Analizi & Kâr Marjları
     const allProducts = await db.product.findMany({
       where: { isActive: true },
       include: {
         recipeItems: {
-          include: {
-            ingredient: true
-          }
+          include: { ingredient: true }
         }
       }
     });
@@ -336,31 +348,7 @@ export async function GET(request: Request) {
     });
     totalCogs = Math.round(totalCogs * 100) / 100;
 
-    // 11. İptal Raporu (Cancellations)
-    const cancellationLogs = await db.auditLog.findMany({
-      where: {
-        ...logWhere,
-        actionType: { in: ['ITEM_CANCEL', 'ORDER_CANCEL'] }
-      },
-      include: {
-        actorUser: { select: { name: true, role: true } },
-        approverUser: { select: { name: true, role: true } }
-      },
-      orderBy: { createdAt: 'desc' }
-    });
-
-    // 12. İndirim Raporu (Discounts)
-    const discountLogs = await db.auditLog.findMany({
-      where: {
-        ...logWhere,
-        actionType: 'DISCOUNT_APPLIED'
-      },
-      include: {
-        actorUser: { select: { name: true, role: true } },
-        approverUser: { select: { name: true, role: true } }
-      },
-      orderBy: { createdAt: 'desc' }
-    });
+    // 11 & 12. İptal ve İndirim Raporları - yukarıda Promise.all ile paralel çekildi
 
     return NextResponse.json({
       summary: {
