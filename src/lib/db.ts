@@ -2,22 +2,15 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaNeon } from '@prisma/adapter-neon';
 import { neonConfig } from '@neondatabase/serverless';
 
-// @neondatabase/serverless v0.10+ ile HTTP connection cache varsayılan olarak açıktır.
-// fetchConnectionCache = true olarak ayarlamaya gerek yok (deprecated).
-
-
-// Sadece local dev ortamında WebSocket polyfill'i devreye al
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const ws = require('ws');
-  neonConfig.webSocketConstructor = ws;
-}
+// Vercel Serverless ortamında Neon HTTP adaptörü kullanılır.
+// Local dev ortamında da aynı adaptörü kullanıyoruz (websocket gerekmez,
+// neonConfig.webSocketConstructor yalnızca Node.js ws kullanımı için gerekli
+// ama HTTP modunda (fetch) bu ayar gereksizdir).
 
 const connectionString = process.env.DATABASE_URL!;
 
 function createPrismaClient() {
-  // PrismaNeon constructor: (config: NeonQueryConfig | string, options?)
-  // config olarak doğrudan connection string geçilir
+  // PrismaNeon HTTP modunda çalışır — WebSocket'e gerek yok
   const adapter = new PrismaNeon({ connectionString });
   return new PrismaClient({ adapter });
 }
