@@ -16,7 +16,8 @@ import {
   Search,
   Star
 } from 'lucide-react';
-import { UserSession, fetchCategories, addSiparis, applyItemAction } from '@/lib/api';
+import { UserSession, fetchCategories, addSiparis, applyItemAction, fetchPrinters, fetchReceiptSettings } from '@/lib/api';
+import { checkPrintServerStatus, printKitchenTickets } from '@/lib/printService';
 
 interface Product {
   id: string;
@@ -262,6 +263,61 @@ export default function POSInterface({
       await addSiparis(table.id, newItems, user.id);
       await refreshDataAction();
       setSuccessMessage('Sipariş mutfağa başarıyla iletildi!');
+
+      // Otomatik mutfak fisi yazdirma
+      try {
+        const settings = await fetchReceiptSettings();
+        if (settings.autoPrintKitchen) {
+          const serverOnline = await checkPrintServerStatus();
+          if (serverOnline) {
+            const printersData = await fetchPrinters();
+            const allAssignments: Array<{
+              printerId: string;
+              categoryId: string;
+              printer: { windowsName: string; paperWidth: number };
+            }> = [];
+            printersData.forEach((p: any) => {
+              if (p.type === 'KITCHEN' && p.isActive) {
+                (p.categoryAssignments || []).forEach((a: any) => {
+                  allAssignments.push({
+                    printerId: a.printerId,
+                    categoryId: a.categoryId,
+                    printer: { windowsName: p.windowsName, paperWidth: p.paperWidth },
+                  });
+                });
+              }
+            });
+
+            if (allAssignments.length > 0) {
+              const cats = await fetchCategories();
+              const productCategoryMap: Record<string, string> = {};
+              cats.forEach((cat: any) => {
+                (cat.products || []).forEach((prod: any) => {
+                  productCategoryMap[prod.id] = cat.id;
+                });
+              });
+
+              const printItems = newItems.map(item => ({
+                productName: item.productName,
+                quantity: item.quantity,
+                note: item.note || undefined,
+                categoryId: productCategoryMap[item.productId] || '',
+                selectedModifiers: item.selectedModifiers,
+              }));
+
+              await printKitchenTickets(
+                printItems,
+                table.name,
+                user.name,
+                allAssignments
+              );
+            }
+          }
+        }
+      } catch (printErr) {
+        console.error('Mutfak fisi yazdirilamadi (siparis kaydedildi):', printErr);
+      }
+
       setNewItems([]);
       setTimeout(() => {
         setSuccessMessage('');

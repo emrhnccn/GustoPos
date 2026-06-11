@@ -27,7 +27,13 @@ import {
   CreditCard,
   DollarSign,
   X,
-  FileText
+  FileText,
+  Printer,
+  Check,
+  RefreshCw,
+  Eye,
+  Settings,
+  Download
 } from 'lucide-react';
 import {
   fetchAdminReports,
@@ -49,8 +55,15 @@ import {
   deleteAdminTable,
   sortAdminTable,
   fetchCustomerStatement,
+  fetchPrinters,
+  savePrinter,
+  deletePrinter,
+  savePrinterAssignments,
+  fetchReceiptSettings,
+  saveReceiptSettings,
   UserSession
 } from '@/lib/api';
+import { checkPrintServerStatus, getWindowsPrinters, generateReceiptText } from '@/lib/printService';
 
 interface AdminPanelProps {
   onCloseAction: () => void;
@@ -141,7 +154,7 @@ interface AuditLog {
 }
 
 export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
-  const [activeTab, setActiveTab] = useState<'REPORTS' | 'MENU' | 'MODIFIERS' | 'TABLES' | 'CARI' | 'LOGS' | 'DAILY_OPS' | 'USERS' | 'INVENTORY' | 'SUPPLIERS'>('REPORTS');
+  const [activeTab, setActiveTab] = useState<'REPORTS' | 'MENU' | 'MODIFIERS' | 'TABLES' | 'CARI' | 'LOGS' | 'DAILY_OPS' | 'USERS' | 'INVENTORY' | 'SUPPLIERS' | 'PRINTERS'>('REPORTS');
   const [reportsData, setReportsData] = useState<{
     summary: ReportSummary;
     paymentMethods: PaymentMethods;
@@ -239,6 +252,16 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
   // Geçmiş Rapor İnceleme State'i
   const [viewingWorkDay, setViewingWorkDay] = useState<any | null>(null);
 
+  // Yazıcı Yönetimi State'leri
+  const [printers, setPrinters] = useState<any[]>([]);
+  const [printerModal, setPrinterModal] = useState<{ id?: string; name: string; windowsName: string; type: string; paperWidth: number } | null>(null);
+  const [windowsPrinters, setWindowsPrinters] = useState<Array<{ name: string; driverName: string; portName: string; status: string }>>([]);
+  const [printServerOnline, setPrintServerOnline] = useState<boolean>(false);
+  const [printerAssignments, setPrinterAssignments] = useState<Array<{ printerId: string; categoryId: string }>>([]);
+  const [receiptSettings, setReceiptSettings] = useState<any | null>(null);
+  const [printerSubTab, setPrinterSubTab] = useState<'LIST' | 'ASSIGNMENTS' | 'RECEIPT'>('LIST');
+  const [showReceiptPreview, setShowReceiptPreview] = useState<boolean>(false);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [actionError, setActionError] = useState<string>('');
   const [actionSuccess, setActionSuccess] = useState<string>('');
@@ -320,6 +343,36 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         const payRes = await fetch('/api/admin/supplier-payments');
         const payData = await payRes.json();
         setSupplierPayments(payData);
+      } else if (activeTab === 'PRINTERS') {
+        const printersData = await fetchPrinters();
+        setPrinters(printersData);
+
+        // Kategori listesini de çek (eşleşme matrisi için)
+        const cats = await fetchCategories();
+        setMenuCategories(cats);
+
+        // Mevcut atamaları ayarla
+        const allAssignments: Array<{ printerId: string; categoryId: string }> = [];
+        printersData.forEach((p: any) => {
+          (p.categoryAssignments || []).forEach((a: any) => {
+            allAssignments.push({ printerId: a.printerId, categoryId: a.categoryId });
+          });
+        });
+        setPrinterAssignments(allAssignments);
+
+        // Fiş ayarlarını çek
+        const settings = await fetchReceiptSettings();
+        setReceiptSettings(settings);
+
+        // Print server durumu
+        const online = await checkPrintServerStatus();
+        setPrintServerOnline(online);
+
+        // Windows yazıcılarını çek
+        if (online) {
+          const winPrinters = await getWindowsPrinters();
+          setWindowsPrinters(winPrinters);
+        }
       }
     } catch (err) {
       console.error('Yönetim paneli verileri yüklenemedi:', err);
@@ -960,6 +1013,15 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           >
             <DollarSign className="w-3.5 h-3.5 text-rose-400" />
             <span>Tedarikçi & Ödeme</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('PRINTERS')}
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'PRINTERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+          >
+            <Printer className="w-3.5 h-3.5 text-teal-400" />
+            <span>Yazıcı Yönetimi</span>
           </button>
 
           {user.role === 'ADMIN' && (
@@ -4310,6 +4372,614 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   className="flex-1 bg-emerald-650 hover:bg-emerald-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ==================== YAZICI YÖNETİMİ SEKMESİ ==================== */}
+      {activeTab === 'PRINTERS' && (
+        <div className="space-y-6 animate-fade-in">
+          {/* Print Server Durumu */}
+          <div className={`flex items-center justify-between p-3 rounded-xl border text-xs font-medium ${
+            printServerOnline 
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' 
+              : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+          }`}>
+            <div className="flex items-center space-x-2">
+              <span className={`w-2.5 h-2.5 rounded-full ${printServerOnline ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`}></span>
+              <span>
+                {printServerOnline 
+                  ? 'Yazdırma Sunucusu Çalışıyor (localhost:9100)' 
+                  : 'Yazdırma Sunucusu Kapalı. Uygulamayı indirip çalıştırın.'}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <a
+                href="/GustoPOS-PrintServer.exe"
+                download="GustoPOS-PrintServer.exe"
+                className="active-press bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
+              >
+                <Download className="w-3 h-3" />
+                <span>Uygulamayı İndir (.exe)</span>
+              </a>
+              <button
+                onClick={async () => {
+                  const online = await checkPrintServerStatus();
+                  setPrintServerOnline(online);
+                  if (online) {
+                    const wp = await getWindowsPrinters();
+                    setWindowsPrinters(wp);
+                  }
+                }}
+                className="active-press bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Yenile</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Alt Sekme Seçici */}
+          <div className="flex bg-slate-950/80 border border-slate-800 p-1 rounded-xl">
+            <button
+              onClick={() => setPrinterSubTab('LIST')}
+              className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
+                printerSubTab === 'LIST' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Yazıcılar</span>
+            </button>
+            <button
+              onClick={() => setPrinterSubTab('ASSIGNMENTS')}
+              className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
+                printerSubTab === 'ASSIGNMENTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Kategori Eşleştirme</span>
+            </button>
+            <button
+              onClick={() => setPrinterSubTab('RECEIPT')}
+              className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
+                printerSubTab === 'RECEIPT' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Settings className="w-3.5 h-3.5" />
+              <span>Hesap Fişi Ayarları</span>
+            </button>
+          </div>
+
+          {/* ===== ALT SEKME: YAZICI LİSTESİ ===== */}
+          {printerSubTab === 'LIST' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-heading text-sm font-bold text-white">Tanımlı Yazıcılar</h3>
+                <button
+                  onClick={() => setPrinterModal({ name: '', windowsName: '', type: 'KITCHEN', paperWidth: 80 })}
+                  className="active-press gradient-primary hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl font-semibold flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-indigo-500/20"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Yeni Yazıcı Ekle</span>
+                </button>
+              </div>
+
+              {printers.length === 0 ? (
+                <div className="text-center py-12 text-slate-500 text-xs italic bg-slate-900/30 border border-dashed border-slate-800/80 rounded-xl">
+                  Henüz tanımlı bir yazıcı bulunmuyor. Yukarıdan yeni yazıcı ekleyin.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {printers.map((p: any) => (
+                    <div key={p.id} className="glass-card rounded-xl p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                            p.type === 'KITCHEN' ? 'bg-amber-500/15 text-amber-400' : 'bg-teal-500/15 text-teal-400'
+                          }`}>
+                            <Printer className="w-4.5 h-4.5" />
+                          </div>
+                          <div>
+                            <h4 className="font-heading font-bold text-white text-sm">{p.name}</h4>
+                            <p className="text-[10px] text-slate-400">{p.windowsName}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => setPrinterModal({
+                              id: p.id,
+                              name: p.name,
+                              windowsName: p.windowsName,
+                              type: p.type,
+                              paperWidth: p.paperWidth,
+                            })}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (!confirm(`"${p.name}" yazıcısını kaldırmak istediğinize emin misiniz?`)) return;
+                              try {
+                                await deletePrinter(p.id);
+                                setActionSuccess('Yazıcı başarıyla kaldırıldı.');
+                                await loadData();
+                                setTimeout(() => setActionSuccess(''), 3000);
+                              } catch (err: any) {
+                                alert(err.message || 'Yazıcı silinemedi.');
+                              }
+                            }}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 transition cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 text-[10px]">
+                        <span className={`px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                          p.type === 'KITCHEN' 
+                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' 
+                            : 'bg-teal-500/15 text-teal-400 border border-teal-500/30'
+                        }`}>
+                          {p.type === 'KITCHEN' ? 'Mutfak/Sipariş' : 'Hesap Fişi'}
+                        </span>
+                        <span className="text-slate-500">|</span>
+                        <span className="text-slate-400">{p.paperWidth}mm</span>
+                        <span className="text-slate-500">|</span>
+                        <span className="text-slate-400">{(p.categoryAssignments || []).length} kategori atanmış</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ===== ALT SEKME: KATEGORİ EŞLEŞTİRME ===== */}
+          {printerSubTab === 'ASSIGNMENTS' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-heading text-sm font-bold text-white">Kategori – Yazıcı Eşleştirme Matrisi</h3>
+                  <p className="text-[10px] text-slate-400 mt-0.5">Her kategorinin hangi yazıcı(lar)dan çıktı alacağını belirleyin.</p>
+                </div>
+                <button
+                  onClick={async () => {
+                    try {
+                      await savePrinterAssignments(printerAssignments);
+                      setActionSuccess('Kategori eşleşmeleri başarıyla kaydedildi!');
+                      await loadData();
+                      setTimeout(() => setActionSuccess(''), 3000);
+                    } catch (err: any) {
+                      setActionError(err.message || 'Eşleşmeler kaydedilemedi.');
+                    }
+                  }}
+                  className="active-press gradient-success text-white text-xs px-4 py-2 rounded-xl font-semibold flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-emerald-500/20"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Eşleşmeleri Kaydet</span>
+                </button>
+              </div>
+
+              {printers.length === 0 || menuCategories.length === 0 ? (
+                <div className="text-center py-12 text-slate-500 text-xs italic bg-slate-900/30 border border-dashed border-slate-800/80 rounded-xl">
+                  Eşleştirme yapabilmek için en az bir yazıcı ve bir kategori tanımlanmış olmalıdır.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-xs">
+                    <thead>
+                      <tr>
+                        <th className="text-left py-3 px-4 bg-slate-900/80 border border-slate-800 rounded-tl-xl font-semibold text-slate-300 sticky left-0 z-10 min-w-[160px]">
+                          Kategori
+                        </th>
+                        {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => (
+                          <th key={p.id} className="text-center py-3 px-4 bg-slate-900/80 border border-slate-800 font-semibold text-slate-300 min-w-[120px]">
+                            <div className="flex flex-col items-center space-y-1">
+                              <Printer className="w-4 h-4 text-amber-400" />
+                              <span>{p.name}</span>
+                            </div>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {menuCategories.map((cat: any) => (
+                        <tr key={cat.id} className="hover:bg-slate-900/40 transition">
+                          <td className="py-3 px-4 border border-slate-800/60 font-medium text-slate-200 sticky left-0 bg-slate-950/90 z-10">
+                            {cat.name}
+                          </td>
+                          {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => {
+                            const isAssigned = printerAssignments.some(
+                              a => a.printerId === p.id && a.categoryId === cat.id
+                            );
+                            return (
+                              <td key={p.id} className="text-center py-3 px-4 border border-slate-800/60">
+                                <button
+                                  onClick={() => {
+                                    setPrinterAssignments(prev => {
+                                      if (isAssigned) {
+                                        return prev.filter(a => !(a.printerId === p.id && a.categoryId === cat.id));
+                                      } else {
+                                        return [...prev, { printerId: p.id, categoryId: cat.id }];
+                                      }
+                                    });
+                                  }}
+                                  className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                                    isAssigned
+                                      ? 'bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30'
+                                      : 'bg-slate-900 border-slate-700 text-slate-600 hover:border-slate-500'
+                                  }`}
+                                >
+                                  {isAssigned && <Check className="w-4 h-4" />}
+                                </button>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ===== ALT SEKME: HESAP FİŞİ AYARLARI ===== */}
+          {printerSubTab === 'RECEIPT' && receiptSettings && (
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Sol: Form Alanları */}
+              <div className="flex-1 space-y-4">
+                <h3 className="font-heading text-sm font-bold text-white">Hesap Fişi Görünüm Ayarları</h3>
+
+                <div className="glass-card rounded-xl p-4 space-y-4">
+                  {/* İşletme Bilgileri */}
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-300 mb-1">İşletme Adı</label>
+                    <input
+                      type="text"
+                      value={receiptSettings.businessName || ''}
+                      onChange={(e) => setReceiptSettings({ ...receiptSettings, businessName: e.target.value })}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Adres Satır 1</label>
+                      <input
+                        type="text"
+                        value={receiptSettings.addressLine1 || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, addressLine1: e.target.value })}
+                        placeholder="Örn: CADDE NO: 12"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Adres Satır 2</label>
+                      <input
+                        type="text"
+                        value={receiptSettings.addressLine2 || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, addressLine2: e.target.value })}
+                        placeholder="Örn: ATAŞEHİR / İSTANBUL"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Telefon</label>
+                      <input
+                        type="text"
+                        value={receiptSettings.phone || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, phone: e.target.value })}
+                        placeholder="0216 555 4433"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Vergi No (VKN)</label>
+                      <input
+                        type="text"
+                        value={receiptSettings.taxNo || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, taxNo: e.target.value })}
+                        placeholder="1234567890"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-slate-300 mb-3">Alt Bilgi Metinleri</h4>
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={receiptSettings.footerLine1 || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine1: e.target.value })}
+                        placeholder="Alt satır 1"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                      <input
+                        type="text"
+                        value={receiptSettings.footerLine2 || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine2: e.target.value })}
+                        placeholder="Alt satır 2"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                      <input
+                        type="text"
+                        value={receiptSettings.footerLine3 || ''}
+                        onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine3: e.target.value })}
+                        placeholder="Alt satır 3"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-slate-300 mb-3">Görünüm Seçenekleri</h4>
+                    <div className="space-y-3">
+                      <label className="flex items-center justify-between cursor-pointer group">
+                        <span className="text-xs text-slate-300 group-hover:text-white transition">Garson Adını Göster</span>
+                        <div
+                          onClick={() => setReceiptSettings({ ...receiptSettings, showWaiterName: !receiptSettings.showWaiterName })}
+                          className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
+                            receiptSettings.showWaiterName ? 'bg-indigo-500' : 'bg-slate-700'
+                          }`}
+                        >
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
+                            receiptSettings.showWaiterName ? 'translate-x-5' : ''
+                          }`} />
+                        </div>
+                      </label>
+                      <label className="flex items-center justify-between cursor-pointer group">
+                        <span className="text-xs text-slate-300 group-hover:text-white transition">Tarih / Saat Göster</span>
+                        <div
+                          onClick={() => setReceiptSettings({ ...receiptSettings, showDateTime: !receiptSettings.showDateTime })}
+                          className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
+                            receiptSettings.showDateTime ? 'bg-indigo-500' : 'bg-slate-700'
+                          }`}
+                        >
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
+                            receiptSettings.showDateTime ? 'translate-x-5' : ''
+                          }`} />
+                        </div>
+                      </label>
+                      <label className="flex items-center justify-between cursor-pointer group">
+                        <span className="text-xs text-slate-300 group-hover:text-white transition">Sipariş Notunu Göster</span>
+                        <div
+                          onClick={() => setReceiptSettings({ ...receiptSettings, showOrderNote: !receiptSettings.showOrderNote })}
+                          className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
+                            receiptSettings.showOrderNote ? 'bg-indigo-500' : 'bg-slate-700'
+                          }`}
+                        >
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
+                            receiptSettings.showOrderNote ? 'translate-x-5' : ''
+                          }`} />
+                        </div>
+                      </label>
+                      <label className="flex items-center justify-between cursor-pointer group">
+                        <span className="text-xs text-slate-300 group-hover:text-white transition">Sipariş Onayında Mutfak Fişi Otomatik Yazdır</span>
+                        <div
+                          onClick={() => setReceiptSettings({ ...receiptSettings, autoPrintKitchen: !receiptSettings.autoPrintKitchen })}
+                          className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
+                            receiptSettings.autoPrintKitchen ? 'bg-indigo-500' : 'bg-slate-700'
+                          }`}
+                        >
+                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
+                            receiptSettings.autoPrintKitchen ? 'translate-x-5' : ''
+                          }`} />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-slate-300 mb-2">Hesap Fişi Yazıcısı</h4>
+                    <select
+                      value={receiptSettings.receiptPrinterId || ''}
+                      onChange={(e) => setReceiptSettings({ ...receiptSettings, receiptPrinterId: e.target.value || null })}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="">-- Yazıcı Seçin --</option>
+                      {printers.map((p: any) => (
+                        <option key={p.id} value={p.id}>{p.name} ({p.windowsName})</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        await saveReceiptSettings(receiptSettings);
+                        setActionSuccess('Hesap fişi ayarları başarıyla kaydedildi!');
+                        setTimeout(() => setActionSuccess(''), 3000);
+                      } catch (err: any) {
+                        setActionError(err.message || 'Ayarlar kaydedilemedi.');
+                      }
+                    }}
+                    className="active-press w-full gradient-primary text-white font-semibold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-indigo-500/20 cursor-pointer"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span>Ayarları Kaydet</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Sağ: Canlı Fiş Önizleme */}
+              <div className="w-full lg:w-80">
+                <h3 className="font-heading text-sm font-bold text-white mb-3 flex items-center space-x-2">
+                  <Eye className="w-4 h-4 text-teal-400" />
+                  <span>Canlı Fiş Önizleme</span>
+                </h3>
+                <div className="bg-white text-slate-950 rounded-lg p-5 shadow-2xl font-mono text-xs max-h-[70vh] overflow-y-auto scrollbar-thin">
+                  <div className="text-center space-y-0.5">
+                    {receiptSettings.businessName && <h2 className="text-sm font-bold uppercase tracking-wider">{receiptSettings.businessName}</h2>}
+                    {receiptSettings.addressLine1 && <p className="text-[10px] text-slate-600">{receiptSettings.addressLine1}</p>}
+                    {receiptSettings.addressLine2 && <p className="text-[10px] text-slate-600">{receiptSettings.addressLine2}</p>}
+                    {receiptSettings.phone && <p className="text-[10px] text-slate-600">TEL: {receiptSettings.phone}</p>}
+                    {receiptSettings.taxNo && <p className="text-[10px] text-slate-600">VKN: {receiptSettings.taxNo}</p>}
+                    <p className="text-slate-400">---------------------------------</p>
+                    <p className="text-[10px] font-bold">ADİSYON DETAYI</p>
+                    <p className="text-slate-400">---------------------------------</p>
+                  </div>
+
+                  <div className="space-y-1 mt-2">
+                    <div className="flex justify-between"><span>Masa:</span><span className="font-bold">Masa 1</span></div>
+                    {receiptSettings.showDateTime && (
+                      <>
+                        <div className="flex justify-between"><span>Tarih:</span><span>{new Date().toLocaleDateString('tr-TR')}</span></div>
+                        <div className="flex justify-between"><span>Saat:</span><span>{new Date().toLocaleTimeString('tr-TR')}</span></div>
+                      </>
+                    )}
+                    {receiptSettings.showWaiterName && (
+                      <div className="flex justify-between"><span>Garson:</span><span>Ahmet</span></div>
+                    )}
+                  </div>
+
+                  <div className="mt-2">
+                    <p className="text-slate-400">---------------------------------</p>
+                    <div className="space-y-1">
+                      <div className="flex justify-between"><span>2x Türk Kahvesi</span><span>120.00</span></div>
+                      <div className="flex justify-between"><span>1x Latte</span><span>85.00</span></div>
+                      <div className="flex justify-between"><span>1x Serpme Kahvaltı</span><span>350.00</span></div>
+                    </div>
+                    <p className="text-slate-400">---------------------------------</p>
+                  </div>
+
+                  <div className="space-y-1 mt-1">
+                    <div className="flex justify-between"><span>Ara Toplam:</span><span>555.00 TL</span></div>
+                    <div className="flex justify-between font-bold text-sm border-t border-dashed border-slate-400 pt-1 mt-1">
+                      <span>TOPLAM:</span><span>555.00 TL</span>
+                    </div>
+                  </div>
+
+                  <div className="text-center pt-4 space-y-0.5">
+                    {receiptSettings.footerLine1 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine1}</p>}
+                    {receiptSettings.footerLine2 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine2}</p>}
+                    {receiptSettings.footerLine3 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine3}</p>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* YAZICI EKLEME/DÜZENLEME MODALI */}
+      {printerModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl animate-scale-in">
+            <h3 className="font-heading font-bold text-base text-white mb-4 flex items-center space-x-2">
+              <Printer className="w-5 h-5 text-teal-400" />
+              <span>{printerModal.id ? 'Yazıcıyı Düzenle' : 'Yeni Yazıcı Ekle'}</span>
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Yazıcı Adı</label>
+                <input
+                  type="text"
+                  value={printerModal.name}
+                  onChange={(e) => setPrinterModal({ ...printerModal, name: e.target.value })}
+                  placeholder="Örn: Mutfak Yazıcısı"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Windows Yazıcı Adı</label>
+                {printServerOnline && windowsPrinters.length > 0 ? (
+                  <select
+                    value={printerModal.windowsName}
+                    onChange={(e) => setPrinterModal({ ...printerModal, windowsName: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="">-- Yazıcı Seçin --</option>
+                    {windowsPrinters.map((wp) => (
+                      <option key={wp.name} value={wp.name}>
+                        {wp.name} ({wp.driverName})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div>
+                    <input
+                      type="text"
+                      value={printerModal.windowsName}
+                      onChange={(e) => setPrinterModal({ ...printerModal, windowsName: e.target.value })}
+                      placeholder="Örn: EPSON TM-T20II"
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                    />
+                    <p className="text-[9px] text-amber-400 mt-1">
+                      ⚠ Print server kapalı. Windows yazıcı adını elle girin veya print server'ı başlatın.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Yazıcı Tipi</label>
+                  <select
+                    value={printerModal.type}
+                    onChange={(e) => setPrinterModal({ ...printerModal, type: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="KITCHEN">Mutfak / Sipariş Fişi</option>
+                    <option value="RECEIPT">Hesap Fişi</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Kağıt Genişliği</label>
+                  <select
+                    value={printerModal.paperWidth}
+                    onChange={(e) => setPrinterModal({ ...printerModal, paperWidth: parseInt(e.target.value) })}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value={80}>80mm (Standart)</option>
+                    <option value={58}>58mm (Dar)</option>
+                  </select>
+                </div>
+              </div>
+
+              {actionError && (
+                <div className="bg-rose-500/10 border border-rose-500 text-rose-300 p-2 rounded-xl text-xs">
+                  {actionError}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setPrinterModal(null);
+                    setActionError('');
+                  }}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!printerModal.name.trim() || !printerModal.windowsName.trim()) {
+                      setActionError('Yazıcı adı ve Windows yazıcı adı zorunludur.');
+                      return;
+                    }
+                    setActionError('');
+                    try {
+                      await savePrinter(printerModal);
+                      setActionSuccess(printerModal.id ? 'Yazıcı başarıyla güncellendi!' : 'Yeni yazıcı başarıyla eklendi!');
+                      setPrinterModal(null);
+                      await loadData();
+                      setTimeout(() => setActionSuccess(''), 3000);
+                    } catch (err: any) {
+                      setActionError(err.message || 'Yazıcı kaydedilemedi.');
+                    }
+                  }}
+                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                >
+                  {printerModal.id ? 'Güncelle' : 'Ekle'}
                 </button>
               </div>
             </div>

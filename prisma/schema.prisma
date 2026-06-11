@@ -233,3 +233,44 @@ model SupplierPayment {
   createdAt     DateTime    @default(now())
 }
 
+model Printer {
+  id            String   @id @default(cuid())
+  name          String   // Kullanıcı dostu ad: "Bar Yazıcısı", "Mutfak Yazıcısı"
+  windowsName   String   // Windows'taki yazıcı adı (print server bunu kullanır)
+  type          String   // "KITCHEN" (Mutfak/Sipariş Fişi), "RECEIPT" (Hesap Fişi)
+  isActive      Boolean  @default(true)
+  paperWidth    Int      @default(80) // mm cinsinden kağıt genişliği (58 veya 80)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  categoryAssignments PrinterCategoryAssignment[]
+}
+
+model PrinterCategoryAssignment {
+  id          String   @id @default(cuid())
+  printerId   String
+  printer     Printer  @relation(fields: [printerId], references: [id], onDelete: Cascade)
+  categoryId  String
+  createdAt   DateTime @default(now())
+
+  @@unique([printerId, categoryId])
+}
+
+model ReceiptSettings {
+  id               String   @id @default(cuid())
+  businessName     String   @default("GUSTO RESTORAN")
+  addressLine1     String   @default("")
+  addressLine2     String   @default("")
+  phone            String   @default("")
+  taxNo            String   @default("")
+  footerLine1      String   @default("BİZİ TERCİH ETTİĞİNİZ İÇİN")
+  footerLine2      String   @default("TEŞEKKÜR EDERİZ.")
+  footerLine3      String   @default("GUSTOPOS RESTORAN YAZILIMI")
+  showWaiterName   Boolean  @default(true)
+  showDateTime     Boolean  @default(true)
+  showOrderNote    Boolean  @default(false)
+  receiptPrinterId String?  // Hesap fişi hangi yazıcıdan çıkacak
+  autoPrintKitchen Boolean  @default(true) // Sipariş onayında mutfak fişi otomatik bas
+  updatedAt        DateTime @updatedAt
+}
+

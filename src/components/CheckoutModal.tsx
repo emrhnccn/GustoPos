@@ -16,7 +16,8 @@ import {
   ListFilter,
   Check
 } from 'lucide-react';
-import { UserSession, processPayment, applyDiscountApi, fetchCustomers } from '@/lib/api';
+import { UserSession, processPayment, applyDiscountApi, fetchCustomers, fetchReceiptSettings, fetchPrinters } from '@/lib/api';
+import { checkPrintServerStatus, sendToPrinter, generateReceiptText } from '@/lib/printService';
 
 interface TableOrder {
   id: string;
@@ -104,17 +105,25 @@ export default function CheckoutModal({
   const [paymentAuthPin, setPaymentAuthPin] = useState<string>('');
   const [paymentAuthError, setPaymentAuthError] = useState<string>('');
 
-  // Cari müşterileri yükle
+  // Fiş ayarları state'i
+  const [receiptSettings, setReceiptSettings] = useState<any>(null);
+  const [isPrinting, setIsPrinting] = useState<boolean>(false);
+
+  // Cari müşterileri ve fiş ayarlarını yükle
   useEffect(() => {
-    async function loadCustomers() {
+    async function loadInitialData() {
       try {
-        const data = await fetchCustomers();
-        setCustomers(data);
+        const [custData, settingsData] = await Promise.all([
+          fetchCustomers(),
+          fetchReceiptSettings(),
+        ]);
+        setCustomers(custData);
+        setReceiptSettings(settingsData);
       } catch (err) {
-        console.error('Cari müşteriler yüklenemedi:', err);
+        console.error('Checkout veri yükleme hatası:', err);
       }
     }
-    loadCustomers();
+    loadInitialData();
   }, []);
 
   // Split billing modu açıldığında miktarları sıfırla
@@ -794,9 +803,21 @@ export default function CheckoutModal({
             {/* Receipt Content */}
             <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
               <div className="text-center">
-                <h2 className="text-base font-bold uppercase tracking-wider">GUSTO RESTORAN</h2>
-                <p className="text-[10px] text-slate-600">CADDE NO: 12 ATAŞEHİR / İSTANBUL</p>
-                <p className="text-[10px] text-slate-600">TEL: 0216 555 4433</p>
+                <h2 className="text-base font-bold uppercase tracking-wider">
+                  {receiptSettings?.businessName || 'GUSTO RESTORAN'}
+                </h2>
+                {receiptSettings?.addressLine1 && (
+                  <p className="text-[10px] text-slate-600">{receiptSettings.addressLine1}</p>
+                )}
+                {receiptSettings?.addressLine2 && (
+                  <p className="text-[10px] text-slate-600">{receiptSettings.addressLine2}</p>
+                )}
+                {receiptSettings?.phone && (
+                  <p className="text-[10px] text-slate-600">TEL: {receiptSettings.phone}</p>
+                )}
+                {receiptSettings?.taxNo && (
+                  <p className="text-[10px] text-slate-600">VKN: {receiptSettings.taxNo}</p>
+                )}
                 <p className="text-[10px] text-slate-600">---------------------------------</p>
                 <p className="text-[10px] font-bold">ADİSYON DETAYI</p>
                 <p className="text-[10px] text-slate-600">---------------------------------</p>
@@ -807,18 +828,24 @@ export default function CheckoutModal({
                   <span>Masa:</span>
                   <span className="font-bold">{table.name}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Tarih:</span>
-                  <span>{new Date(order.createdAt).toLocaleDateString('tr-TR')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Saat:</span>
-                  <span>{new Date(order.createdAt).toLocaleTimeString('tr-TR')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Garson:</span>
-                  <span>{user.name}</span>
-                </div>
+                {(receiptSettings?.showDateTime !== false) && (
+                  <>
+                    <div className="flex justify-between">
+                      <span>Tarih:</span>
+                      <span>{new Date(order.createdAt).toLocaleDateString('tr-TR')}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Saat:</span>
+                      <span>{new Date(order.createdAt).toLocaleTimeString('tr-TR')}</span>
+                    </div>
+                  </>
+                )}
+                {(receiptSettings?.showWaiterName !== false) && (
+                  <div className="flex justify-between">
+                    <span>Garson:</span>
+                    <span>{user.name}</span>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -866,22 +893,85 @@ export default function CheckoutModal({
                 </div>
               </div>
 
+              {receiptSettings?.showOrderNote && order.note && (
+                <div className="text-left">
+                  <p className="text-slate-600">---------------------------------</p>
+                  <p className="text-[10px] text-slate-700">Not: {order.note}</p>
+                </div>
+              )}
+
               <div className="text-center pt-4">
-                <p className="text-[10px] text-slate-500">BİZİ TERCİH ETTİĞİNİZ İÇİN</p>
-                <p className="text-[10px] text-slate-500">TEŞEKKÜR EDERİZ.</p>
-                <p className="text-[10px] text-slate-500">GUSTOPOS RESTORAN YAZILIMI</p>
+                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine1 || 'BİZİ TERCİH ETTİĞİNİZ İÇİN'}</p>
+                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine2 || 'TEŞEKKÜR EDERİZ.'}</p>
+                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine3 || 'GUSTOPOS RESTORAN YAZILIMI'}</p>
               </div>
             </div>
 
             <button
-              onClick={() => {
-                alert('Yazdırma işlemi simüle edildi (Termal Fiş Gönderildi).');
-                setShowReceipt(false);
+              onClick={async () => {
+                setIsPrinting(true);
+                try {
+                  const serverOnline = await checkPrintServerStatus();
+                  if (!serverOnline) {
+                    alert('Yazdırma sunucusu kapalı! Lütfen "node print-server.js" komutunu çalıştırın.');
+                    setIsPrinting(false);
+                    return;
+                  }
+
+                  // Hesap fişi yazıcısını bul
+                  let printerWindowsName = '';
+                  let paperWidth = 80;
+
+                  if (receiptSettings?.receiptPrinterId) {
+                    const printersData = await fetchPrinters();
+                    const receiptPrinter = printersData.find((p: any) => p.id === receiptSettings.receiptPrinterId);
+                    if (receiptPrinter) {
+                      printerWindowsName = receiptPrinter.windowsName;
+                      paperWidth = receiptPrinter.paperWidth;
+                    }
+                  }
+
+                  if (!printerWindowsName) {
+                    alert('Hesap fişi yazıcısı atanmamış! Lütfen Yazıcı Yönetimi ayarlarından bir hesap fişi yazıcısı seçin.');
+                    setIsPrinting(false);
+                    return;
+                  }
+
+                  const receiptText = generateReceiptText(
+                    {
+                      tableName: table.name,
+                      waiterName: user.name,
+                      createdAt: order.createdAt,
+                      items: order.items,
+                      totalAmount: order.totalAmount,
+                      discountAmount: order.discountAmount,
+                      paidAmount: order.paidAmount,
+                      note: order.note,
+                      payments: order.payments,
+                    },
+                    receiptSettings,
+                    paperWidth
+                  );
+
+                  const result = await sendToPrinter(printerWindowsName, receiptText);
+                  if (result.success) {
+                    setShowReceipt(false);
+                    setSuccessMessage('Hesap fişi yazıcıya gönderildi!');
+                    setTimeout(() => setSuccessMessage(''), 3000);
+                  } else {
+                    alert('Yazdırma hatası: ' + (result.error || 'Bilinmeyen hata'));
+                  }
+                } catch (err: any) {
+                  alert('Yazdırma sırasında hata: ' + (err.message || ''));
+                } finally {
+                  setIsPrinting(false);
+                }
               }}
-              className="mt-4 w-full bg-slate-900 hover:bg-slate-800 text-white py-2 rounded font-bold transition flex items-center justify-center space-x-1.5"
+              disabled={isPrinting}
+              className="mt-4 w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white py-2 rounded font-bold transition flex items-center justify-center space-x-1.5"
             >
               <Printer className="w-4 h-4" />
-              <span>Yazıcıya Gönder</span>
+              <span>{isPrinting ? 'Yazdırılıyor...' : 'Yazıcıya Gönder'}</span>
             </button>
           </div>
         </div>

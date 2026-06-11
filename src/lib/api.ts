@@ -340,3 +340,67 @@ export async function fetchCustomerStatement(id: string) {
   if (!res.ok) throw new Error('Cari hesap ekstre detayları alınamadı.');
   return await res.json();
 }
+
+// === YAZICI YÖNETİMİ API FONKSİYONLARI ===
+
+export async function fetchPrinters() {
+  const res = await fetch('/api/admin/printers');
+  if (!res.ok) throw new Error('Yazıcı listesi alınamadı.');
+  return await res.json();
+}
+
+export async function savePrinter(printerData: any) {
+  const res = await fetch('/api/admin/printers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(printerData),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Yazıcı kaydedilemedi.');
+  }
+  return await res.json();
+}
+
+export async function deletePrinter(id: string) {
+  const res = await fetch(`/api/admin/printers?id=${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Yazıcı silinemedi.');
+  }
+  return await res.json();
+}
+
+export async function savePrinterAssignments(assignments: Array<{ printerId: string; categoryId: string }>) {
+  const res = await fetch('/api/admin/printers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'saveAssignments', assignments }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Yazıcı eşleşmeleri kaydedilemedi.');
+  }
+  return await res.json();
+}
+
+export async function fetchReceiptSettings() {
+  const res = await fetch('/api/admin/receipt-settings');
+  if (!res.ok) throw new Error('Fiş ayarları alınamadı.');
+  return await res.json();
+}
+
+export async function saveReceiptSettings(settingsData: any) {
+  const res = await fetch('/api/admin/receipt-settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settingsData),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Fiş ayarları kaydedilemedi.');
+  }
+  return await res.json();
+}
