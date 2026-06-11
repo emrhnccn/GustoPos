@@ -125,16 +125,19 @@ interface OrderData {
   }>;
 }
 
+export interface PrintItem {
+  productName: string;
+  quantity: number;
+  note?: string;
+  productId: string;
+  selectedModifiers?: any[];
+}
+
 /**
  * Mutfak fişi metni oluştur (80mm termal yazıcı için 42 karakter genişliği)
  */
 export function generateKitchenTicketText(
-  items: Array<{
-    productName: string;
-    quantity: number;
-    note?: string;
-    selectedModifiers?: Array<{ name: string; price: number }>;
-  }>,
+  items: PrintItem[],
   tableName: string,
   waiterName: string,
   paperWidth: number = 80
@@ -344,52 +347,37 @@ export function generateReceiptText(
  * Mutfak fişi yazdır – öğeleri kategori bazlı gruplara ayırıp ilgili yazıcılara gönder
  */
 export async function printKitchenTickets(
-  items: Array<{
-    productName: string;
-    quantity: number;
-    note?: string;
-    categoryId: string;
-    selectedModifiers?: Array<{ name: string; price: number }>;
-  }>,
+  items: PrintItem[],
   tableName: string,
   waiterName: string,
-  printerAssignments: Array<{
-    printerId: string;
-    categoryId: string;
-    printer: {
-      windowsName: string;
-      paperWidth: number;
-    };
-  }>
+  assignments: Array<{ printerId: string; productId: string; printer: { windowsName: string; paperWidth: number } }>
 ): Promise<Array<{ printerName: string; success: boolean; error?: string }>> {
   const results: Array<{ printerName: string; success: boolean; error?: string }> = [];
   
-  // Yazıcı bazında öğeleri grupla
-  const printerGroups: Map<string, {
-    windowsName: string;
-    paperWidth: number;
-    items: typeof items;
-  }> = new Map();
+  // Yazıcılara göre öğeleri grupla
+  const itemsByPrinter: Record<string, { printerName: string; paperWidth: number; items: PrintItem[] }> = {};
 
-  for (const item of items) {
-    // Bu kategorinin atandığı yazıcıları bul
-    const assignments = printerAssignments.filter(a => a.categoryId === item.categoryId);
+  items.forEach(item => {
+    // Bu ürünün atanmış olduğu yazıcıları bul
+    const matchedAssignments = assignments.filter(a => a.productId === item.productId);
     
-    for (const assignment of assignments) {
-      const key = assignment.printerId;
-      if (!printerGroups.has(key)) {
-        printerGroups.set(key, {
-          windowsName: assignment.printer.windowsName,
+    // Eğer ürün hiçbir yere atanmamışsa yazdırma
+    matchedAssignments.forEach(assignment => {
+      const pId = assignment.printerId;
+      if (!itemsByPrinter[pId]) {
+        itemsByPrinter[pId] = {
+          printerName: assignment.printer.windowsName,
           paperWidth: assignment.printer.paperWidth,
           items: []
-        });
+        };
       }
-      printerGroups.get(key)!.items.push(item);
-    }
-  }
+      itemsByPrinter[pId].items.push(item);
+    });
+  });
 
   // Her yazıcı grubunu yazdır
-  for (const [, group] of printerGroups) {
+  for (const pId in itemsByPrinter) {
+    const group = itemsByPrinter[pId];
     const ticketText = generateKitchenTicketText(
       group.items,
       tableName,
@@ -397,9 +385,9 @@ export async function printKitchenTickets(
       group.paperWidth
     );
 
-    const result = await sendToPrinter(group.windowsName, ticketText);
+    const result = await sendToPrinter(group.printerName, ticketText);
     results.push({
-      printerName: group.windowsName,
+      printerName: group.printerName,
       ...result
     });
   }

@@ -257,7 +257,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
   const [printerModal, setPrinterModal] = useState<{ id?: string; name: string; windowsName: string; type: string; paperWidth: number } | null>(null);
   const [windowsPrinters, setWindowsPrinters] = useState<Array<{ name: string; driverName: string; portName: string; status: string }>>([]);
   const [printServerOnline, setPrintServerOnline] = useState<boolean>(false);
-  const [printerAssignments, setPrinterAssignments] = useState<Array<{ printerId: string; categoryId: string }>>([]);
+  const [printerAssignments, setPrinterAssignments] = useState<Array<{ printerId: string; productId: string }>>([]);
   const [receiptSettings, setReceiptSettings] = useState<any | null>(null);
   const [printerSubTab, setPrinterSubTab] = useState<'LIST' | 'ASSIGNMENTS' | 'RECEIPT'>('LIST');
   const [showReceiptPreview, setShowReceiptPreview] = useState<boolean>(false);
@@ -352,10 +352,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         setMenuCategories(cats);
 
         // Mevcut atamaları ayarla
-        const allAssignments: Array<{ printerId: string; categoryId: string }> = [];
+        const allAssignments: Array<{ printerId: string; productId: string }> = [];
         printersData.forEach((p: any) => {
-          (p.categoryAssignments || []).forEach((a: any) => {
-            allAssignments.push({ printerId: a.printerId, categoryId: a.categoryId });
+          (p.productAssignments || []).forEach((a: any) => {
+            allAssignments.push({ printerId: a.printerId, productId: a.productId });
           });
         });
         setPrinterAssignments(allAssignments);
@@ -4528,7 +4528,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <span className="text-slate-500">|</span>
                         <span className="text-slate-400">{p.paperWidth}mm</span>
                         <span className="text-slate-500">|</span>
-                        <span className="text-slate-400">{(p.categoryAssignments || []).length} kategori atanmış</span>
+                        <span className="text-slate-400">{(p.productAssignments || []).length} ürün atanmış</span>
                       </div>
                     </div>
                   ))}
@@ -4542,8 +4542,8 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-heading text-sm font-bold text-white">Kategori – Yazıcı Eşleştirme Matrisi</h3>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Her kategorinin hangi yazıcı(lar)dan çıktı alacağını belirleyin.</p>
+                  <h3 className="font-heading text-sm font-bold text-white">Ürün – Yazıcı Eşleştirme Matrisi</h3>
+                  <p className="text-[10px] text-slate-400 mt-0.5">Hangi ürünün hangi mutfak/bar yazıcısından çıkacağını belirleyin.</p>
                 </div>
                 <button
                   onClick={async () => {
@@ -4587,38 +4587,47 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     </thead>
                     <tbody>
                       {menuCategories.map((cat: any) => (
-                        <tr key={cat.id} className="hover:bg-slate-900/40 transition">
-                          <td className="py-3 px-4 border border-slate-800/60 font-medium text-slate-200 sticky left-0 bg-slate-950/90 z-10">
-                            {cat.name}
-                          </td>
-                          {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => {
-                            const isAssigned = printerAssignments.some(
-                              a => a.printerId === p.id && a.categoryId === cat.id
-                            );
-                            return (
-                              <td key={p.id} className="text-center py-3 px-4 border border-slate-800/60">
-                                <button
-                                  onClick={() => {
-                                    setPrinterAssignments(prev => {
-                                      if (isAssigned) {
-                                        return prev.filter(a => !(a.printerId === p.id && a.categoryId === cat.id));
-                                      } else {
-                                        return [...prev, { printerId: p.id, categoryId: cat.id }];
-                                      }
-                                    });
-                                  }}
-                                  className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center transition-all duration-200 cursor-pointer ${
-                                    isAssigned
-                                      ? 'bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30'
-                                      : 'bg-slate-900 border-slate-700 text-slate-600 hover:border-slate-500'
-                                  }`}
-                                >
-                                  {isAssigned && <Check className="w-4 h-4" />}
-                                </button>
+                        <React.Fragment key={cat.id}>
+                          <tr className="bg-slate-800/40">
+                            <td colSpan={1 + printers.filter((p: any) => p.type === 'KITCHEN').length} className="py-2 px-4 border border-slate-800/60 font-bold text-slate-400 text-[10px] uppercase tracking-wider sticky left-0 bg-slate-900/90 z-10">
+                              KATEGORİ: {cat.name}
+                            </td>
+                          </tr>
+                          {(cat.products || []).map((prod: any) => (
+                            <tr key={prod.id} className="hover:bg-slate-900/40 transition">
+                              <td className="py-2 px-4 border border-slate-800/60 font-medium text-slate-200 sticky left-0 bg-slate-950/90 z-10 pl-8">
+                                • {prod.name}
                               </td>
-                            );
-                          })}
-                        </tr>
+                              {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => {
+                                const isAssigned = printerAssignments.some(
+                                  a => a.printerId === p.id && a.productId === prod.id
+                                );
+                                return (
+                                  <td key={p.id} className="text-center py-2 px-4 border border-slate-800/60">
+                                    <button
+                                      onClick={() => {
+                                        setPrinterAssignments(prev => {
+                                          if (isAssigned) {
+                                            return prev.filter(a => !(a.printerId === p.id && a.productId === prod.id));
+                                          } else {
+                                            return [...prev, { printerId: p.id, productId: prod.id }];
+                                          }
+                                        });
+                                      }}
+                                      className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all duration-200 cursor-pointer mx-auto ${
+                                        isAssigned
+                                          ? 'bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30'
+                                          : 'bg-slate-900 border-slate-700 text-slate-600 hover:border-slate-500'
+                                      }`}
+                                    >
+                                      {isAssigned && <Check className="w-3 h-3" />}
+                                    </button>
+                                  </td>
+                                );
+                              })}
+                            </tr>
+                          ))}
+                        </React.Fragment>
                       ))}
                     </tbody>
                   </table>

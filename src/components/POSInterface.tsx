@@ -273,15 +273,15 @@ export default function POSInterface({
             const printersData = await fetchPrinters();
             const allAssignments: Array<{
               printerId: string;
-              categoryId: string;
+              productId: string;
               printer: { windowsName: string; paperWidth: number };
             }> = [];
             printersData.forEach((p: any) => {
               if (p.type === 'KITCHEN' && p.isActive) {
-                (p.categoryAssignments || []).forEach((a: any) => {
+                (p.productAssignments || []).forEach((a: any) => {
                   allAssignments.push({
                     printerId: a.printerId,
-                    categoryId: a.categoryId,
+                    productId: a.productId,
                     printer: { windowsName: p.windowsName, paperWidth: p.paperWidth },
                   });
                 });
@@ -289,19 +289,11 @@ export default function POSInterface({
             });
 
             if (allAssignments.length > 0) {
-              const cats = await fetchCategories();
-              const productCategoryMap: Record<string, string> = {};
-              cats.forEach((cat: any) => {
-                (cat.products || []).forEach((prod: any) => {
-                  productCategoryMap[prod.id] = cat.id;
-                });
-              });
-
               const printItems = newItems.map(item => ({
                 productName: item.productName,
                 quantity: item.quantity,
                 note: item.note || undefined,
-                categoryId: productCategoryMap[item.productId] || '',
+                productId: item.productId,
                 selectedModifiers: item.selectedModifiers,
               }));
 

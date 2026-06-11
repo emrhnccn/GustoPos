@@ -7,7 +7,7 @@ export async function GET() {
     const printers = await db.printer.findMany({
       where: { isActive: true },
       include: {
-        categoryAssignments: true,
+        productAssignments: true,
       },
       orderBy: { createdAt: 'asc' },
     });
@@ -23,16 +23,16 @@ export async function GET() {
   }
 }
 
-// POST – Yazıcı ekle/güncelle + Kategori atamaları kaydet
+// POST – Yazıcı ekle/güncelle + Ürün atamaları kaydet
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action } = body;
 
-    // === Kategori-Yazıcı Eşleşmelerini Toplu Kaydet ===
+    // === Ürün-Yazıcı Eşleşmelerini Toplu Kaydet ===
     if (action === 'saveAssignments') {
       const { assignments } = body;
-      // assignments: Array<{ printerId: string, categoryId: string }>
+      // assignments: Array<{ printerId: string, productId: string }>
 
       if (!Array.isArray(assignments)) {
         return NextResponse.json(
@@ -43,13 +43,13 @@ export async function POST(request: Request) {
 
       // Mevcut tüm atamaları sil ve yeniden oluştur
       await db.$transaction(async (tx) => {
-        await tx.printerCategoryAssignment.deleteMany({});
+        await tx.printerProductAssignment.deleteMany({});
         
         if (assignments.length > 0) {
-          await tx.printerCategoryAssignment.createMany({
-            data: assignments.map((a: { printerId: string; categoryId: string }) => ({
+          await tx.printerProductAssignment.createMany({
+            data: assignments.map((a: { printerId: string; productId: string }) => ({
               printerId: a.printerId,
-              categoryId: a.categoryId,
+              productId: a.productId,
             })),
           });
         }

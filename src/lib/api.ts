@@ -373,7 +373,7 @@ export async function deletePrinter(id: string) {
   return await res.json();
 }
 
-export async function savePrinterAssignments(assignments: Array<{ printerId: string; categoryId: string }>) {
+export async function savePrinterAssignments(assignments: Array<{ printerId: string; productId: string }>) {
   const res = await fetch('/api/admin/printers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
