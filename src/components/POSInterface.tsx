@@ -14,10 +14,11 @@ import {
   Check, 
   DollarSign,
   Search,
-  Star
+  Star,
+  Printer
 } from 'lucide-react';
 import { UserSession, fetchCategories, addSiparis, applyItemAction, fetchPrinters, fetchReceiptSettings } from '@/lib/api';
-import { checkPrintServerStatus, printKitchenTickets } from '@/lib/printService';
+import { checkPrintServerStatus, printKitchenTickets, sendToPrinter, generateReceiptText } from '@/lib/printService';
 
 interface Product {
   id: string;
@@ -120,6 +121,7 @@ export default function POSInterface({
   const [overridePriceInput, setOverridePriceInput] = useState<string>('');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPrintingReceipt, setIsPrintingReceipt] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -252,6 +254,69 @@ export default function POSInterface({
       );
     }
     setNoteModalItem(null);
+  };
+
+  // Hesap Fişi Yazdır (Siparişi onaylamadan, sadece aktif kalemler için)
+  const handlePrintReceipt = async () => {
+    if (!table.activeOrder) return;
+    setIsPrintingReceipt(true);
+    setErrorMessage('');
+    
+    try {
+      const serverOnline = await checkPrintServerStatus();
+      if (!serverOnline) {
+        setErrorMessage('Yazdırma sunucusu kapalı! Lütfen "node print-server.js" çalıştırın.');
+        setIsPrintingReceipt(false);
+        return;
+      }
+
+      const settings = await fetchReceiptSettings();
+      let printerWindowsName = '';
+      let paperWidth = 80;
+
+      if (settings?.receiptPrinterId) {
+        const printersData = await fetchPrinters();
+        const receiptPrinter = printersData.find((p: any) => p.id === settings.receiptPrinterId);
+        if (receiptPrinter) {
+          printerWindowsName = receiptPrinter.windowsName;
+          paperWidth = receiptPrinter.paperWidth;
+        }
+      }
+
+      if (!printerWindowsName) {
+        setErrorMessage('Hesap fişi yazıcısı ayarlanmamış!');
+        setIsPrintingReceipt(false);
+        return;
+      }
+
+      const receiptText = generateReceiptText(
+        {
+          tableName: table.name,
+          waiterName: user.name,
+          createdAt: table.activeOrder.createdAt,
+          items: table.activeOrder.items,
+          totalAmount: table.activeOrder.totalAmount,
+          discountAmount: table.activeOrder.discountAmount,
+          paidAmount: table.activeOrder.paidAmount,
+          note: table.activeOrder.note,
+          payments: [],
+        },
+        settings,
+        paperWidth
+      );
+
+      const result = await sendToPrinter(printerWindowsName, receiptText);
+      if (result.success) {
+        setSuccessMessage('Hesap fişi yazdırıldı!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setErrorMessage('Yazdırma hatası: ' + (result.error || ''));
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Hesap fişi yazdırılırken hata oluştu.');
+    } finally {
+      setIsPrintingReceipt(false);
+    }
   };
 
   // Siparişleri Veritabanına Gönder
@@ -725,6 +790,18 @@ export default function POSInterface({
             <Send className="w-4 h-4" />
             <span>{isLoading ? 'Gönderiliyor...' : 'Siparişi Onayla & Gönder'}</span>
           </button>
+
+          {/* Hesap Yazdır Butonu (sadece aktif sipariş varsa) */}
+          {table.activeOrder && table.activeOrder.items.some(i => i.status !== 'CANCELLED') && (
+            <button
+              onClick={handlePrintReceipt}
+              disabled={isPrintingReceipt}
+              className="active-press w-full bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-200 font-heading font-bold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 border border-slate-700 cursor-pointer transition mt-2"
+            >
+              <Printer className="w-4 h-4" />
+              <span>{isPrintingReceipt ? 'Yazdırılıyor...' : 'Hesap Fişi Yazdır'}</span>
+            </button>
+          )}
         </div>
       </div>
 
