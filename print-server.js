@@ -122,13 +122,23 @@ try {
     exit 1
   }
   
+  # 1. YENİ EKLENEN: Windows'un varsayılan kenar boşluklarını (margin) sıfırla
+  $printJob.DefaultPageSettings.Margins = [System.Drawing.Printing.Margins]::new(0, 0, 0, 0)
+  
   $printJob.add_PrintPage({
     param($sender, $e)
+    # Font boyutunu (10) çok büyük/küçük gelirse buradan değiştirebilirsiniz (Örn: 9 veya 11)
     $font = [System.Drawing.Font]::new('Consolas', 10)
     $brush = [System.Drawing.Brushes]::Black
-    $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
-    $format = [System.Drawing.StringFormat]::new()
-    $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
+    
+    # ESKİ KOD: Sınırları belirleyen kutu çizimi (Bunu kaldırdık)
+    # $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
+    # $format = [System.Drawing.StringFormat]::new()
+    # $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
+    
+    # 2. YENİ KOD: Kutuyu iptal edip, X:0, Y:0 koordinatından direkt yazdırmaya başla
+    # Bu sayede kelimeler sadece sizin gönderdiğiniz metinde '\\n' (enter) varsa alt satıra iner
+    $e.Graphics.DrawString($content, $font, $brush, 0.0, 0.0)
   })
   
   $printJob.Print()
