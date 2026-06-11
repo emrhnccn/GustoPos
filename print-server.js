@@ -109,49 +109,58 @@ function printText(printerName, text) {
         return;
       }
 
-      // PowerShell ile yazdır
+      // PowerShell Scriptini oluştur
       const psCommand = `
-        try {
-          $content = Get-Content -Path '${tmpFile.replace(/\\/g, '\\\\')}' -Raw -Encoding UTF8
-          $printJob = [System.Drawing.Printing.PrintDocument]::new()
-          $printJob.PrinterSettings.PrinterName = '${printerName.replace(/'/g, "''")}'
-          
-          if (-not $printJob.PrinterSettings.IsValid) {
-            Write-Error "Yazıcı bulunamadı: ${printerName}"
-            exit 1
-          }
-          
-          $printJob.add_PrintPage({
-            param($sender, $e)
-            $font = [System.Drawing.Font]::new('Consolas', 9)
-            $brush = [System.Drawing.Brushes]::Black
-            $rect = $e.MarginBounds
-            $format = [System.Drawing.StringFormat]::new()
-            $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
-          })
-          
-          $printJob.Print()
-          $printJob.Dispose()
-          Write-Output "OK"
-        } catch {
-          Write-Error $_.Exception.Message
-          exit 1
-        }
+try {
+  Add-Type -AssemblyName System.Drawing
+  $content = Get-Content -Path '${tmpFile.replace(/'/g, "''")}' -Raw -Encoding UTF8
+  $printJob = [System.Drawing.Printing.PrintDocument]::new()
+  $printJob.PrinterSettings.PrinterName = '${printerName.replace(/'/g, "''")}'
+  
+  if (-not $printJob.PrinterSettings.IsValid) {
+    Write-Error "Yazıcı gecersiz veya bulunamadı: ${printerName}"
+    exit 1
+  }
+  
+  $printJob.add_PrintPage({
+    param($sender, $e)
+    $font = [System.Drawing.Font]::new('Consolas', 10)
+    $brush = [System.Drawing.Brushes]::Black
+    $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
+    $format = [System.Drawing.StringFormat]::new()
+    $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
+  })
+  
+  $printJob.Print()
+  $printJob.Dispose()
+  Write-Output "OK"
+} catch {
+  Write-Error $_.Exception.Message
+  exit 1
+}
       `;
 
-      // Daha basit yaklaşım: notepad /pt ile sessiz yazdırma
-      // Ama önce doğrudan print komutunu deneyelim
-      const simpleCmd = `powershell -NoProfile -Command "Get-Content '${tmpFile.replace(/'/g, "''")}' | Out-Printer '${printerName.replace(/'/g, "''")}'"`; 
-
-      exec(simpleCmd, { encoding: 'utf-8', timeout: 30000 }, (printErr, stdout, stderr) => {
-        // Geçici dosyayı temizle (asenkron)
-        fs.unlink(tmpFile, () => {});
-
-        if (printErr) {
-          reject(new Error('Yazdırma hatası: ' + (stderr || printErr.message)));
+      const tmpPs1 = path.join(tmpDir, `gustopos_print_script_${Date.now()}.ps1`);
+      
+      fs.writeFile(tmpPs1, psCommand, 'utf8', (psErr) => {
+        if (psErr) {
+          reject(new Error('PowerShell script oluşturulamadı: ' + psErr.message));
           return;
         }
-        resolve({ success: true, message: `Yazıcıya gönderildi: ${printerName}` });
+
+        const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpPs1}"`;
+
+        exec(cmd, { encoding: 'utf-8', timeout: 30000 }, (printErr, stdout, stderr) => {
+          // Geçici dosyaları temizle
+          fs.unlink(tmpFile, () => {});
+          fs.unlink(tmpPs1, () => {});
+
+          if (printErr) {
+            reject(new Error('Yazdırma hatası: ' + (stderr || printErr.message)));
+            return;
+          }
+          resolve({ success: true, message: `Yazıcıya gönderildi: ${printerName}` });
+        });
       });
     });
   });
