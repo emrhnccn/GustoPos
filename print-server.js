@@ -109,6 +109,7 @@ function printText(printerName, text) {
         return;
       }
 
+       
       // PowerShell Scriptini oluştur
       const psCommand = `
 try {
@@ -122,23 +123,22 @@ try {
     exit 1
   }
   
-  # 1. YENİ EKLENEN: Windows'un varsayılan kenar boşluklarını (margin) sıfırla
   $printJob.DefaultPageSettings.Margins = [System.Drawing.Printing.Margins]::new(0, 0, 0, 0)
   
   $printJob.add_PrintPage({
     param($sender, $e)
-    # Font boyutunu (10) çok büyük/küçük gelirse buradan değiştirebilirsiniz (Örn: 9 veya 11)
+    # Font boyutunu buradan ayarlıyoruz
     $font = [System.Drawing.Font]::new('Consolas', 10)
     $brush = [System.Drawing.Brushes]::Black
     
-    # ESKİ KOD: Sınırları belirleyen kutu çizimi (Bunu kaldırdık)
-    # $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
-    # $format = [System.Drawing.StringFormat]::new()
-    # $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
+    # 1. HAMLE: Otomatik satır atlamayı (Word Wrap) KESİNLİKLE YASAKLIYORUZ
+    $format = [System.Drawing.StringFormat]::new()
+    $format.FormatFlags = [System.Drawing.StringFormatFlags]::NoWrap
     
-    # 2. YENİ KOD: Kutuyu iptal edip, X:0, Y:0 koordinatından direkt yazdırmaya başla
-    # Bu sayede kelimeler sadece sizin gönderdiğiniz metinde '\\n' (enter) varsa alt satıra iner
-    $e.Graphics.DrawString($content, $font, $brush, 0.0, 0.0)
+    # 2. HAMLE: Windows'un bildirdiği dar alanı yok sayıp, hayali olarak geniş (800 birim) bir alan tanımlıyoruz
+    $rect = [System.Drawing.RectangleF]::new(0.0, 0.0, 800.0, 3000.0)
+    
+    $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
   })
   
   $printJob.Print()
