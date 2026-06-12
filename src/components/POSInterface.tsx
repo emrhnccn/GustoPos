@@ -140,13 +140,11 @@ export default function POSInterface({
 
   // Modifiers fetch has been removed as modifiers are now loaded inline with products
 
-  // Favori ürünleri hesapla (En çok satan veya varsayılan ilk 6 ürün)
+  // Favori ürünleri hesapla
   const getFavoriteProducts = () => {
     const allProducts = categories.flatMap((c) => c.products);
-    const favNames = ['Serpme Kahvaltı', 'Menemen', 'Karışık Tost', 'Bardak Çay', 'Türk Kahvesi', 'Latte'];
-    const favs = allProducts.filter((p) => favNames.includes(p.name));
-    if (favs.length > 0) return favs;
-    return allProducts.slice(0, 6);
+    const favs = allProducts.filter((p: any) => p.isFavorite);
+    return favs;
   };
 
   // Kategorileri Favoriler ile genişlet
