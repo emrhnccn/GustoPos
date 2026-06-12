@@ -479,9 +479,9 @@ export default function POSInterface({
   const grandTotal = activeOrderSubtotal + newItemsSubtotal;
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden max-w-7xl mx-auto w-full md:p-4 gap-4">
+    <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden max-w-7xl mx-auto w-full md:p-4 gap-4 min-h-0">
       {/* Sol Panel: Kategoriler ve Ürünler Grid Yapısı */}
-      <div className="flex-1 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden">
+      <div className="flex-1 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden min-h-0">
         {/* Header / Geri Dönüş ve Arama */}
         <div className="flex flex-col space-y-3 pb-3 border-b border-slate-800 mb-4">
           <div className="flex items-center justify-between">
