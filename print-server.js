@@ -109,6 +109,7 @@ function printText(printerName, text) {
         return;
       }
 
+       
       // PowerShell Scriptini oluştur
       const psCommand = `
 try {
@@ -126,10 +127,21 @@ try {
   
   $printJob.add_PrintPage({
     param($sender, $e)
+<<<<<<< HEAD
     $font = [System.Drawing.Font]::new('Consolas', 9)
+=======
+    # Font boyutunu buradan ayarlıyoruz
+    $font = [System.Drawing.Font]::new('Consolas', 10)
+>>>>>>> 7a4a0bcae287109518e677f1e534ec9e7fa3442f
     $brush = [System.Drawing.Brushes]::Black
-    $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
+    
+    # 1. HAMLE: Otomatik satır atlamayı (Word Wrap) KESİNLİKLE YASAKLIYORUZ
     $format = [System.Drawing.StringFormat]::new()
+    $format.FormatFlags = [System.Drawing.StringFormatFlags]::NoWrap
+    
+    # 2. HAMLE: Windows'un bildirdiği dar alanı yok sayıp, hayali olarak geniş (800 birim) bir alan tanımlıyoruz
+    $rect = [System.Drawing.RectangleF]::new(0.0, 0.0, 800.0, 3000.0)
+    
     $e.Graphics.DrawString($content, $font, $brush, $rect, $format)
   })
   
