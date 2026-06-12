@@ -81,7 +81,7 @@ export default function POSApplication() {
   }, [viewMode, user]);
 
   return (
-    <main className="flex-1 flex flex-col w-full h-full min-h-screen relative">
+    <main className="flex-1 flex flex-col w-full h-[100dvh] min-h-[100dvh] relative overflow-hidden">
       {viewMode === 'LOGIN' && (
         <PinLogin onLoginSuccessAction={handleLoginSuccess} />
       )}

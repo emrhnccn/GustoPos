@@ -522,9 +522,9 @@ export default function POSInterface({
         </div>
 
         {/* Kategori ve Ürün Alanı */}
-        <div className="flex-1 flex overflow-hidden gap-4">
+        <div className="flex-1 flex overflow-hidden gap-4 min-h-0">
           {/* Dikey Kategoriler */}
-          <div className="w-24 md:w-32 flex flex-col space-y-2 overflow-y-auto pr-1 scrollbar-thin">
+          <div className="w-24 md:w-32 flex flex-col space-y-2 overflow-y-auto pr-1 scrollbar-thin pb-10">
             {categoriesWithFavorites.map((cat) => (
               <button
                 key={cat.id}
@@ -532,7 +532,7 @@ export default function POSInterface({
                   setActiveCategoryId(cat.id);
                   setSearchQuery(''); // kategori değişince aramayı temizle
                 }}
-                className={`active-press py-3.5 px-2 rounded-xl text-[11px] md:text-xs font-bold leading-tight text-center border transition-all duration-200 cursor-pointer ${
+                className={`active-press py-3.5 px-2 rounded-xl text-[11px] md:text-xs font-bold leading-tight text-center border transition-all duration-200 cursor-pointer flex-shrink-0 ${
                   activeCategoryId === cat.id
                     ? 'gradient-primary text-white border-transparent shadow-lg shadow-indigo-500/25'
                     : 'bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800/80'
@@ -549,7 +549,7 @@ export default function POSInterface({
           </div>
 
           {/* Sağ Panel: Ürün Kartları Gridi */}
-          <div className="flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 gap-3 pr-1 align-content-start scrollbar-thin">
+          <div className="flex-1 overflow-y-auto grid grid-cols-2 lg:grid-cols-3 gap-3 pr-1 content-start scrollbar-thin pb-10">
             {filteredProducts.map((product) => {
               const isOutOfStock = product.isStockControlled && product.stockLevel <= 0;
 
@@ -557,7 +557,7 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-slate-800/70 p-4 rounded-xl flex flex-col items-center justify-center text-center min-h-[105px] border transition cursor-pointer select-none relative overflow-hidden group ${
+                  className={`active-press glass-card hover:bg-slate-800/70 p-2 rounded-xl flex flex-col items-center justify-center text-center aspect-square max-h-[140px] border transition cursor-pointer select-none relative overflow-hidden group ${
                     isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-slate-800/60 hover:border-slate-700'
                   }`}
                 >
@@ -602,7 +602,7 @@ export default function POSInterface({
       </div>
 
       {/* Sağ Panel: Sipariş Sepeti / Aktif Adisyon Kontrolü */}
-      <div className="w-full md:w-80 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden border-t md:border-t-0 md:border-l border-slate-800">
+      <div className="w-full md:w-80 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden border-t md:border-t-0 md:border-l border-slate-800 max-h-[45vh] md:max-h-full shrink-0">
         <h2 className="font-heading font-bold text-white text-sm mb-3 flex items-center justify-between pb-2 border-b border-slate-800">
           <span>Adisyon Detayı</span>
           <span className="text-xs text-slate-400 font-normal">#{table.name}</span>
