@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 // 2. Ürün Güncelle
 export async function PUT(request: Request) {
   try {
-    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive, image, modifierIds, newModifiers } = await request.json();
+    const { id, name, price, categoryId, isStockControlled, stockLevel, isActive, isFavorite, image, modifierIds, newModifiers } = await request.json();
 
     if (!id || !name || price === undefined || !categoryId) {
       return NextResponse.json(
@@ -68,6 +68,7 @@ export async function PUT(request: Request) {
         isStockControlled: !!isStockControlled,
         stockLevel: parseFloat(stockLevel || 0),
         isActive: isActive !== undefined ? !!isActive : true,
+        isFavorite: isFavorite !== undefined ? !!isFavorite : undefined,
         modifiers: {
           set: (modifierIds || []).map((id: string) => ({ id })),
           create: (newModifiers || []).map((m: { name: string; price?: number | string }) => ({

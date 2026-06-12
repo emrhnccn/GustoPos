@@ -557,7 +557,7 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-zinc-800/70 p-3 rounded-xl flex flex-col items-center justify-center text-center min-h-[110px] md:min-h-[130px] border transition cursor-pointer select-none relative overflow-hidden group ${
+                  className={`active-press glass-card hover:bg-zinc-800/70 p-2 md:p-3 rounded-xl flex flex-col items-center justify-center text-center aspect-square border transition cursor-pointer select-none relative overflow-hidden group ${
                     isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-zinc-800/60 hover:border-zinc-700'
                   }`}
                 >
@@ -774,7 +774,7 @@ export default function POSInterface({
         )}
 
         {/* Fiyatlar / Özet ve Siparişi Gönder */}
-        <div className="border-t border-zinc-800 pt-3 mt-3 space-y-2 bg-zinc-950/20 p-3 rounded-xl">
+        <div className="border-t border-zinc-800 pt-3 mt-3 space-y-2 bg-zinc-950/20 p-3 rounded-xl shrink-0">
           <div className="flex justify-between items-center text-xs">
             <span className="text-zinc-400">Genel Toplam:</span>
             <span className="font-heading font-extrabold text-white text-base">

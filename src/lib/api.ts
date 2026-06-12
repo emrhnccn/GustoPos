@@ -207,6 +207,32 @@ export async function deleteCategory(categoryId: string) {
   return await res.json();
 }
 
+export async function reorderCategories(updates: Array<{ id: string; sortOrder: number }>) {
+  const res = await fetch('/api/admin/categories/reorder', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Kategori sırası güncellenemedi.');
+  }
+  return await res.json();
+}
+
+export async function reorderProducts(updates: Array<{ id: string; sortOrder: number; categoryId?: string }>) {
+  const res = await fetch('/api/admin/products/reorder', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ updates }),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Ürün sırası güncellenemedi.');
+  }
+  return await res.json();
+}
+
 // === CARI / MUSTERI API HAREKETLERI ===
 export async function fetchCustomers() {
   const res = await fetch('/api/admin/customers');

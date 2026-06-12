@@ -46,7 +46,7 @@ export default function RootLayout({
       lang="tr"
       className={`${outfit.variable} ${inter.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full font-sans bg-[#0c0f17] text-zinc-100 flex flex-col">
+      <body className="min-h-full font-sans bg-[#0c0a09] text-zinc-100 flex flex-col">
         <BackgroundOrbs />
         {children}
       </body>

@@ -26,11 +26,11 @@ export default function BackgroundOrbs() {
           animation-direction: alternate;
         }
 
-        /* ── Orb 1: İndigo — sol üst ── */
+        /* ── Orb 1: Gold — sol üst ── */
         .orb-1 {
           width: 900px;
           height: 900px;
-          background: radial-gradient(circle, rgba(99,102,241,0.65) 0%, rgba(79,70,229,0.30) 40%, transparent 72%);
+          background: radial-gradient(circle, rgba(245,158,11,0.5) 0%, rgba(180,83,9,0.25) 40%, transparent 72%);
           filter: blur(90px);
           top: -250px;
           left: -200px;
@@ -38,11 +38,11 @@ export default function BackgroundOrbs() {
           animation-duration: 13s;
         }
 
-        /* ── Orb 2: Cyan — sağ alt ── */
+        /* ── Orb 2: Orange — sağ alt ── */
         .orb-2 {
           width: 800px;
           height: 800px;
-          background: radial-gradient(circle, rgba(6,182,212,0.60) 0%, rgba(8,145,178,0.28) 40%, transparent 72%);
+          background: radial-gradient(circle, rgba(234,88,12,0.45) 0%, rgba(154,52,18,0.2) 40%, transparent 72%);
           filter: blur(80px);
           bottom: -200px;
           right: -150px;
@@ -50,11 +50,11 @@ export default function BackgroundOrbs() {
           animation-duration: 16s;
         }
 
-        /* ── Orb 3: Violet — orta sağ ── */
+        /* ── Orb 3: Light Gold — orta sağ ── */
         .orb-3 {
           width: 650px;
           height: 650px;
-          background: radial-gradient(circle, rgba(139,92,246,0.55) 0%, rgba(109,40,217,0.24) 45%, transparent 72%);
+          background: radial-gradient(circle, rgba(251,191,36,0.4) 0%, rgba(217,119,6,0.18) 45%, transparent 72%);
           filter: blur(75px);
           top: 25%;
           right: -120px;
@@ -62,11 +62,11 @@ export default function BackgroundOrbs() {
           animation-duration: 19s;
         }
 
-        /* ── Orb 4: Rose — sol alt ── */
+        /* ── Orb 4: Soft Orange — sol alt ── */
         .orb-4 {
           width: 600px;
           height: 600px;
-          background: radial-gradient(circle, rgba(244,63,94,0.45) 0%, rgba(190,18,60,0.20) 45%, transparent 72%);
+          background: radial-gradient(circle, rgba(249,115,22,0.4) 0%, rgba(194,65,12,0.15) 45%, transparent 72%);
           filter: blur(70px);
           bottom: 5%;
           left: 5%;
@@ -74,11 +74,11 @@ export default function BackgroundOrbs() {
           animation-duration: 21s;
         }
 
-        /* ── Orb 5: Emerald — merkez üst ── */
+        /* ── Orb 5: Warm Bronze — merkez üst ── */
         .orb-5 {
           width: 550px;
           height: 550px;
-          background: radial-gradient(circle, rgba(16,185,129,0.42) 0%, rgba(5,150,105,0.18) 45%, transparent 72%);
+          background: radial-gradient(circle, rgba(217,119,6,0.35) 0%, rgba(120,53,15,0.15) 45%, transparent 72%);
           filter: blur(70px);
           top: 10%;
           left: 38%;

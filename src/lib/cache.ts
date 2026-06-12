@@ -79,7 +79,7 @@ export const getCachedMenu = unstable_cache(
       include: {
         products: {
           where: { isActive: true },
-          orderBy: { name: 'asc' },
+          orderBy: { sortOrder: 'asc' },
           include: {
             modifiers: { where: { isActive: true } },
           },

@@ -54,6 +54,8 @@ model Product {
   isStockControlled Boolean            @default(false)
   stockLevel        Float              @default(0.0)
   isActive          Boolean            @default(true)
+  isFavorite        Boolean            @default(false)
+  sortOrder         Int                @default(0)
   orderItems        OrderItem[]
   stockTransactions StockTransaction[]
   modifiers         Modifier[]         @relation("ProductModifiers")

@@ -61,9 +61,27 @@ import {
   savePrinterAssignments,
   fetchReceiptSettings,
   saveReceiptSettings,
-  UserSession
+  UserSession,
+  reorderCategories,
+  reorderProducts
 } from '@/lib/api';
 import { checkPrintServerStatus, getWindowsPrinters, generateReceiptText } from '@/lib/printService';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { SortableCategoryItem, SortableProductItem } from './SortableMenuHelpers';
 
 interface AdminPanelProps {
   onCloseAction: () => void;
@@ -265,6 +283,79 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [actionError, setActionError] = useState<string>('');
   const [actionSuccess, setActionSuccess] = useState<string>('');
+
+  // DnD Sensörleri
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleDragEndCategory = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = menuCategories.findIndex((c) => c.id === active.id);
+      const newIndex = menuCategories.findIndex((c) => c.id === over?.id);
+      
+      const newCategories = arrayMove(menuCategories, oldIndex, newIndex);
+      // Update sortOrders immediately in local state
+      const updatedCategories = newCategories.map((c, idx) => ({ ...c, sortOrder: idx + 1 }));
+      setMenuCategories(updatedCategories);
+
+      // Call API
+      try {
+        await reorderCategories(updatedCategories.map(c => ({ id: c.id, sortOrder: c.sortOrder })));
+      } catch (err: any) {
+        setActionError('Sıralama kaydedilemedi: ' + err.message);
+        loadData(); // Revert on failure
+      }
+    }
+  };
+
+  const handleDragEndProduct = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      // Bulunan kategorinin ürünlerini sırala
+      const catIndex = menuCategories.findIndex(c => c.id === selectedMenuCategoryId);
+      if (catIndex === -1) return;
+
+      const cat = menuCategories[catIndex];
+      const oldIndex = cat.products.findIndex((p: any) => p.id === active.id);
+      const newIndex = cat.products.findIndex((p: any) => p.id === over?.id);
+
+      const newProducts = arrayMove(cat.products, oldIndex, newIndex);
+      const updatedProducts = newProducts.map((p: any, idx) => ({ ...p, sortOrder: idx + 1 }));
+
+      const newCategories = [...menuCategories];
+      newCategories[catIndex] = { ...cat, products: updatedProducts };
+      setMenuCategories(newCategories);
+
+      try {
+        await reorderProducts(updatedProducts.map((p: any) => ({ id: p.id, sortOrder: p.sortOrder, categoryId: p.categoryId })));
+      } catch (err: any) {
+        setActionError('Sıralama kaydedilemedi: ' + err.message);
+        loadData();
+      }
+    }
+  };
+
+  const handleToggleFavorite = async (prod: any) => {
+    try {
+      const updatedIsFavorite = !prod.isFavorite;
+      await saveProduct({ ...prod, isFavorite: updatedIsFavorite });
+      // update local state
+      const catIndex = menuCategories.findIndex(c => c.id === prod.categoryId);
+      if (catIndex > -1) {
+        const newCats = [...menuCategories];
+        const prodIndex = newCats[catIndex].products.findIndex((p: any) => p.id === prod.id);
+        if (prodIndex > -1) {
+          newCats[catIndex].products[prodIndex].isFavorite = updatedIsFavorite;
+          setMenuCategories(newCats);
+        }
+      }
+    } catch (err: any) {
+      setActionError('Favori durumu güncellenemedi.');
+    }
+  };
 
   // Verileri yükle
   const loadData = async () => {
@@ -2028,40 +2119,20 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-2 max-h-[400px] pr-1 scrollbar-thin">
-              {menuCategories.map((cat) => (
-                <div
-                  key={cat.id}
-                  onClick={() => setSelectedMenuCategoryId(cat.id)}
-                  className={`p-3 rounded-xl border flex items-center justify-between transition cursor-pointer ${selectedMenuCategoryId === cat.id
-                      ? 'bg-amber-500/10 border-amber-500/80 text-white font-semibold'
-                      : 'bg-zinc-900/40 border-zinc-850 text-zinc-400 hover:text-zinc-200'
-                    }`}
-                >
-                  <span className="truncate pr-4">
-                    {cat.name} <span className="text-[10px] text-zinc-500 ml-1">({cat.products.length} ürün)</span>
-                  </span>
-                  <div className="flex items-center space-x-1.5 shrink-0">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCategoryModal({ id: cat.id, name: cat.name, sortOrder: cat.sortOrder });
-                      }}
-                      className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteCategory(cat.id, cat.name);
-                      }}
-                      className="hover:bg-rose-500/20 p-1 text-rose-400 rounded transition"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndCategory}>
+                <SortableContext items={menuCategories.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+                  {menuCategories.map((cat) => (
+                    <SortableCategoryItem
+                      key={cat.id}
+                      cat={cat}
+                      isSelected={selectedMenuCategoryId === cat.id}
+                      onSelect={() => setSelectedMenuCategoryId(cat.id)}
+                      onEdit={(c: any) => setCategoryModal({ id: c.id, name: c.name, sortOrder: c.sortOrder })}
+                      onDelete={(c: any) => handleDeleteCategory(c.id, c.name)}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
             </div>
           </div>
 
@@ -2106,6 +2177,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                           <th className="p-3">Ürün Adı</th>
                           <th className="p-3 text-right">Fiyat</th>
+                          <th className="p-3 text-center">Favori</th>
                           <th className="p-3 text-center">Stok T.</th>
                           <th className="p-3 text-center">Mevcut Stok</th>
                           <th className="p-3 text-center">İşlemler</th>
@@ -2114,67 +2186,38 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       <tbody className="divide-y divide-zinc-850">
                         {productsList.length === 0 ? (
                           <tr>
-                            <td colSpan={5} className="p-6 text-center text-zinc-500 italic">
+                            <td colSpan={6} className="p-6 text-center text-zinc-500 italic">
                               Seçili kategoriye ait ürün bulunmuyor.
                             </td>
                           </tr>
                         ) : (
-                          productsList.map((prod: any) => (
-                            <tr key={prod.id} className="hover:bg-zinc-900/20 text-zinc-300">
-                              <td className="p-3 font-semibold text-zinc-200">
-                                <div className="flex items-center space-x-2">
-                                  {prod.image && (
-                                    <img
-                                      src={prod.image}
-                                      alt={prod.name}
-                                      className="w-7 h-7 rounded-lg object-cover border border-zinc-800 shrink-0"
-                                    />
-                                  )}
-                                  <span>{prod.name}</span>
-                                </div>
-                              </td>
-                              <td className="p-3 text-right font-bold text-cyan-300">{prod.price.toFixed(2)} TL</td>
-                              <td className="p-3 text-center">
-                                <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${prod.isStockControlled ? 'bg-amber-500/20 text-amber-400' : 'bg-zinc-800 text-zinc-500'
-                                  }`}>
-                                  {prod.isStockControlled ? 'Aktif' : 'Pasif'}
-                                </span>
-                              </td>
-                              <td className="p-3 text-center font-semibold text-zinc-300">
-                                {prod.isStockControlled ? `${prod.stockLevel} adet` : '-'}
-                              </td>
-                              <td className="p-3 text-center">
-                                <div className="flex items-center justify-center space-x-2">
-                                  <button
-                                    onClick={() => {
-                                      setProductModal({
-                                        id: prod.id,
-                                        name: prod.name,
-                                        price: prod.price,
-                                        categoryId: prod.categoryId,
-                                        isStockControlled: prod.isStockControlled,
-                                        stockLevel: prod.stockLevel,
-                                        image: prod.image || '',
-                                        modifierIds: prod.modifiers?.map((m: any) => m.id) || [],
-                                        newModifiers: [],
-                                      });
-                                      setNewModName('');
-                                      setNewModPrice('0');
-                                    }}
-                                    className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
-                                  >
-                                    <Edit3 className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteProduct(prod.id, prod.name)}
-                                    className="hover:bg-rose-500/20 p-1 text-rose-400 rounded transition"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))
+                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndProduct}>
+                            <SortableContext items={productsList.map((p: any) => p.id)} strategy={verticalListSortingStrategy}>
+                              {productsList.map((prod: any) => (
+                                <SortableProductItem
+                                  key={prod.id}
+                                  prod={prod}
+                                  onToggleFavorite={handleToggleFavorite}
+                                  onEdit={(p: any) => {
+                                    setProductModal({
+                                      id: p.id,
+                                      name: p.name,
+                                      price: p.price,
+                                      categoryId: p.categoryId,
+                                      isStockControlled: p.isStockControlled,
+                                      stockLevel: p.stockLevel,
+                                      image: p.image || '',
+                                      modifierIds: p.modifiers?.map((m: any) => m.id) || [],
+                                      newModifiers: [],
+                                    });
+                                    setNewModName('');
+                                    setNewModPrice('0');
+                                  }}
+                                  onDelete={(p: any) => handleDeleteProduct(p.id, p.name)}
+                                />
+                              ))}
+                            </SortableContext>
+                          </DndContext>
                         )}
                       </tbody>
                     </table>
