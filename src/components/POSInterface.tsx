@@ -549,7 +549,7 @@ export default function POSInterface({
           </div>
 
           {/* Sağ Panel: Ürün Kartları Gridi */}
-          <div className="flex-1 overflow-y-auto grid grid-cols-2 lg:grid-cols-3 gap-3 pr-1 content-start scrollbar-thin pb-10">
+          <div className="flex-1 overflow-y-auto grid grid-cols-2 lg:grid-cols-3 gap-3 pr-1 content-start scrollbar-thin pb-10 min-h-0">
             {filteredProducts.map((product) => {
               const isOutOfStock = product.isStockControlled && product.stockLevel <= 0;
 
@@ -557,7 +557,7 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-slate-800/70 p-2 rounded-xl flex flex-col items-center justify-center text-center aspect-square max-h-[140px] border transition cursor-pointer select-none relative overflow-hidden group ${
+                  className={`active-press glass-card hover:bg-slate-800/70 p-3 rounded-xl flex flex-col items-center justify-center text-center min-h-[110px] md:min-h-[130px] border transition cursor-pointer select-none relative overflow-hidden group ${
                     isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-slate-800/60 hover:border-slate-700'
                   }`}
                 >
@@ -581,7 +581,7 @@ export default function POSInterface({
                   )}
 
                   {/* Product Name - Centered & Highly Prominent */}
-                  <div className="relative z-10 font-heading font-black text-white text-xs md:text-sm tracking-tight leading-snug">
+                  <div className="relative z-10 font-heading font-bold text-white text-xs md:text-sm tracking-tight leading-snug">
                     {product.name}
                   </div>
 
@@ -602,14 +602,14 @@ export default function POSInterface({
       </div>
 
       {/* Sağ Panel: Sipariş Sepeti / Aktif Adisyon Kontrolü */}
-      <div className="w-full md:w-80 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden border-t md:border-t-0 md:border-l border-slate-800 max-h-[45vh] md:max-h-full shrink-0">
-        <h2 className="font-heading font-bold text-white text-sm mb-3 flex items-center justify-between pb-2 border-b border-slate-800">
+      <div className="w-full md:w-80 flex flex-col glass-card md:rounded-2xl p-3 md:p-4 overflow-hidden border-t md:border-t-0 md:border-l border-slate-800 h-[48vh] md:h-auto shrink-0 md:shrink min-h-0">
+        <h2 className="font-heading font-bold text-white text-sm mb-3 flex items-center justify-between pb-2 border-b border-slate-800 shrink-0">
           <span>Adisyon Detayı</span>
           <span className="text-xs text-slate-400 font-normal">#{table.name}</span>
         </h2>
 
         {/* Sepet Listesi */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin min-h-0">
           {/* KISIM 1: Aktif Kayıtlı Siparişler (Mutfak siparişleri) */}
           {table.activeOrder && table.activeOrder.items.length > 0 && (
             <div>
