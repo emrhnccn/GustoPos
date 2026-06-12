@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  Plus, 
-  Minus, 
-  Trash2, 
-  Gift, 
-  MessageSquare, 
-  Send, 
-  Edit3, 
-  Lock, 
-  Check, 
+import {
+  ArrowLeft,
+  Plus,
+  Minus,
+  Trash2,
+  Gift,
+  MessageSquare,
+  Send,
+  Edit3,
+  Lock,
+  Check,
   DollarSign,
   Search,
   Star,
@@ -92,7 +92,7 @@ export default function POSInterface({
   const [activeCategoryId, setActiveCategoryId] = useState<string>('favorites');
   const [newItems, setNewItems] = useState<NewOrderItem[]>([]);
   const [generalNote, setGeneralNote] = useState<string>(table.activeOrder?.note || '');
-  
+
   // Arama state'i
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -106,7 +106,7 @@ export default function POSInterface({
 
   // Note Modal state (Sepetteki kalemin notunu düzenlemek için)
   const [noteModalItem, setNoteModalItem] = useState<{ type: 'new' | 'active', index: number, id?: string, text: string } | null>(null);
-  
+
   // Admin PIN Onay Modalı State'leri
   const [adminAuthModal, setAdminAuthModal] = useState<{
     action: 'cancel' | 'complimentary' | 'price_override';
@@ -158,8 +158,8 @@ export default function POSInterface({
   // Arama sonucuna göre ürünleri filtrele
   const filteredProducts = activeCategory
     ? activeCategory.products.filter((p) =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : [];
 
   // Ürün tıklandığında Modifier modalını aç
@@ -195,7 +195,7 @@ export default function POSInterface({
       const existingIndex = prev.findIndex((item) => {
         if (item.productId !== selectedProductForModal.id) return false;
         if (item.note !== modalItemNote) return false;
-        
+
         // Modifier karşılaştırması
         const m1 = item.selectedModifiers || [];
         const m2 = modalSelectedModifiers;
@@ -259,7 +259,7 @@ export default function POSInterface({
     if (!table.activeOrder) return;
     setIsPrintingReceipt(true);
     setErrorMessage('');
-    
+
     try {
       const serverOnline = await checkPrintServerStatus();
       if (!serverOnline) {
@@ -461,12 +461,12 @@ export default function POSInterface({
 
   const activeOrderSubtotal = table.activeOrder
     ? table.activeOrder.items
-        .filter((item) => item.status === 'ACTIVE')
-        .reduce((sum, item) => {
-          const modifiers = item.selectedModifiers ? JSON.parse(item.selectedModifiers) : [];
-          const modifiersTotal = modifiers.reduce((mSum: number, m: any) => mSum + m.price, 0);
-          return sum + (item.unitPrice + modifiersTotal) * item.quantity;
-        }, 0)
+      .filter((item) => item.status === 'ACTIVE')
+      .reduce((sum, item) => {
+        const modifiers = item.selectedModifiers ? JSON.parse(item.selectedModifiers) : [];
+        const modifiersTotal = modifiers.reduce((mSum: number, m: any) => mSum + m.price, 0);
+        return sum + (item.unitPrice + modifiersTotal) * item.quantity;
+      }, 0)
     : 0;
 
   const newItemsSubtotal = newItems.reduce(
@@ -509,7 +509,7 @@ export default function POSInterface({
               className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 pl-10 pr-4 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30"
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3.5 top-2.5 text-xs text-zinc-500 hover:text-zinc-300"
               >
@@ -530,11 +530,10 @@ export default function POSInterface({
                   setActiveCategoryId(cat.id);
                   setSearchQuery(''); // kategori değişince aramayı temizle
                 }}
-                className={`active-press py-3.5 px-2 rounded-xl text-[11px] md:text-xs font-bold leading-tight text-center border transition-all duration-200 cursor-pointer flex-shrink-0 ${
-                  activeCategoryId === cat.id
+                className={`active-press py-3.5 px-2 rounded-xl text-[11px] md:text-xs font-bold leading-tight text-center border transition-all duration-200 cursor-pointer flex-shrink-0 ${activeCategoryId === cat.id
                     ? 'gradient-primary text-white border-transparent shadow-lg shadow-amber-500/25'
                     : 'bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border-zinc-800/80'
-                }`}
+                  }`}
               >
                 {cat.id === 'favorites' ? (
                   <span className="flex items-center justify-center space-x-1">
@@ -555,13 +554,12 @@ export default function POSInterface({
                 <div
                   key={product.id}
                   onClick={() => !isOutOfStock && handleProductClick(product)}
-                  className={`active-press glass-card hover:bg-zinc-800/70 p-2 md:p-3 rounded-xl flex flex-col items-center justify-center text-center aspect-square border transition cursor-pointer select-none relative overflow-hidden group ${
-                    isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-zinc-800/60 hover:border-zinc-700'
-                  }`}
+                  className={`active-press glass-card hover:bg-zinc-800/70 p-2 md:p-3 rounded-xl flex flex-col items-center justify-center text-center aspect-square border transition cursor-pointer select-none relative overflow-hidden group ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'border-zinc-800/60 hover:border-zinc-700'
+                    }`}
                 >
                   {/* Subtle Background Image Overlay */}
                   {product.image && (
-                    <div 
+                    <div
                       className="absolute inset-0 pointer-events-none opacity-[0.06] group-hover:opacity-[0.09] transition-opacity duration-300 select-none bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${product.image})`,
@@ -571,9 +569,8 @@ export default function POSInterface({
 
                   {/* Stock Level Badge - Absolute Top-Right */}
                   {product.isStockControlled && (
-                    <span className={`absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded-full font-bold z-20 ${
-                      product.stockLevel <= 15 ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
-                    }`}>
+                    <span className={`absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded-full font-bold z-20 ${product.stockLevel <= 15 ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
+                      }`}>
                       {product.stockLevel}
                     </span>
                   )}
@@ -623,11 +620,9 @@ export default function POSInterface({
                   return (
                     <div
                       key={item.id}
-                      className={`bg-zinc-900/60 border border-zinc-800/80 p-2.5 rounded-xl text-xs relative group transition ${
-                        item.status === 'COMPLIMENTARY' ? 'border-l-4 border-l-orange-500 bg-orange-500/5' : ''
-                      } ${item.status === 'PAID' ? 'border-l-4 border-l-emerald-500 bg-emerald-500/5' : ''} ${
-                        item.status === 'CANCELLED' ? 'opacity-40 line-through border-rose-950 bg-rose-950/5' : ''
-                      }`}
+                      className={`bg-zinc-900/60 border border-zinc-800/80 p-2.5 rounded-xl text-xs relative group transition ${item.status === 'COMPLIMENTARY' ? 'border-l-4 border-l-orange-500 bg-orange-500/5' : ''
+                        } ${item.status === 'PAID' ? 'border-l-4 border-l-emerald-500 bg-emerald-500/5' : ''} ${item.status === 'CANCELLED' ? 'opacity-40 line-through border-rose-950 bg-rose-950/5' : ''
+                        }`}
                     >
                       <div className="flex justify-between items-start font-medium text-zinc-200">
                         <span className="flex items-center">
@@ -861,11 +856,10 @@ export default function POSInterface({
                           <button
                             key={mod.id}
                             onClick={() => handleToggleModifier(mod)}
-                            className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-medium transition duration-150 cursor-pointer ${
-                              isSelected
+                            className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-medium transition duration-150 cursor-pointer ${isSelected
                                 ? 'bg-amber-500/20 border-amber-500 text-amber-200'
                                 : 'bg-zinc-900/60 border-zinc-800 hover:bg-zinc-800 text-zinc-400'
-                            }`}
+                              }`}
                           >
                             <span>{mod.name}</span>
                             <span className="font-bold text-amber-400">+{mod.price} TL</span>
@@ -932,7 +926,7 @@ export default function POSInterface({
               <Lock className="w-5 h-5" />
               <h3 className="font-heading font-bold text-base text-white">Yönetici Onayı Gerekli</h3>
             </div>
-            
+
             <p className="text-xs text-zinc-400 mb-4">
               Bu işlem güvenlik sınırları dahilindedir. Yetkilendirmek için 4 haneli müdür PIN kodunu girin.
             </p>
