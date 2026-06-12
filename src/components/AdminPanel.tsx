@@ -923,7 +923,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         <div className="flex items-center space-x-3 flex-wrap">
           <button
             onClick={onCloseAction}
-            className="active-press p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition duration-200 cursor-pointer"
+            className="active-press p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition duration-200 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -934,18 +934,18 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 Admin
               </span>
             </h1>
-            <p className="text-xs text-slate-400">Restoran ayarları, menü modları, cari hesap defteri ve personel ciroları</p>
+            <p className="text-xs text-zinc-400">Restoran ayarları, menü modları, cari hesap defteri ve personel ciroları</p>
           </div>
         </div>
 
         {/* Tab Seçiciler */}
-        <div className="flex bg-slate-950/80 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full scrollbar-thin">
+        <div className="flex bg-zinc-950/80 border border-zinc-800 p-1 rounded-xl overflow-x-auto max-w-full scrollbar-thin">
           <button
             onClick={() => {
               setViewingWorkDay(null);
               setActiveTab('REPORTS');
             }}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'REPORTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'REPORTS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
@@ -954,7 +954,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('MENU')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MENU' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MENU' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -963,7 +963,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('MODIFIERS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MODIFIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'MODIFIERS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Star className="w-3.5 h-3.5" />
@@ -972,7 +972,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('TABLES')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'TABLES' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'TABLES' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Layers className="w-3.5 h-3.5 text-cyan-400" />
@@ -981,7 +981,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('CARI')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'CARI' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'CARI' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -990,7 +990,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('DAILY_OPS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'DAILY_OPS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'DAILY_OPS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Activity className="w-3.5 h-3.5 text-amber-400" />
@@ -999,7 +999,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('INVENTORY')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'INVENTORY' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'INVENTORY' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Package className="w-3.5 h-3.5 text-cyan-400" />
@@ -1008,7 +1008,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('SUPPLIERS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'SUPPLIERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'SUPPLIERS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <DollarSign className="w-3.5 h-3.5 text-rose-400" />
@@ -1017,7 +1017,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <button
             onClick={() => setActiveTab('PRINTERS')}
-            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'PRINTERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+            className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'PRINTERS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
           >
             <Printer className="w-3.5 h-3.5 text-teal-400" />
@@ -1028,16 +1028,16 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <>
               <button
                 onClick={() => setActiveTab('USERS')}
-                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'USERS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                   }`}
               >
-                <Users className="w-3.5 h-3.5 text-indigo-400" />
+                <Users className="w-3.5 h-3.5 text-amber-400" />
                 <span>Personel Yönetimi</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('LOGS')}
-                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                className={`active-press px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${activeTab === 'LOGS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                   }`}
               >
                 <History className="w-3.5 h-3.5" />
@@ -1056,18 +1056,18 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center py-20 space-y-3">
-          <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm text-slate-400">Veriler hazırlanıyor...</p>
+          <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm text-zinc-400">Veriler hazırlanıyor...</p>
         </div>
       ) : activeTab === 'REPORTS' && reportsData ? (
         <div className="space-y-6 animate-fade-in">
 
           {/* Geçmiş Rapor İnceleme Uyarısı */}
           {viewingWorkDay && (
-            <div className="bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-2xl flex items-center justify-between shadow-md">
+            <div className="bg-amber-950/40 border border-amber-500/30 p-4 rounded-2xl flex items-center justify-between shadow-md">
               <div className="flex items-center space-x-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
-                <span className="text-xs text-slate-200">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span className="text-xs text-zinc-200">
                   Şu anda <strong>{new Date(viewingWorkDay.startTime).toLocaleDateString('tr-TR')}</strong> tarihli geçmiş günün Z raporunu inceliyorsunuz.
                 </span>
               </div>
@@ -1076,7 +1076,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   setViewingWorkDay(null);
                   setDateRange({ startDate: '', endDate: '' });
                 }}
-                className="bg-indigo-650 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold transition shadow-md"
+                className="bg-amber-650 hover:bg-amber-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold transition shadow-md"
               >
                 Aktif Güne Geri Dön
               </button>
@@ -1084,31 +1084,31 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           )}
 
           {/* Rapor Alt Sekme Seçiciler */}
-          <div className="flex bg-slate-950/40 border border-slate-850 p-1 rounded-xl w-fit space-x-1">
+          <div className="flex bg-zinc-950/40 border border-zinc-850 p-1 rounded-xl w-fit space-x-1">
             <button
               onClick={() => setReportsSubTab('OVERVIEW')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'OVERVIEW' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'OVERVIEW' ? 'bg-amber-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
             >
               Genel Raporlar
             </button>
             <button
               onClick={() => setReportsSubTab('COST')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'COST' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'COST' ? 'bg-amber-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
             >
               Maliyet Analizi
             </button>
             <button
               onClick={() => setReportsSubTab('CANCELLATIONS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'CANCELLATIONS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'CANCELLATIONS' ? 'bg-amber-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
             >
               İptal Raporu
             </button>
             <button
               onClick={() => setReportsSubTab('DISCOUNTS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'DISCOUNTS' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer ${reportsSubTab === 'DISCOUNTS' ? 'bg-amber-600 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
                 }`}
             >
               İndirim Raporu
@@ -1120,26 +1120,26 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               {/* Tarih Filtresi */}
               <div className="glass-card p-4 rounded-2xl shadow-md flex items-end space-x-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Başlangıç Tarihi</label>
+                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Başlangıç Tarihi</label>
                   <input
                     type="date"
                     value={dateRange.startDate}
                     onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
-                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Bitiş Tarihi</label>
+                  <label className="block text-xs font-semibold text-zinc-400 mb-1">Bitiş Tarihi</label>
                   <input
                     type="date"
                     value={dateRange.endDate}
                     onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
-                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                   />
                 </div>
                 <button
                   onClick={() => setDateRange({ startDate: '', endDate: '' })}
-                  className="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2.5 rounded-xl font-medium transition h-[38px]"
+                  className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs px-4 py-2.5 rounded-xl font-medium transition h-[38px]"
                 >
                   Filtreyi Temizle
                 </button>
@@ -1151,17 +1151,17 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <div className="absolute right-3 top-3 text-emerald-500 bg-emerald-500/10 p-2 rounded-xl">
                     <TrendingUp className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Net Günlük Ciro</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {reportsData.summary.totalRevenue.toFixed(2)} TL
                   </h2>
                 </div>
 
-                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-indigo-500">
-                  <div className="absolute right-3 top-3 text-indigo-500 bg-indigo-500/10 p-2 rounded-xl">
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-amber-500">
+                  <div className="absolute right-3 top-3 text-amber-500 bg-amber-500/10 p-2 rounded-xl">
                     <ShoppingBag className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Kapatılan Adisyon</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {reportsData.summary.totalOrders} adet
                   </h2>
@@ -1171,7 +1171,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <div className="absolute right-3 top-3 text-amber-500 bg-amber-500/10 p-2 rounded-xl">
                     <Percent className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Yapılan İndirim</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {reportsData.summary.totalDiscounts.toFixed(2)} TL
                   </h2>
@@ -1181,7 +1181,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <div className="absolute right-3 top-3 text-cyan-500 bg-cyan-500/10 p-2 rounded-xl">
                     <UserCheck className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Cari Satış</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Cari Satış</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {(reportsData.paymentMethods.cari || 0).toFixed(2)} TL
                   </h2>
@@ -1191,17 +1191,17 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <div className="absolute right-3 top-3 text-rose-500 bg-rose-500/10 p-2 rounded-xl">
                     <DollarSign className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Ürün Maliyeti (COGS)</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Ürün Maliyeti (COGS)</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {((reportsData.summary as any).totalCogs || 0).toFixed(2)} TL
                   </h2>
                 </div>
 
-                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-purple-500">
-                  <div className="absolute right-3 top-3 text-purple-500 bg-purple-500/10 p-2 rounded-xl">
+                <div className="glass-card p-4 rounded-2xl relative overflow-hidden shadow-lg border-l-4 border-l-orange-500">
+                  <div className="absolute right-3 top-3 text-orange-500 bg-orange-500/10 p-2 rounded-xl">
                     <Star className="w-5 h-5" />
                   </div>
-                  <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Kâr</p>
+                  <p className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Net Kâr</p>
                   <h2 className="text-xl font-heading font-black text-white mt-2">
                     {((reportsData.summary as any).netProfit || 0).toFixed(2)} TL
                   </h2>
@@ -1261,24 +1261,24 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   '#3b82f6', // Blue
                 ];
                 const catTextColors = [
-                  'text-indigo-400',
+                  'text-amber-400',
                   'text-cyan-400',
                   'text-emerald-400',
                   'text-amber-400',
                   'text-fuchsia-400',
                   'text-violet-400',
                   'text-rose-400',
-                  'text-blue-400',
+                  'text-amber-400',
                 ];
                 const catBgColors = [
-                  'bg-indigo-500/10',
+                  'bg-amber-500/10',
                   'bg-cyan-500/10',
                   'bg-emerald-500/10',
                   'bg-amber-500/10',
                   'bg-fuchsia-500/10',
                   'bg-violet-500/10',
                   'bg-rose-500/10',
-                  'bg-blue-500/10',
+                  'bg-amber-500/10',
                 ];
 
                 return (
@@ -1290,7 +1290,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <span>Saatlik Ciro Yoğunluğu (Peak Hours)</span>
                       </h3>
 
-                      <div className="relative flex-1 min-h-[220px] flex items-center justify-center bg-slate-950/45 rounded-xl border border-slate-900 p-2">
+                      <div className="relative flex-1 min-h-[220px] flex items-center justify-center bg-zinc-950/45 rounded-xl border border-zinc-900 p-2">
                         <svg viewBox={`0 0 ${hourWidth} ${hourHeight}`} className="w-full h-full overflow-visible">
                           <defs>
                             <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -1426,15 +1426,15 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         {/* Tooltip HTML */}
                         {hoveredHourIndex !== null && hourPoints[hoveredHourIndex] && (
                           <div
-                            className="absolute bg-slate-950/95 border border-indigo-500/30 text-white p-2.5 rounded-xl shadow-xl backdrop-blur-md text-[10px] pointer-events-none z-10 transition-all duration-150 animate-scale-in"
+                            className="absolute bg-zinc-950/95 border border-amber-500/30 text-white p-2.5 rounded-xl shadow-xl backdrop-blur-md text-[10px] pointer-events-none z-10 transition-all duration-150 animate-scale-in"
                             style={{
                               left: `${(hourPoints[hoveredHourIndex].x / hourWidth) * 100}%`,
                               top: `${(hourPoints[hoveredHourIndex].y / hourHeight) * 100 - 32}%`,
                               transform: 'translateX(-50%)',
                             }}
                           >
-                            <div className="font-bold text-slate-400">{hourPoints[hoveredHourIndex].hour} Dilimi</div>
-                            <div className="font-extrabold text-indigo-300 text-xs mt-0.5">
+                            <div className="font-bold text-zinc-400">{hourPoints[hoveredHourIndex].hour} Dilimi</div>
+                            <div className="font-extrabold text-amber-300 text-xs mt-0.5">
                               {hourPoints[hoveredHourIndex].total.toFixed(2)} TL
                             </div>
                           </div>
@@ -1445,11 +1445,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     {/* Kategori Bazlı Dağılım */}
                     <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col">
                       <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                        <Layers className="w-4 h-4 text-purple-400" />
+                        <Layers className="w-4 h-4 text-orange-400" />
                         <span>Kategori Bazlı Ciro Dağılımı</span>
                       </h3>
 
-                      <div className="flex-1 flex flex-col sm:flex-row items-center justify-around gap-6 bg-slate-950/45 rounded-xl border border-slate-900 p-4">
+                      <div className="flex-1 flex flex-col sm:flex-row items-center justify-around gap-6 bg-zinc-950/45 rounded-xl border border-zinc-900 p-4">
                         {/* Donut Chart SVG */}
                         <div className="relative w-[170px] h-[170px] shrink-0 flex items-center justify-center">
                           <svg viewBox="0 0 220 220" className="w-full h-full transform -rotate-90">
@@ -1494,28 +1494,28 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           </svg>
 
                           {/* Donut Center Text */}
-                          <div className="absolute flex flex-col items-center text-center justify-center bg-slate-950/70 w-[94px] h-[94px] rounded-full border border-slate-800/60 backdrop-blur-sm pointer-events-none select-none">
+                          <div className="absolute flex flex-col items-center text-center justify-center bg-zinc-950/70 w-[94px] h-[94px] rounded-full border border-zinc-800/60 backdrop-blur-sm pointer-events-none select-none">
                             {hoveredCategoryIndex !== null && categorySales[hoveredCategoryIndex] ? (
                               <>
-                                <span className="text-[9px] font-bold text-slate-400 uppercase truncate max-w-[80px]">
+                                <span className="text-[9px] font-bold text-zinc-400 uppercase truncate max-w-[80px]">
                                   {categorySales[hoveredCategoryIndex].name}
                                 </span>
                                 <span className="text-xs font-black text-white mt-0.5">
                                   {((categorySales[hoveredCategoryIndex].value / totalCatSales) * 100).toFixed(0)}%
                                 </span>
-                                <span className="text-[9px] font-bold text-indigo-300 mt-0.5">
+                                <span className="text-[9px] font-bold text-amber-300 mt-0.5">
                                   {categorySales[hoveredCategoryIndex].value.toFixed(0)} TL
                                 </span>
                               </>
                             ) : (
                               <>
-                                <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                                <span className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider">
                                   Toplam
                                 </span>
                                 <span className="text-[11px] font-black text-white mt-0.5 leading-tight">
                                   {totalCatSales.toFixed(0)} TL
                                 </span>
-                                <span className="text-[8px] font-bold text-slate-500 mt-0.5">
+                                <span className="text-[8px] font-bold text-zinc-500 mt-0.5">
                                   {categorySales.length} Kategori
                                 </span>
                               </>
@@ -1526,7 +1526,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         {/* Legend List */}
                         <div className="flex-1 w-full space-y-1.5 max-h-[160px] overflow-y-auto pr-1 scrollbar-thin">
                           {categorySales.length === 0 ? (
-                            <div className="text-center py-6 text-slate-500 italic text-[10px]">Satış kaydı bulunamadı.</div>
+                            <div className="text-center py-6 text-zinc-500 italic text-[10px]">Satış kaydı bulunamadı.</div>
                           ) : (
                             categorySales.map((cat, idx) => {
                               const pct = totalCatSales > 0 ? (cat.value / totalCatSales) * 100 : 0;
@@ -1534,7 +1534,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               return (
                                 <div
                                   key={idx}
-                                  className={`flex items-center justify-between p-1.5 rounded-lg transition-colors cursor-pointer ${isHovered ? 'bg-slate-900 text-white' : 'hover:bg-slate-900/40 text-slate-300'
+                                  className={`flex items-center justify-between p-1.5 rounded-lg transition-colors cursor-pointer ${isHovered ? 'bg-zinc-900 text-white' : 'hover:bg-zinc-900/40 text-zinc-300'
                                     }`}
                                   onMouseEnter={() => setHoveredCategoryIndex(idx)}
                                   onMouseLeave={() => setHoveredCategoryIndex(null)}
@@ -1547,7 +1547,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                     <span className="text-[10px] font-bold truncate max-w-[100px]">{cat.name}</span>
                                   </div>
                                   <div className="text-right shrink-0 font-mono text-[9px] font-bold">
-                                    <span className="text-slate-400 mr-2">{pct.toFixed(0)}%</span>
+                                    <span className="text-zinc-400 mr-2">{pct.toFixed(0)}%</span>
                                     <span className={catTextColors[idx % catTextColors.length]}>{cat.value.toFixed(1)} TL</span>
                                   </div>
                                 </div>
@@ -1572,7 +1572,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <div className="space-y-3.5">
                       {[
                         { label: 'Nakit (Cash)', val: reportsData.paymentMethods.cash, color: 'bg-emerald-500' },
-                        { label: 'Kredi Kartı', val: reportsData.paymentMethods.creditCard, color: 'bg-indigo-500' },
+                        { label: 'Kredi Kartı', val: reportsData.paymentMethods.creditCard, color: 'bg-amber-500' },
                         { label: 'Yemek Kartı', val: reportsData.paymentMethods.mealCard, color: 'bg-cyan-500' },
                         { label: 'Cari (Veresiye)', val: reportsData.paymentMethods.cari || 0, color: 'bg-amber-500' }
                       ].map((pay, i) => {
@@ -1582,10 +1582,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         return (
                           <div key={i} className="space-y-1.5">
                             <div className="flex justify-between text-xs font-semibold">
-                              <span className="text-slate-300">{pay.label}</span>
-                              <span className="text-slate-100">{pay.val.toFixed(2)} TL ({pct.toFixed(1)}%)</span>
+                              <span className="text-zinc-300">{pay.label}</span>
+                              <span className="text-zinc-100">{pay.val.toFixed(2)} TL ({pct.toFixed(1)}%)</span>
                             </div>
-                            <div className="w-full bg-slate-900 rounded-full h-2">
+                            <div className="w-full bg-zinc-900 rounded-full h-2">
                               <div className={`h-2 rounded-full ${pay.color}`} style={{ width: `${pct}%` }}></div>
                             </div>
                           </div>
@@ -1600,45 +1600,45 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       <Users className="w-4 h-4 text-emerald-400" />
                       <span>Garson Satış & Ciro Performansı</span>
                     </h3>
-                    <div className="divide-y divide-slate-850 text-xs">
+                    <div className="divide-y divide-zinc-850 text-xs">
                       {reportsData.waiterSalesPerformance.length === 0 ? (
-                        <div className="text-center py-6 text-slate-500 italic">Kayıtlı garson satışı bulunamadı.</div>
+                        <div className="text-center py-6 text-zinc-500 italic">Kayıtlı garson satışı bulunamadı.</div>
                       ) : (
                         reportsData.waiterSalesPerformance.map((waiter, i) => (
                           <div key={i} className="flex flex-col py-2">
                             <div
-                              className="flex justify-between items-center cursor-pointer hover:bg-slate-900/40 p-2 rounded-xl transition"
+                              className="flex justify-between items-center cursor-pointer hover:bg-zinc-900/40 p-2 rounded-xl transition"
                               onClick={() => setExpandedWaiterIndex(expandedWaiterIndex === i ? null : i)}
                             >
                               <div>
-                                <div className="font-bold text-slate-200">{waiter.name}</div>
-                                <div className="text-[10px] text-slate-500">Kapatılan Adisyon: {waiter.ordersCount} adet</div>
+                                <div className="font-bold text-zinc-200">{waiter.name}</div>
+                                <div className="text-[10px] text-zinc-500">Kapatılan Adisyon: {waiter.ordersCount} adet</div>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <span className="bg-emerald-500/10 text-emerald-400 font-extrabold px-3 py-1 rounded-full text-xs">
                                   {waiter.totalSales.toFixed(2)} TL Satış
                                 </span>
-                                {expandedWaiterIndex === i ? <ArrowUp className="w-4 h-4 text-slate-400" /> : <ArrowDown className="w-4 h-4 text-slate-400" />}
+                                {expandedWaiterIndex === i ? <ArrowUp className="w-4 h-4 text-zinc-400" /> : <ArrowDown className="w-4 h-4 text-zinc-400" />}
                               </div>
                             </div>
                             {expandedWaiterIndex === i && (
                               <div className="mt-2 px-2 animate-scale-in">
-                                <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3 space-y-2">
-                                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-2">Sattığı Ürünler</h4>
+                                <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-xl p-3 space-y-2">
+                                  <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider border-b border-zinc-800 pb-2 mb-2">Sattığı Ürünler</h4>
                                   {waiter.items && waiter.items.length > 0 ? (
                                     <div className="max-h-[150px] overflow-y-auto pr-1 scrollbar-thin space-y-1.5">
                                       {waiter.items.map((item, idx) => (
                                         <div key={idx} className="flex justify-between items-center text-[11px]">
                                           <div className="flex items-center space-x-2">
-                                            <span className="text-slate-500 font-mono w-5">{item.quantity}x</span>
-                                            <span className="text-slate-300 font-medium">{item.name}</span>
+                                            <span className="text-zinc-500 font-mono w-5">{item.quantity}x</span>
+                                            <span className="text-zinc-300 font-medium">{item.name}</span>
                                           </div>
                                           <span className="text-emerald-400/80 font-semibold">{item.total.toFixed(2)} TL</span>
                                         </div>
                                       ))}
                                     </div>
                                   ) : (
-                                    <div className="text-[10px] text-slate-500 italic">Ürün detayı bulunamadı.</div>
+                                    <div className="text-[10px] text-zinc-500 italic">Ürün detayı bulunamadı.</div>
                                   )}
                                 </div>
                               </div>
@@ -1654,21 +1654,21 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   {/* En Çok Satan Ürünler */}
                   <div className="glass-card p-5 rounded-2xl shadow-md">
                     <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                      <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+                      <span className="w-2 h-2 rounded-full bg-orange-400"></span>
                       <span>En Çok Satan 5 Ürün</span>
                     </h3>
-                    <div className="divide-y divide-slate-850">
+                    <div className="divide-y divide-zinc-850">
                       {reportsData.topProducts.map((p, i) => (
                         <div key={i} className="flex justify-between items-center py-2.5 text-xs">
                           <div className="flex items-center space-x-2.5">
-                            <span className="w-5 h-5 rounded bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center text-[10px]">
+                            <span className="w-5 h-5 rounded bg-amber-500/10 text-amber-400 font-bold flex items-center justify-center text-[10px]">
                               {i + 1}
                             </span>
-                            <span className="font-semibold text-slate-200">{p.name}</span>
+                            <span className="font-semibold text-zinc-200">{p.name}</span>
                           </div>
                           <div className="text-right">
-                            <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{p.quantity} Adet</span>
-                            <span className="font-bold text-slate-100">{p.total.toFixed(2)} TL</span>
+                            <span className="bg-zinc-900 px-2 py-0.5 rounded text-[10px] font-bold text-zinc-400 mr-2">{p.quantity} Adet</span>
+                            <span className="font-bold text-zinc-100">{p.total.toFixed(2)} TL</span>
                           </div>
                         </div>
                       ))}
@@ -1681,9 +1681,9 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
                       <span>En Çok Tercih Edilen 5 Masa</span>
                     </h3>
-                    <div className="divide-y divide-slate-850">
+                    <div className="divide-y divide-zinc-850">
                       {(!reportsData.topTables || reportsData.topTables.length === 0) ? (
-                        <div className="text-center py-6 text-slate-500 italic">Masa kullanım verisi bulunamadı.</div>
+                        <div className="text-center py-6 text-zinc-500 italic">Masa kullanım verisi bulunamadı.</div>
                       ) : (
                         reportsData.topTables.map((t, i) => (
                           <div key={i} className="flex justify-between items-center py-2.5 text-xs">
@@ -1691,11 +1691,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               <span className="w-5 h-5 rounded bg-cyan-500/10 text-cyan-400 font-bold flex items-center justify-center text-[10px]">
                                 {i + 1}
                               </span>
-                              <span className="font-semibold text-slate-200">{t.name} Masası</span>
+                              <span className="font-semibold text-zinc-200">{t.name} Masası</span>
                             </div>
                             <div className="text-right">
-                              <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] font-bold text-slate-400 mr-2">{t.orderCount} Kere</span>
-                              <span className="font-bold text-slate-100">{t.totalRevenue.toFixed(2)} TL Ciro</span>
+                              <span className="bg-zinc-900 px-2 py-0.5 rounded text-[10px] font-bold text-zinc-400 mr-2">{t.orderCount} Kere</span>
+                              <span className="font-bold text-zinc-100">{t.totalRevenue.toFixed(2)} TL Ciro</span>
                             </div>
                           </div>
                         ))
@@ -1707,13 +1707,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               {/* Kapatılan Toplam Adisyonlar (Z Günlüğü) */}
               <div className="glass-card p-5 rounded-2xl shadow-md text-xs">
                 <h3 className="font-heading font-bold text-white text-sm mb-4 flex items-center space-x-2">
-                  <FileSpreadsheet className="w-4 h-4 text-indigo-400" />
+                  <FileSpreadsheet className="w-4 h-4 text-amber-400" />
                   <span>Günlük Kapatılan Adisyon Defteri (Z Günlüğü)</span>
                 </h3>
                 <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                      <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                         <th className="p-3">Kapatılma Zamanı</th>
                         <th className="p-3">Masa</th>
                         <th className="p-3">Siparişi Kapatan Garson</th>
@@ -1722,35 +1722,35 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <th className="p-3 text-center">Detay</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850">
+                    <tbody className="divide-y divide-zinc-850">
                       {reportsData.adisyonHistory.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="p-6 text-center text-slate-500 italic">
+                          <td colSpan={6} className="p-6 text-center text-zinc-500 italic">
                             Kapatılmış adisyon bulunmamaktadır.
                           </td>
                         </tr>
                       ) : (
                         reportsData.adisyonHistory.map((o) => (
-                          <tr key={o.id} className="hover:bg-slate-900/20 transition text-slate-300">
-                            <td className="p-3 font-mono text-slate-500">
+                          <tr key={o.id} className="hover:bg-zinc-900/20 transition text-zinc-300">
+                            <td className="p-3 font-mono text-zinc-500">
                               {new Date(o.updatedAt).toLocaleTimeString('tr-TR')}
                             </td>
-                            <td className="p-3 font-bold text-slate-200">{o.tableName}</td>
-                            <td className="p-3 text-slate-300 font-semibold">{o.waiterName}</td>
+                            <td className="p-3 font-bold text-zinc-200">{o.tableName}</td>
+                            <td className="p-3 text-zinc-300 font-semibold">{o.waiterName}</td>
                             <td className="p-3">
                               {o.customerName ? (
                                 <span className="text-cyan-400 font-semibold">{o.customerName}</span>
                               ) : (
-                                <span className="text-slate-500">-</span>
+                                <span className="text-zinc-500">-</span>
                               )}
                             </td>
-                            <td className="p-3 text-right font-extrabold text-indigo-300">
+                            <td className="p-3 text-right font-extrabold text-amber-300">
                               {o.paidAmount.toFixed(2)} TL
                             </td>
                             <td className="p-3 text-center">
                               <button
                                 onClick={() => setSelectedAdisyon(o)}
-                                className="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1 px-2.5 rounded-lg font-bold"
+                                className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 py-1 px-2.5 rounded-lg font-bold"
                               >
                                 İncele
                               </button>
@@ -1772,23 +1772,23 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="overflow-x-auto max-h-[300px] scrollbar-thin">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                      <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                         <th className="p-3">Ürün Adı</th>
                         <th className="p-3 text-center">Toplam Adet</th>
                         <th className="p-3 text-right">Toplam Ciro</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850">
+                    <tbody className="divide-y divide-zinc-850">
                       {!reportsData.productSalesSummary || reportsData.productSalesSummary.length === 0 ? (
                         <tr>
-                          <td colSpan={3} className="p-6 text-center text-slate-500 italic">
+                          <td colSpan={3} className="p-6 text-center text-zinc-500 italic">
                             Satılan ürün kaydı bulunmamaktadır.
                           </td>
                         </tr>
                       ) : (
                         reportsData.productSalesSummary.map((p, idx) => (
-                          <tr key={idx} className="hover:bg-slate-900/20 transition text-slate-300">
-                            <td className="p-3 font-semibold text-slate-200">{p.name}</td>
+                          <tr key={idx} className="hover:bg-zinc-900/20 transition text-zinc-300">
+                            <td className="p-3 font-semibold text-zinc-200">{p.name}</td>
                             <td className="p-3 text-center font-extrabold text-cyan-400">{p.quantity} Adet</td>
                             <td className="p-3 text-right font-extrabold text-emerald-400">{p.total.toFixed(2)} TL</td>
                           </tr>
@@ -1811,7 +1811,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="overflow-x-auto scrollbar-thin">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                      <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                         <th className="p-3">Ürün Adı</th>
                         <th className="p-3 text-right">Satış Fiyatı</th>
                         <th className="p-3 text-right">Reçete Maliyeti</th>
@@ -1819,10 +1819,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <th className="p-3 text-center">Kâr Marjı (%)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850">
+                    <tbody className="divide-y divide-zinc-850">
                       {(!reportsData.costAnalysis || reportsData.costAnalysis.length === 0) ? (
                         <tr>
-                          <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                          <td colSpan={5} className="p-6 text-center text-zinc-500 italic">
                             Ürün reçete verisi bulunmamaktadır. Reçete sekmesinden ürünlere reçete bağlayın.
                           </td>
                         </tr>
@@ -1831,9 +1831,9 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           const isLowMargin = c.marginPercentage < 25;
                           const isHighMargin = c.marginPercentage >= 50;
                           return (
-                            <tr key={c.id} className="hover:bg-slate-900/20 transition text-slate-300">
-                              <td className="p-3 font-semibold text-slate-200">{c.name}</td>
-                              <td className="p-3 text-right font-bold text-slate-100">{c.price.toFixed(2)} TL</td>
+                            <tr key={c.id} className="hover:bg-zinc-900/20 transition text-zinc-300">
+                              <td className="p-3 font-semibold text-zinc-200">{c.name}</td>
+                              <td className="p-3 text-right font-bold text-zinc-100">{c.price.toFixed(2)} TL</td>
                               <td className="p-3 text-right font-bold text-rose-300">{c.cost.toFixed(2)} TL</td>
                               <td className="p-3 text-right font-bold text-emerald-400">{c.margin.toFixed(2)} TL</td>
                               <td className="p-3 text-center">
@@ -1865,7 +1865,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="overflow-x-auto scrollbar-thin">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                      <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                         <th className="p-3">Zaman</th>
                         <th className="p-3">İşlem Tipi</th>
                         <th className="p-3">Talep Eden (Garson)</th>
@@ -1873,17 +1873,17 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <th className="p-3">Detaylar / İptal Nedeni</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850">
+                    <tbody className="divide-y divide-zinc-850">
                       {(!reportsData.cancellationLogs || reportsData.cancellationLogs.length === 0) ? (
                         <tr>
-                          <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                          <td colSpan={5} className="p-6 text-center text-zinc-500 italic">
                             İptal kaydı bulunmamaktadır.
                           </td>
                         </tr>
                       ) : (
                         reportsData.cancellationLogs.map((log: any) => (
-                          <tr key={log.id} className="hover:bg-slate-900/20 transition text-slate-300">
-                            <td className="p-3 font-mono text-slate-500">
+                          <tr key={log.id} className="hover:bg-zinc-900/20 transition text-zinc-300">
+                            <td className="p-3 font-mono text-zinc-500">
                               {new Date(log.createdAt).toLocaleString('tr-TR')}
                             </td>
                             <td className="p-3">
@@ -1891,9 +1891,9 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                 {log.actionType}
                               </span>
                             </td>
-                            <td className="p-3 font-medium text-slate-200">{log.actorUser.name}</td>
+                            <td className="p-3 font-medium text-zinc-200">{log.actorUser.name}</td>
                             <td className="p-3 text-emerald-400 font-semibold">{log.approverUser?.name || '-'}</td>
-                            <td className="p-3 font-medium text-slate-300">{log.description}</td>
+                            <td className="p-3 font-medium text-zinc-300">{log.description}</td>
                           </tr>
                         ))
                       )}
@@ -1914,29 +1914,29 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="overflow-x-auto scrollbar-thin">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                      <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                         <th className="p-3">Zaman</th>
                         <th className="p-3">Uygulayan</th>
                         <th className="p-3">Onaylayan</th>
                         <th className="p-3">Detaylar / Tutar</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-850">
+                    <tbody className="divide-y divide-zinc-850">
                       {(!reportsData.discountLogs || reportsData.discountLogs.length === 0) ? (
                         <tr>
-                          <td colSpan={4} className="p-6 text-center text-slate-500 italic">
+                          <td colSpan={4} className="p-6 text-center text-zinc-500 italic">
                             İndirim kaydı bulunmamaktadır.
                           </td>
                         </tr>
                       ) : (
                         reportsData.discountLogs.map((log: any) => (
-                          <tr key={log.id} className="hover:bg-slate-900/20 transition text-slate-300">
-                            <td className="p-3 font-mono text-slate-500">
+                          <tr key={log.id} className="hover:bg-zinc-900/20 transition text-zinc-300">
+                            <td className="p-3 font-mono text-zinc-500">
                               {new Date(log.createdAt).toLocaleString('tr-TR')}
                             </td>
-                            <td className="p-3 font-medium text-slate-200">{log.actorUser.name}</td>
+                            <td className="p-3 font-medium text-zinc-200">{log.actorUser.name}</td>
                             <td className="p-3 text-emerald-400 font-semibold">{log.approverUser?.name || '-'}</td>
-                            <td className="p-3 font-medium text-slate-300">{log.description}</td>
+                            <td className="p-3 font-medium text-zinc-300">{log.description}</td>
                           </tr>
                         ))
                       )}
@@ -1951,7 +1951,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       ) : activeTab === 'LOGS' ? (
         /* Garson Log Defteri */
         <div className="glass-card rounded-2xl overflow-hidden shadow-lg animate-fade-in text-xs">
-          <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/20">
+          <div className="p-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-950/20">
             <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
               <Database className="w-4 h-4 text-rose-400" />
               <span>Denetim & Mutfak İptal Günlüğü</span>
@@ -1964,7 +1964,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           <div className="overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/35 text-slate-400 font-semibold">
+                <tr className="border-b border-zinc-800 bg-zinc-900/35 text-zinc-400 font-semibold">
                   <th className="p-4">Tarih / Saat</th>
                   <th className="p-4">İşlem Tipi</th>
                   <th className="p-4">Talep Eden (Garson)</th>
@@ -1972,37 +1972,37 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <th className="p-4">Açıklama / Detay</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850">
+              <tbody className="divide-y divide-zinc-850">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-900/30 transition text-slate-300">
-                    <td className="p-4 whitespace-nowrap text-slate-500 font-mono">
+                  <tr key={log.id} className="hover:bg-zinc-900/30 transition text-zinc-300">
+                    <td className="p-4 whitespace-nowrap text-zinc-500 font-mono">
                       {new Date(log.createdAt).toLocaleString('tr-TR')}
                     </td>
                     <td className="p-4 whitespace-nowrap">
                       <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${log.actionType === 'ITEM_CANCEL' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                          log.actionType === 'TABLE_MERGE' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' :
+                          log.actionType === 'TABLE_MERGE' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
                             log.actionType === 'DISCOUNT_APPLIED' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                              'bg-slate-800 text-slate-300'
+                              'bg-zinc-800 text-zinc-300'
                         }`}>
                         {log.actionType}
                       </span>
                     </td>
-                    <td className="p-4 font-medium text-slate-200">
+                    <td className="p-4 font-medium text-zinc-200">
                       {log.actorUser.name}
-                      <span className="text-[10px] text-slate-500 block">
+                      <span className="text-[10px] text-zinc-500 block">
                         {log.actorUser.role === 'ADMIN' ? 'Müdür' : 'Garson'}
                       </span>
                     </td>
-                    <td className="p-4 text-slate-400">
+                    <td className="p-4 text-zinc-400">
                       {log.approverUser ? (
                         <span className="text-emerald-400 font-medium">
                           {log.approverUser.name}
                         </span>
                       ) : (
-                        <span className="text-slate-500">-</span>
+                        <span className="text-zinc-500">-</span>
                       )}
                     </td>
-                    <td className="p-4 font-medium text-slate-200">{log.description}</td>
+                    <td className="p-4 font-medium text-zinc-200">{log.description}</td>
                   </tr>
                 ))}
               </tbody>
@@ -2013,14 +2013,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         /* Menü & Ürün Yönetimi */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-xs">
           <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[350px]">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
               <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
-                <FolderOpen className="w-4 h-4 text-indigo-400" />
+                <FolderOpen className="w-4 h-4 text-amber-400" />
                 <span>Menü Kategorileri</span>
               </h3>
               <button
                 onClick={() => setCategoryModal({ name: '', sortOrder: menuCategories.length + 1 })}
-                className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold p-1.5 px-2 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
+                className="bg-amber-650 hover:bg-amber-500 text-white font-bold p-1.5 px-2 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Ekle</span>
@@ -2033,12 +2033,12 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   key={cat.id}
                   onClick={() => setSelectedMenuCategoryId(cat.id)}
                   className={`p-3 rounded-xl border flex items-center justify-between transition cursor-pointer ${selectedMenuCategoryId === cat.id
-                      ? 'bg-indigo-500/10 border-indigo-500/80 text-white font-semibold'
-                      : 'bg-slate-900/40 border-slate-850 text-slate-400 hover:text-slate-200'
+                      ? 'bg-amber-500/10 border-amber-500/80 text-white font-semibold'
+                      : 'bg-zinc-900/40 border-zinc-850 text-zinc-400 hover:text-zinc-200'
                     }`}
                 >
                   <span className="truncate pr-4">
-                    {cat.name} <span className="text-[10px] text-slate-500 ml-1">({cat.products.length} ürün)</span>
+                    {cat.name} <span className="text-[10px] text-zinc-500 ml-1">({cat.products.length} ürün)</span>
                   </span>
                   <div className="flex items-center space-x-1.5 shrink-0">
                     <button
@@ -2046,7 +2046,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         e.stopPropagation();
                         setCategoryModal({ id: cat.id, name: cat.name, sortOrder: cat.sortOrder });
                       }}
-                      className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                      className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
@@ -2072,7 +2072,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
               return (
                 <>
-                  <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+                  <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
                     <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
                       <Package className="w-4 h-4 text-cyan-400" />
                       <span>{selectedCat ? `"${selectedCat.name}" Ürünleri` : 'Ürünler'}</span>
@@ -2103,7 +2103,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <div className="flex-1 overflow-x-auto scrollbar-thin">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
-                        <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                        <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                           <th className="p-3">Ürün Adı</th>
                           <th className="p-3 text-right">Fiyat</th>
                           <th className="p-3 text-center">Stok T.</th>
@@ -2111,23 +2111,23 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           <th className="p-3 text-center">İşlemler</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-850">
+                      <tbody className="divide-y divide-zinc-850">
                         {productsList.length === 0 ? (
                           <tr>
-                            <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                            <td colSpan={5} className="p-6 text-center text-zinc-500 italic">
                               Seçili kategoriye ait ürün bulunmuyor.
                             </td>
                           </tr>
                         ) : (
                           productsList.map((prod: any) => (
-                            <tr key={prod.id} className="hover:bg-slate-900/20 text-slate-300">
-                              <td className="p-3 font-semibold text-slate-200">
+                            <tr key={prod.id} className="hover:bg-zinc-900/20 text-zinc-300">
+                              <td className="p-3 font-semibold text-zinc-200">
                                 <div className="flex items-center space-x-2">
                                   {prod.image && (
                                     <img
                                       src={prod.image}
                                       alt={prod.name}
-                                      className="w-7 h-7 rounded-lg object-cover border border-slate-800 shrink-0"
+                                      className="w-7 h-7 rounded-lg object-cover border border-zinc-800 shrink-0"
                                     />
                                   )}
                                   <span>{prod.name}</span>
@@ -2135,12 +2135,12 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               </td>
                               <td className="p-3 text-right font-bold text-cyan-300">{prod.price.toFixed(2)} TL</td>
                               <td className="p-3 text-center">
-                                <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${prod.isStockControlled ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-500'
+                                <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${prod.isStockControlled ? 'bg-amber-500/20 text-amber-400' : 'bg-zinc-800 text-zinc-500'
                                   }`}>
                                   {prod.isStockControlled ? 'Aktif' : 'Pasif'}
                                 </span>
                               </td>
-                              <td className="p-3 text-center font-semibold text-slate-300">
+                              <td className="p-3 text-center font-semibold text-zinc-300">
                                 {prod.isStockControlled ? `${prod.stockLevel} adet` : '-'}
                               </td>
                               <td className="p-3 text-center">
@@ -2161,7 +2161,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                       setNewModName('');
                                       setNewModPrice('0');
                                     }}
-                                    className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                                    className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                                   >
                                     <Edit3 className="w-3.5 h-3.5" />
                                   </button>
@@ -2187,14 +2187,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       ) : activeTab === 'MODIFIERS' ? (
         /* Ek Seçenek (Modifier) Yönetimi */
         <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col text-xs animate-fade-in">
-          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
             <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>Ürün Ek Seçenekleri (Modifiers)</span>
             </h3>
             <button
               onClick={() => setModifierModal({ name: '', price: 0, productIds: [] })}
-              className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer shadow-md shadow-indigo-600/10"
+              className="bg-amber-650 hover:bg-amber-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer shadow-md shadow-amber-600/10"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Yeni Seçenek Ekle</span>
@@ -2204,43 +2204,43 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           <div className="overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                   <th className="p-3">Seçenek Adı</th>
                   <th className="p-3">Bağlı Ürünler</th>
                   <th className="p-3 text-right">Ekstra Fiyatı</th>
                   <th className="p-3 text-center">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850">
+              <tbody className="divide-y divide-zinc-850">
                 {modifiers.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="p-6 text-center text-slate-500 italic">
+                    <td colSpan={4} className="p-6 text-center text-zinc-500 italic">
                       Seçenek tanımlanmamıştır. Sol üstten seçenek ekleyin.
                     </td>
                   </tr>
                 ) : (
                   modifiers.map((mod) => (
-                    <tr key={mod.id} className="hover:bg-slate-900/20 text-slate-300">
-                      <td className="p-3 font-semibold text-slate-200">{mod.name}</td>
+                    <tr key={mod.id} className="hover:bg-zinc-900/20 text-zinc-300">
+                      <td className="p-3 font-semibold text-zinc-200">{mod.name}</td>
                       <td className="p-3">
                         {mod.products && mod.products.length > 0 ? (
                           <div className="flex flex-wrap gap-1 max-w-xs">
                             {mod.products.map((p: any) => (
-                              <span key={p.id} className="bg-indigo-900/50 text-indigo-300 font-semibold px-2 py-0.5 rounded text-[9px]">
+                              <span key={p.id} className="bg-amber-900/50 text-amber-300 font-semibold px-2 py-0.5 rounded text-[9px]">
                                 {p.name}
                               </span>
                             ))}
                           </div>
                         ) : (
-                          <span className="text-slate-500 italic">Global / Hiçbir Ürün</span>
+                          <span className="text-zinc-500 italic">Global / Hiçbir Ürün</span>
                         )}
                       </td>
-                      <td className="p-3 text-right font-bold text-indigo-300">+{mod.price.toFixed(2)} TL</td>
+                      <td className="p-3 text-right font-bold text-amber-300">+{mod.price.toFixed(2)} TL</td>
                       <td className="p-3 text-center">
                         <div className="flex items-center justify-center space-x-2">
                           <button
                             onClick={() => setModifierModal({ id: mod.id, name: mod.name, price: mod.price, productIds: mod.products?.map((p: any) => p.id) || [] })}
-                            className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                            className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -2262,14 +2262,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       ) : activeTab === 'TABLES' ? (
         /* Masa Yönetimi & Sıralayıcısı */
         <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col text-xs animate-fade-in">
-          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
             <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
               <Layers className="w-4 h-4 text-cyan-400" />
               <span>Masa & Bölge Yönetim Sistemi</span>
             </h3>
             <button
               onClick={() => setTableModal({ name: '', area: 'Bahçe' })}
-              className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
+              className="bg-amber-650 hover:bg-amber-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Masa Ekle</span>
@@ -2279,7 +2279,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           <div className="overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                   <th className="p-3">Masa Adı</th>
                   <th className="p-3">Hizmet Bölgesi</th>
                   <th className="p-3 text-center">Durum</th>
@@ -2288,37 +2288,37 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <th className="p-3 text-center font-bold">Sil</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850">
+              <tbody className="divide-y divide-zinc-850">
                 {tables.map((tbl) => (
-                  <tr key={tbl.id} className="hover:bg-slate-900/20 text-slate-300">
-                    <td className="p-3 font-semibold text-slate-200">{tbl.name}</td>
-                    <td className="p-3 text-slate-400 font-semibold">{tbl.area}</td>
+                  <tr key={tbl.id} className="hover:bg-zinc-900/20 text-zinc-300">
+                    <td className="p-3 font-semibold text-zinc-200">{tbl.name}</td>
+                    <td className="p-3 text-zinc-400 font-semibold">{tbl.area}</td>
                     <td className="p-3 text-center">
-                      <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${tbl.status === 'EMPTY' ? 'bg-slate-800 text-slate-400' : 'bg-rose-500/20 text-rose-400'
+                      <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${tbl.status === 'EMPTY' ? 'bg-zinc-800 text-zinc-400' : 'bg-rose-500/20 text-rose-400'
                         }`}>
                         {tbl.status === 'EMPTY' ? 'Boş' : 'Dolu'}
                       </span>
                     </td>
-                    <td className="p-3 text-center font-semibold text-slate-400">{tbl.sortOrder}</td>
+                    <td className="p-3 text-center font-semibold text-zinc-400">{tbl.sortOrder}</td>
                     <td className="p-3 text-center">
                       <div className="flex items-center justify-center space-x-1">
                         <button
                           onClick={() => handleSortTable(tbl.id, 'up')}
-                          className="hover:bg-slate-800 p-1 text-indigo-400 rounded transition"
+                          className="hover:bg-zinc-800 p-1 text-amber-400 rounded transition"
                           title="Yukarı Taşı"
                         >
                           <ArrowUp className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleSortTable(tbl.id, 'down')}
-                          className="hover:bg-slate-800 p-1 text-indigo-400 rounded transition"
+                          className="hover:bg-zinc-800 p-1 text-amber-400 rounded transition"
                           title="Aşağı Taşı"
                         >
                           <ArrowDown className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => setTableModal({ id: tbl.id, name: tbl.name, area: tbl.area })}
-                          className="hover:bg-slate-800 p-1 text-slate-300 hover:text-white rounded transition ml-1"
+                          className="hover:bg-zinc-800 p-1 text-zinc-300 hover:text-white rounded transition ml-1"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
@@ -2342,14 +2342,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       ) : activeTab === 'CARI' ? (
         /* Cari Hesap Defteri (CARI) */
         <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col text-xs animate-fade-in">
-          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
             <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
               <UserCheck className="w-4 h-4 text-emerald-400" />
               <span>Veresiye Hesap Defteri (Cari Müşteriler)</span>
             </h3>
             <button
               onClick={() => setCustomerModal({ name: '', phone: '', balance: 0 })}
-              className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer shadow-md shadow-indigo-600/10"
+              className="bg-amber-650 hover:bg-amber-500 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer shadow-md shadow-amber-600/10"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Müşteri Tanımla</span>
@@ -2359,7 +2359,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           <div className="overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                   <th className="p-3">Cari İsim / Unvan</th>
                   <th className="p-3">Telefon</th>
                   <th className="p-3 text-right">Borç Bakiyesi</th>
@@ -2368,18 +2368,18 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <th className="p-3 text-center">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850">
+              <tbody className="divide-y divide-zinc-850">
                 {customers.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-6 text-center text-slate-500 italic">
+                    <td colSpan={6} className="p-6 text-center text-zinc-500 italic">
                       Cari bakiye kaydı bulunmamaktadır.
                     </td>
                   </tr>
                 ) : (
                   customers.map((cust) => (
-                    <tr key={cust.id} className="hover:bg-slate-900/20 text-slate-300">
-                      <td className="p-3 font-semibold text-slate-200">{cust.name}</td>
-                      <td className="p-3 text-slate-400 font-mono">{cust.phone}</td>
+                    <tr key={cust.id} className="hover:bg-zinc-900/20 text-zinc-300">
+                      <td className="p-3 font-semibold text-zinc-200">{cust.name}</td>
+                      <td className="p-3 text-zinc-400 font-mono">{cust.phone}</td>
                       <td className="p-3 text-right font-bold text-rose-400">{cust.balance.toFixed(2)} TL</td>
                       <td className="p-3 text-center">
                         <button
@@ -2393,7 +2393,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       <td className="p-3 text-center">
                         <button
                           onClick={() => handleViewCariDetails(cust.id)}
-                          className="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-1 px-2.5 rounded-lg text-[10px]"
+                          className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold py-1 px-2.5 rounded-lg text-[10px]"
                         >
                           Ekstre Dökümü
                         </button>
@@ -2402,7 +2402,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         <div className="flex items-center justify-center space-x-2">
                           <button
                             onClick={() => setCustomerModal({ id: cust.id, name: cust.name, phone: cust.phone, balance: cust.balance })}
-                            className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                            className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -2425,7 +2425,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-xs font-sans">
           {/* Malzeme Tanımları ve Stok Seviyeleri */}
           <div className="lg:col-span-2 glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
               <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
                 <Package className="w-4 h-4 text-cyan-400" />
                 <span>Stok Malzemeleri Seviyeleri</span>
@@ -2442,7 +2442,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="flex-1 overflow-x-auto scrollbar-thin">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                  <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                     <th className="p-3">Malzeme Adı</th>
                     <th className="p-3">Birim</th>
                     <th className="p-3 text-right">Birim Maliyeti</th>
@@ -2451,10 +2451,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <th className="p-3 text-center">İşlemler</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850">
+                <tbody className="divide-y divide-zinc-850">
                   {ingredients.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-6 text-center text-slate-500 italic">
+                      <td colSpan={6} className="p-6 text-center text-zinc-500 italic">
                         Kayıtlı stok malzemesi bulunmuyor. Yeni malzeme ekleyin.
                       </td>
                     </tr>
@@ -2462,26 +2462,26 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     ingredients.map((ing) => {
                       const isLowStock = ing.stockLevel <= ing.minStockLevel;
                       return (
-                        <tr key={ing.id} className="hover:bg-slate-900/20 text-slate-300">
-                          <td className="p-3 font-semibold text-slate-200">{ing.name}</td>
-                          <td className="p-3 text-slate-400">{ing.unit}</td>
+                        <tr key={ing.id} className="hover:bg-zinc-900/20 text-zinc-300">
+                          <td className="p-3 font-semibold text-zinc-200">{ing.name}</td>
+                          <td className="p-3 text-zinc-400">{ing.unit}</td>
                           <td className="p-3 text-right font-bold text-rose-300">{ing.costPerUnit.toFixed(2)} TL</td>
                           <td className={`p-3 text-center font-extrabold ${isLowStock ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
                             {ing.stockLevel.toFixed(3)}
                           </td>
-                          <td className="p-3 text-center font-semibold text-slate-400">{ing.minStockLevel.toFixed(3)}</td>
+                          <td className="p-3 text-center font-semibold text-zinc-400">{ing.minStockLevel.toFixed(3)}</td>
                           <td className="p-3 text-center">
                             <div className="flex items-center justify-center space-x-2">
                               <button
                                 onClick={() => setStockAdjustmentModal({ id: ing.id, name: ing.name, unit: ing.unit, adjustmentQty: '', adjustmentNotes: '' })}
-                                className="bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold py-1 px-2 rounded text-[10px]"
+                                className="bg-zinc-800 hover:bg-zinc-700 text-cyan-400 font-bold py-1 px-2 rounded text-[10px]"
                                 title="Stok Seviyesi Düzelt"
                               >
                                 Düzelt
                               </button>
                               <button
                                 onClick={() => setIngredientModal({ id: ing.id, name: ing.name, unit: ing.unit, stockLevel: ing.stockLevel, costPerUnit: ing.costPerUnit, minStockLevel: ing.minStockLevel })}
-                                className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                                className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
                               </button>
@@ -2504,20 +2504,20 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           {/* Ürün Reçete Eşleştirme */}
           <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
               <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
-                <Layers className="w-4 h-4 text-indigo-400" />
+                <Layers className="w-4 h-4 text-amber-400" />
                 <span>Ürün Reçete Eşleştirme</span>
               </h3>
             </div>
 
             <div className="space-y-4 flex-1 flex flex-col">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-400 mb-1">Eşleştirilecek Ürün Seçin:</label>
+                <label className="block text-[11px] font-semibold text-zinc-400 mb-1">Eşleştirilecek Ürün Seçin:</label>
                 <select
                   value={selectedProductIdForRecipe}
                   onChange={(e) => setSelectedProductIdForRecipe(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none"
                 >
                   <option value="">-- Ürün Seçin --</option>
                   {recipes.map((prod) => (
@@ -2532,14 +2532,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-3 flex-1 overflow-y-auto max-h-[300px] scrollbar-thin pr-1">
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] text-slate-400">Reçete Kalemleri:</span>
+                      <span className="text-[10px] text-zinc-400">Reçete Kalemleri:</span>
                       <button
                         type="button"
                         onClick={() => {
                           if (ingredients.length === 0) return;
                           setEditingRecipeItems([...editingRecipeItems, { ingredientId: ingredients[0].id, quantityRequired: 0, wastePercentage: 0 }]);
                         }}
-                        className="text-indigo-400 hover:text-indigo-300 font-bold text-[10px] flex items-center space-x-0.5"
+                        className="text-amber-400 hover:text-amber-300 font-bold text-[10px] flex items-center space-x-0.5"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Satır Ekle</span>
@@ -2547,10 +2547,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     </div>
 
                     {editingRecipeItems.length === 0 ? (
-                      <div className="text-center py-6 text-slate-500 italic bg-slate-900/30 rounded-xl">Reçete tanımlanmamış. Satır ekleyip kaydedin.</div>
+                      <div className="text-center py-6 text-zinc-500 italic bg-zinc-900/30 rounded-xl">Reçete tanımlanmamış. Satır ekleyip kaydedin.</div>
                     ) : (
                       editingRecipeItems.map((item, idx) => (
-                        <div key={idx} className="bg-slate-950 border border-slate-900 p-2.5 rounded-xl space-y-2 relative">
+                        <div key={idx} className="bg-zinc-950 border border-zinc-900 p-2.5 rounded-xl space-y-2 relative">
                           <button
                             type="button"
                             onClick={() => setEditingRecipeItems(editingRecipeItems.filter((_, i) => i !== idx))}
@@ -2561,7 +2561,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
                           <div className="grid grid-cols-1 gap-2">
                             <div>
-                              <label className="block text-[9px] text-slate-500 mb-0.5">Malzeme</label>
+                              <label className="block text-[9px] text-zinc-500 mb-0.5">Malzeme</label>
                               <select
                                 value={item.ingredientId}
                                 onChange={(e) => {
@@ -2569,7 +2569,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                   list[idx].ingredientId = e.target.value;
                                   setEditingRecipeItems(list);
                                 }}
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-[10px] text-zinc-200"
                               >
                                 {ingredients.map(ing => (
                                   <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
@@ -2579,7 +2579,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
                             <div className="grid grid-cols-2 gap-2">
                               <div>
-                                <label className="block text-[9px] text-slate-500 mb-0.5">Gerekli Mik. ({ingredients.find(i => i.id === item.ingredientId)?.unit || ''})</label>
+                                <label className="block text-[9px] text-zinc-500 mb-0.5">Gerekli Mik. ({ingredients.find(i => i.id === item.ingredientId)?.unit || ''})</label>
                                 <input
                                   type="number"
                                   step="0.0001"
@@ -2589,11 +2589,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                     list[idx].quantityRequired = parseFloat(e.target.value) || 0;
                                     setEditingRecipeItems(list);
                                   }}
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-[10px] text-zinc-200"
                                 />
                               </div>
                               <div>
-                                <label className="block text-[9px] text-slate-500 mb-0.5">Fire (%)</label>
+                                <label className="block text-[9px] text-zinc-500 mb-0.5">Fire (%)</label>
                                 <input
                                   type="number"
                                   step="0.1"
@@ -2603,7 +2603,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                     list[idx].wastePercentage = parseFloat(e.target.value) || 0;
                                     setEditingRecipeItems(list);
                                   }}
-                                  className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-200"
+                                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-[10px] text-zinc-200"
                                 />
                               </div>
                             </div>
@@ -2614,14 +2614,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   </div>
 
                   {/* Dinamik Reçete Maliyeti Gösterimi */}
-                  <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-900 space-y-1.5 font-sans mb-3 text-left">
-                    <div className="flex justify-between text-[11px] text-slate-400">
+                  <div className="bg-zinc-950/60 p-3 rounded-xl border border-zinc-900 space-y-1.5 font-sans mb-3 text-left">
+                    <div className="flex justify-between text-[11px] text-zinc-400">
                       <span>Ürün Satış Fiyatı:</span>
                       <span className="font-bold text-white">
                         {(recipes.find(r => r.id === selectedProductIdForRecipe)?.price || 0).toFixed(2)} TL
                       </span>
                     </div>
-                    <div className="flex justify-between text-[11px] text-slate-400">
+                    <div className="flex justify-between text-[11px] text-zinc-400">
                       <span>Hesaplanan Reçete Maliyeti:</span>
                       <span className="font-bold text-rose-400">
                         {(() => {
@@ -2637,7 +2637,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         })().toFixed(2)} TL
                       </span>
                     </div>
-                    <div className="flex justify-between text-xs font-bold text-emerald-400 border-t border-slate-900 pt-1.5">
+                    <div className="flex justify-between text-xs font-bold text-emerald-400 border-t border-zinc-900 pt-1.5">
                       <span>Tahmini Brüt Kâr:</span>
                       <span>
                         {(() => {
@@ -2658,13 +2658,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
                   <button
                     onClick={() => handleSaveRecipe(selectedProductIdForRecipe, editingRecipeItems)}
-                    className="w-full gradient-primary hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition cursor-pointer text-center text-xs"
+                    className="w-full gradient-primary hover:bg-amber-500 text-white font-bold py-2.5 rounded-xl transition cursor-pointer text-center text-xs"
                   >
                     Reçeteyi Kaydet
                   </button>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center border border-dashed border-slate-850 rounded-2xl p-6 text-slate-500 italic text-center">
+                <div className="flex-1 flex items-center justify-center border border-dashed border-zinc-850 rounded-2xl p-6 text-zinc-500 italic text-center">
                   Reçetesini düzenlemek istediğiniz ürünü yukarıdaki listeden seçin.
                 </div>
               )}
@@ -2675,14 +2675,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-xs font-sans">
           {/* Tedarikçi Listesi ve Borç Bakiyeleri */}
           <div className="lg:col-span-2 glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
               <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
                 <Users className="w-4 h-4 text-rose-400" />
                 <span>Tedarikçi Cari Bakiyeleri</span>
               </h3>
               <button
                 onClick={() => setSupplierModal({ name: '', phone: '' })}
-                className="bg-indigo-650 hover:bg-indigo-550 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
+                className="bg-amber-650 hover:bg-amber-550 text-white font-bold p-1.5 px-3 rounded-lg transition text-[10px] flex items-center space-x-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tedarikçi Ekle</span>
@@ -2692,7 +2692,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="flex-1 overflow-x-auto scrollbar-thin">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 bg-slate-900/30 text-slate-400 font-semibold">
+                  <tr className="border-b border-zinc-800 bg-zinc-900/30 text-zinc-400 font-semibold">
                     <th className="p-3">Tedarikçi Adı</th>
                     <th className="p-3">Telefon</th>
                     <th className="p-3 text-right">Borç Bakiyemiz</th>
@@ -2700,24 +2700,24 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <th className="p-3 text-center">İşlemler</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850">
+                <tbody className="divide-y divide-zinc-850">
                   {suppliers.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="p-6 text-center text-slate-500 italic">
+                      <td colSpan={5} className="p-6 text-center text-zinc-500 italic">
                         Kayıtlı tedarikçi bulunmuyor. Yeni tedarikçi ekleyin.
                       </td>
                     </tr>
                   ) : (
                     suppliers.map((sup) => (
-                      <tr key={sup.id} className={`hover:bg-slate-900/20 text-slate-300 transition ${selectedSupplierIdForDetails === sup.id ? 'bg-slate-900/40' : ''}`} onClick={() => setSelectedSupplierIdForDetails(sup.id)}>
-                        <td className="p-3 font-semibold text-slate-200 cursor-pointer">{sup.name}</td>
-                        <td className="p-3 text-slate-400 font-mono">{sup.phone || '-'}</td>
+                      <tr key={sup.id} className={`hover:bg-zinc-900/20 text-zinc-300 transition ${selectedSupplierIdForDetails === sup.id ? 'bg-zinc-900/40' : ''}`} onClick={() => setSelectedSupplierIdForDetails(sup.id)}>
+                        <td className="p-3 font-semibold text-zinc-200 cursor-pointer">{sup.name}</td>
+                        <td className="p-3 text-zinc-400 font-mono">{sup.phone || '-'}</td>
                         <td className="p-3 text-right font-extrabold text-rose-400">{sup.balance.toFixed(2)} TL</td>
                         <td className="p-3 text-center" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-center space-x-2">
                             <button
                               onClick={() => setSupplierInvoiceModal({ supplierId: sup.id, supplierName: sup.name, amount: '', ingredientId: '', quantity: '', note: '' })}
-                              className="bg-indigo-600/30 hover:bg-indigo-650 text-indigo-300 font-bold py-1 px-2 rounded-lg text-[9px] transition"
+                              className="bg-amber-600/30 hover:bg-amber-650 text-amber-300 font-bold py-1 px-2 rounded-lg text-[9px] transition"
                             >
                               + Fatura Girişi
                             </button>
@@ -2733,7 +2733,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           <div className="flex items-center justify-center space-x-2">
                             <button
                               onClick={() => setSupplierModal({ id: sup.id, name: sup.name, phone: sup.phone || '' })}
-                              className="hover:bg-indigo-500/20 p-1 text-indigo-400 rounded transition"
+                              className="hover:bg-amber-500/20 p-1 text-amber-400 rounded transition"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                             </button>
@@ -2755,7 +2755,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           {/* Tedarikçi Ekstresi / Geçmiş İşlemler */}
           <div className="glass-card p-5 rounded-2xl shadow-md flex flex-col min-h-[400px]">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-800">
               <h3 className="font-heading font-bold text-white text-sm flex items-center space-x-2">
                 <DollarSign className="w-4 h-4 text-emerald-400" />
                 <span>Tedarikçi Cari Ekstresi</span>
@@ -2765,34 +2765,34 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="space-y-4 flex-1 flex flex-col">
               {selectedSupplierIdForDetails ? (
                 <div className="flex-1 flex flex-col justify-between space-y-4">
-                  <div className="text-xs font-bold text-slate-300">
+                  <div className="text-xs font-bold text-zinc-300">
                     {suppliers.find(s => s.id === selectedSupplierIdForDetails)?.name || ''} - Cari Hesap Hareketleri:
                   </div>
 
                   <div className="flex-1 overflow-y-auto max-h-[300px] scrollbar-thin pr-1 space-y-2">
                     {supplierPayments.filter(sp => sp.supplierId === selectedSupplierIdForDetails).length === 0 ? (
-                      <div className="text-center py-8 text-slate-500 italic bg-slate-900/30 rounded-xl">Cari hareket bulunmuyor.</div>
+                      <div className="text-center py-8 text-zinc-500 italic bg-zinc-900/30 rounded-xl">Cari hareket bulunmuyor.</div>
                     ) : (
                       supplierPayments
                         .filter(sp => sp.supplierId === selectedSupplierIdForDetails)
                         .map((sp) => {
                           const isInvoice = sp.type === 'INVOICE';
                           return (
-                            <div key={sp.id} className="bg-slate-950/40 border border-slate-900 p-2.5 rounded-xl space-y-1 relative">
-                              <div className="flex justify-between text-[9px] text-slate-500">
+                            <div key={sp.id} className="bg-zinc-950/40 border border-zinc-900 p-2.5 rounded-xl space-y-1 relative">
+                              <div className="flex justify-between text-[9px] text-zinc-500">
                                 <span>{new Date(sp.createdAt).toLocaleString('tr-TR')}</span>
                                 <span className={isInvoice ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
                                   {isInvoice ? 'Alış Faturası' : 'Yapılan Ödeme'}
                                 </span>
                               </div>
                               <div className="flex justify-between text-xs font-bold">
-                                <span className="text-slate-300">{sp.note || (isInvoice ? 'Malzeme Alımı' : 'Cari Ödeme')}</span>
+                                <span className="text-zinc-300">{sp.note || (isInvoice ? 'Malzeme Alımı' : 'Cari Ödeme')}</span>
                                 <span className={isInvoice ? 'text-rose-400' : 'text-emerald-400'}>
                                   {isInvoice ? '+' : '-'}{sp.amount.toFixed(2)} TL
                                 </span>
                               </div>
                               {sp.ingredient && (
-                                <div className="text-[9px] text-slate-400 mt-1">
+                                <div className="text-[9px] text-zinc-400 mt-1">
                                   Alınan: {sp.ingredient.name}
                                 </div>
                               )}
@@ -2803,7 +2803,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   </div>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center border border-dashed border-slate-850 rounded-2xl p-6 text-slate-500 italic text-center">
+                <div className="flex-1 flex items-center justify-center border border-dashed border-zinc-850 rounded-2xl p-6 text-zinc-500 italic text-center">
                   Cari hareketlerini izlemek istediğiniz tedarikçinin satırına tıklayın.
                 </div>
               )}
@@ -2814,48 +2814,48 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* ADİSYON DETAY MODALI */}
       {selectedAdisyon && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
-            <div className="flex justify-between items-start pb-3 border-b border-slate-800 mb-4">
+            <div className="flex justify-between items-start pb-3 border-b border-zinc-800 mb-4">
               <div>
                 <h3 className="font-heading font-black text-sm text-white flex items-center space-x-2">
-                  <FileText className="w-5 h-5 text-indigo-400" />
+                  <FileText className="w-5 h-5 text-amber-400" />
                   <span>Adisyon Detayı</span>
-                  <span className="text-[10px] bg-slate-800 text-slate-300 font-semibold px-2 py-0.5 rounded ml-2">
+                  <span className="text-[10px] bg-zinc-800 text-zinc-300 font-semibold px-2 py-0.5 rounded ml-2">
                     {selectedAdisyon.tableName}
                   </span>
                 </h3>
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-zinc-500 mt-1">
                   Kapatılma: {new Date(selectedAdisyon.updatedAt).toLocaleString('tr-TR')}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedAdisyon(null)}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-zinc-400 hover:text-white p-1"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="border border-slate-800 rounded-xl bg-slate-900/30 p-3 divide-y divide-slate-850 max-h-56 overflow-y-auto scrollbar-thin">
+              <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 p-3 divide-y divide-zinc-850 max-h-56 overflow-y-auto scrollbar-thin">
                 {selectedAdisyon.items.map((item, idx) => {
                   const mods = item.selectedModifiers ? JSON.parse(item.selectedModifiers) : [];
                   const modTotal = mods.reduce((sum: number, m: any) => sum + m.price, 0);
                   return (
                     <div key={idx} className="py-2 first:pt-0 last:pb-0 flex justify-between items-center text-xs">
                       <div>
-                        <div className="font-semibold text-slate-200">{item.productName}</div>
+                        <div className="font-semibold text-zinc-200">{item.productName}</div>
                         {mods.length > 0 && (
-                          <div className="text-[10px] text-indigo-400 italic mt-0.5">
+                          <div className="text-[10px] text-amber-400 italic mt-0.5">
                             + {mods.map((m: any) => m.name).join(', ')}
                           </div>
                         )}
-                        <div className="text-[9px] text-slate-500">
+                        <div className="text-[9px] text-zinc-500">
                           {item.quantity} adet × {item.unitPrice + modTotal} TL
                         </div>
                       </div>
-                      <span className="font-bold text-slate-100">
+                      <span className="font-bold text-zinc-100">
                         {((item.unitPrice + modTotal) * item.quantity).toFixed(2)} TL
                       </span>
                     </div>
@@ -2863,10 +2863,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 })}
               </div>
 
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-2">
-                <div className="flex justify-between text-slate-400">
+              <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 space-y-2">
+                <div className="flex justify-between text-zinc-400">
                   <span>Toplam Adisyon Tutarı</span>
-                  <span className="font-bold text-slate-200">{selectedAdisyon.totalAmount.toFixed(2)} TL</span>
+                  <span className="font-bold text-zinc-200">{selectedAdisyon.totalAmount.toFixed(2)} TL</span>
                 </div>
                 {selectedAdisyon.discountAmount > 0 && (
                   <div className="flex justify-between text-rose-400">
@@ -2874,11 +2874,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <span>-{selectedAdisyon.discountAmount.toFixed(2)} TL</span>
                   </div>
                 )}
-                <div className="flex justify-between text-emerald-400 border-t border-slate-900 pt-2 font-bold">
+                <div className="flex justify-between text-emerald-400 border-t border-zinc-900 pt-2 font-bold">
                   <span>Ödenen Net Tutar</span>
                   <span>{selectedAdisyon.paidAmount.toFixed(2)} TL</span>
                 </div>
-                <div className="flex justify-between text-slate-500 text-[10px] pt-1">
+                <div className="flex justify-between text-zinc-500 text-[10px] pt-1">
                   <span>Siparişi Kapatan Garson:</span>
                   <span className="font-semibold">{selectedAdisyon.waiterName}</span>
                 </div>
@@ -2886,7 +2886,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
               <button
                 onClick={() => setSelectedAdisyon(null)}
-                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-2.5 rounded-xl font-bold cursor-pointer"
+                className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 py-2.5 rounded-xl font-bold cursor-pointer"
               >
                 Kapat
               </button>
@@ -2897,26 +2897,26 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* CARI DETAY / EKSTRE MODALI */}
       {selectedCariStatement && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-2xl rounded-2xl p-6 shadow-2xl border-emerald-500/20 animate-scale-in text-xs flex flex-col max-h-[85vh]">
-            <div className="flex justify-between items-start pb-3 border-b border-slate-800 mb-4 shrink-0">
+            <div className="flex justify-between items-start pb-3 border-b border-zinc-800 mb-4 shrink-0">
               <div>
                 <h3 className="font-heading font-black text-base text-white flex items-center space-x-2">
                   <UserCheck className="w-5 h-5 text-emerald-400" />
                   <span>Cari Hesap Ekstre Detayı</span>
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Müşteri: <strong className="text-slate-200">{selectedCariStatement.customer.name}</strong> • Tel: {selectedCariStatement.customer.phone}
+                <p className="text-[11px] text-zinc-400 mt-1">
+                  Müşteri: <strong className="text-zinc-200">{selectedCariStatement.customer.name}</strong> • Tel: {selectedCariStatement.customer.phone}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Toplam Cari Borç</div>
+                  <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Toplam Cari Borç</div>
                   <div className="text-lg font-heading font-black text-rose-400">{selectedCariStatement.customer.balance.toFixed(2)} TL</div>
                 </div>
                 <button
                   onClick={() => setSelectedCariStatement(null)}
-                  className="text-slate-400 hover:text-white p-1 bg-slate-900 rounded-lg border border-slate-800"
+                  className="text-zinc-400 hover:text-white p-1 bg-zinc-900 rounded-lg border border-zinc-800"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -2926,10 +2926,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin">
               {/* Timeline list of Cari Orders and Cash Collections */}
               <div>
-                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Cari Hesap Hareketleri</h4>
+                <h4 className="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Cari Hesap Hareketleri</h4>
 
                 {selectedCariStatement.orders.length === 0 && selectedCariStatement.collections.length === 0 ? (
-                  <div className="text-center py-10 text-slate-500 italic border border-dashed border-slate-800 rounded-2xl">
+                  <div className="text-center py-10 text-zinc-500 italic border border-dashed border-zinc-800 rounded-2xl">
                     Hesaba ait cari hareket bulunmuyor.
                   </div>
                 ) : (
@@ -2953,9 +2953,9 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         if (move.type === 'DEBIT') {
                           const o = move.data;
                           return (
-                            <div key={`d-${idx}`} className="bg-slate-900/60 border border-slate-850 p-4 rounded-xl space-y-2">
+                            <div key={`d-${idx}`} className="bg-zinc-900/60 border border-zinc-850 p-4 rounded-xl space-y-2">
                               <div className="flex justify-between items-center text-[10px]">
-                                <span className="font-mono text-slate-500">
+                                <span className="font-mono text-zinc-500">
                                   {new Date(o.createdAt).toLocaleString('tr-TR')}
                                 </span>
                                 <span className="bg-rose-500/10 border border-rose-500/20 text-rose-300 font-bold px-2 py-0.5 rounded">
@@ -2964,22 +2964,22 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               </div>
                               <div className="flex justify-between items-center text-xs">
                                 <div>
-                                  Masa: <strong className="text-slate-200">{o.tableName}</strong> •
-                                  Garson: <span className="text-slate-400 font-semibold ml-1">{o.waiterName}</span>
+                                  Masa: <strong className="text-zinc-200">{o.tableName}</strong> •
+                                  Garson: <span className="text-zinc-400 font-semibold ml-1">{o.waiterName}</span>
                                 </div>
                                 <span className="font-black text-rose-400 text-sm">+{o.totalAmount.toFixed(2)} TL</span>
                               </div>
                               {/* Items list */}
-                              <div className="bg-slate-950/60 p-2 rounded-lg text-[10px] text-slate-400 border border-slate-900 divide-y divide-slate-900 space-y-1">
+                              <div className="bg-zinc-950/60 p-2 rounded-lg text-[10px] text-zinc-400 border border-zinc-900 divide-y divide-zinc-900 space-y-1">
                                 {o.items.map((item: any, i: number) => {
                                   const mods = item.selectedModifiers ? JSON.parse(item.selectedModifiers) : [];
                                   return (
                                     <div key={i} className="flex justify-between pt-1 first:pt-0">
                                       <span>
                                         {item.quantity}x {item.productName}
-                                        {mods.length > 0 && <span className="text-indigo-400 ml-1">({mods.map((m: any) => m.name).join(', ')})</span>}
+                                        {mods.length > 0 && <span className="text-amber-400 ml-1">({mods.map((m: any) => m.name).join(', ')})</span>}
                                       </span>
-                                      <span className="font-bold text-slate-300">
+                                      <span className="font-bold text-zinc-300">
                                         {((item.unitPrice + mods.reduce((s: number, m: any) => s + m.price, 0)) * item.quantity).toFixed(2)} TL
                                       </span>
                                     </div>
@@ -2995,7 +2995,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           return (
                             <div key={`c-${idx}`} className="bg-emerald-950/10 border border-emerald-900/30 p-3 rounded-xl flex justify-between items-center">
                               <div>
-                                <span className="font-mono text-slate-500 text-[10px] block mb-1">
+                                <span className="font-mono text-zinc-500 text-[10px] block mb-1">
                                   {new Date(c.createdAt).toLocaleString('tr-TR')}
                                 </span>
                                 <div className="text-emerald-300 font-semibold flex items-center space-x-1.5">
@@ -3016,10 +3016,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 shrink-0">
+            <div className="pt-4 border-t border-zinc-800 shrink-0">
               <button
                 onClick={() => setSelectedCariStatement(null)}
-                className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl font-bold cursor-pointer text-center"
+                className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 py-3 rounded-xl font-bold cursor-pointer text-center"
               >
                 Döküm Pencerisini Kapat
               </button>
@@ -3030,32 +3030,32 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* MODIFIER MODAL */}
       {modifierModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <Star className="w-5 h-5 text-indigo-400" />
+              <Star className="w-5 h-5 text-amber-400" />
               <span>{modifierModal.id ? 'Seçeneği Düzenle' : 'Yeni Seçenek Ekle'}</span>
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Seçenek Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Seçenek Adı</label>
                 <input
                   type="text"
                   value={modifierModal.name}
                   onChange={(e) => setModifierModal({ ...modifierModal, name: e.target.value })}
                   placeholder="Örn: Double Shot, Ekstra Peynir"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1.5">Bağlanacağı Ürünler</label>
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-2.5 max-h-40 overflow-y-auto space-y-1.5 scrollbar-thin">
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1.5">Bağlanacağı Ürünler</label>
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 max-h-40 overflow-y-auto space-y-1.5 scrollbar-thin">
                   {menuCategories.flatMap((cat: any) => cat.products || []).map((prod: any) => {
                     const isChecked = modifierModal.productIds?.includes(prod.id) || false;
                     return (
-                      <label key={prod.id} className="flex items-center space-x-2 text-slate-300 hover:text-white cursor-pointer select-none py-0.5">
+                      <label key={prod.id} className="flex items-center space-x-2 text-zinc-300 hover:text-white cursor-pointer select-none py-0.5">
                         <input
                           type="checkbox"
                           checked={isChecked}
@@ -3073,28 +3073,28 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               });
                             }
                           }}
-                          className="w-3.5 h-3.5 accent-indigo-500 rounded border-slate-800 cursor-pointer"
+                          className="w-3.5 h-3.5 accent-amber-500 rounded border-zinc-800 cursor-pointer"
                         />
                         <span className="text-[11px]">{prod.name}</span>
-                        <span className="text-[9px] text-slate-500 font-semibold">({menuCategories.find(c => c.products.some((p: any) => p.id === prod.id))?.name || ''})</span>
+                        <span className="text-[9px] text-zinc-500 font-semibold">({menuCategories.find(c => c.products.some((p: any) => p.id === prod.id))?.name || ''})</span>
                       </label>
                     );
                   })}
                   {menuCategories.flatMap((cat: any) => cat.products || []).length === 0 && (
-                    <div className="text-[10px] text-slate-500 italic p-2 text-center">Menüde ürün bulunmamaktadır.</div>
+                    <div className="text-[10px] text-zinc-500 italic p-2 text-center">Menüde ürün bulunmamaktadır.</div>
                   )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Fiyat Farkı (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Fiyat Farkı (TL)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={modifierModal.price === 0 ? '' : modifierModal.price}
                   onChange={(e) => setModifierModal({ ...modifierModal, price: parseFloat(e.target.value) || 0 })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -3110,13 +3110,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setModifierModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveModifier}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -3128,31 +3128,31 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* MASA MODAL */}
       {tableModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <Layers className="w-5 h-5 text-indigo-400" />
+              <Layers className="w-5 h-5 text-amber-400" />
               <span>{tableModal.id ? 'Masayı Düzenle' : 'Yeni Masa Ekle'}</span>
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Masa Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Masa Adı</label>
                 <input
                   type="text"
                   value={tableModal.name}
                   onChange={(e) => setTableModal({ ...tableModal, name: e.target.value })}
                   placeholder="Örn: Masa 12, B-4"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Bölge (Area)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Bölge (Area)</label>
                 <select
                   value={tableModal.area}
                   onChange={(e) => setTableModal({ ...tableModal, area: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 >
                   <option value="Açık">Açık</option>
                   <option value="Bahçe">Bahçe</option>
@@ -3175,13 +3175,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setTableModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveTable}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -3193,45 +3193,45 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* CARI MUSTERI MODAL */}
       {customerModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <UserCheck className="w-5 h-5 text-indigo-400" />
+              <UserCheck className="w-5 h-5 text-amber-400" />
               <span>{customerModal.id ? 'Müşteri Bilgilerini Düzenle' : 'Yeni Cari Hesap Oluştur'}</span>
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Müşteri / Cari Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Müşteri / Cari Adı</label>
                 <input
                   type="text"
                   value={customerModal.name}
                   onChange={(e) => setCustomerModal({ ...customerModal, name: e.target.value })}
                   placeholder="Örn: Ahmet Bey, Google Türkiye"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Telefon Numarası</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Telefon Numarası</label>
                 <input
                   type="text"
                   value={customerModal.phone}
                   onChange={(e) => setCustomerModal({ ...customerModal, phone: e.target.value })}
                   placeholder="Örn: 0532 555 4433"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               {!customerModal.id && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Başlangıç Bakiyesi (Borç)</label>
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Başlangıç Bakiyesi (Borç)</label>
                   <input
                     type="number"
                     value={customerModal.balance === 0 ? '' : customerModal.balance}
                     onChange={(e) => setCustomerModal({ ...customerModal, balance: parseFloat(e.target.value) || 0 })}
                     placeholder="0.00 TL"
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                   />
                 </div>
               )}
@@ -3248,13 +3248,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setCustomerModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveCustomer}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -3266,40 +3266,40 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* TAHSILAT AL MODAL */}
       {collectionModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
               <DollarSign className="w-5 h-5 text-emerald-400" />
               <span>Cari Hesap Tahsilat Al</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4">
+            <p className="text-[11px] text-zinc-400 mb-4">
               <strong>{collectionModal.name}</strong> müşterisinden alınan tahsilat miktarını ve ödeme tipini belirleyin.
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Tahsil Edilen Tutar (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Tahsil Edilen Tutar (TL)</label>
                 <input
                   type="number"
                   value={collectionModal.amount}
                   onChange={(e) => setCollectionModal({ ...collectionModal, amount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               {/* Payment Method Select */}
-              <div className="flex bg-slate-950 border border-slate-800 p-1 rounded-xl">
+              <div className="flex bg-zinc-950 border border-zinc-800 p-1 rounded-xl">
                 <button
                   onClick={() => setCollectionModal({ ...collectionModal, paymentMethod: 'CASH' })}
-                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CASH' ? 'gradient-primary text-white' : 'text-slate-400'
+                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CASH' ? 'gradient-primary text-white' : 'text-zinc-400'
                     }`}
                 >
                   Nakit
                 </button>
                 <button
                   onClick={() => setCollectionModal({ ...collectionModal, paymentMethod: 'CREDIT_CARD' })}
-                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CREDIT_CARD' ? 'gradient-primary text-white' : 'text-slate-400'
+                  className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${collectionModal.paymentMethod === 'CREDIT_CARD' ? 'gradient-primary text-white' : 'text-zinc-400'
                     }`}
                 >
                   Kredi Kartı
@@ -3318,7 +3318,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setCollectionModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
@@ -3336,32 +3336,32 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* KATEGORİ MODAL */}
       {categoryModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <FolderOpen className="w-5 h-5 text-indigo-400" />
+              <FolderOpen className="w-5 h-5 text-amber-400" />
               <span>{categoryModal.id ? 'Kategoriyi Düzenle' : 'Yeni Kategori Ekle'}</span>
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Kategori Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Kategori Adı</label>
                 <input
                   type="text"
                   value={categoryModal.name}
                   onChange={(e) => setCategoryModal({ ...categoryModal, name: e.target.value })}
                   placeholder="Örn: Tatlılar, Güne Başlarken"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Sıralama Önceliği</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Sıralama Önceliği</label>
                 <input
                   type="number"
                   value={categoryModal.sortOrder}
                   onChange={(e) => setCategoryModal({ ...categoryModal, sortOrder: parseInt(e.target.value) || 0 })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -3377,13 +3377,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setCategoryModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveCategory}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -3395,7 +3395,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* ÜRÜN MODAL */}
       {productModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
               <Package className="w-5 h-5 text-cyan-400" />
@@ -3404,34 +3404,34 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ürün Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Ürün Adı</label>
                 <input
                   type="text"
                   value={productModal.name}
                   onChange={(e) => setProductModal({ ...productModal, name: e.target.value })}
                   placeholder="Örn: Penne Arabiata, Latte"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Birim Satış Fiyatı (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Birim Satış Fiyatı (TL)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={productModal.price === 0 ? '' : productModal.price}
                   onChange={(e) => setProductModal({ ...productModal, price: parseFloat(e.target.value) || 0 })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Kategori</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Kategori</label>
                 <select
                   value={productModal.categoryId}
                   onChange={(e) => setProductModal({ ...productModal, categoryId: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 >
                   {menuCategories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -3442,17 +3442,17 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ürün Görsel URL'si (Opsiyonel)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Ürün Görsel URL'si (Opsiyonel)</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={productModal.image || ''}
                     onChange={(e) => setProductModal({ ...productModal, image: e.target.value })}
                     placeholder="https://images.unsplash.com/... veya /resim.png"
-                    className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                    className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500/80"
                   />
                   {productModal.image && (
-                    <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-slate-800">
+                    <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 border border-zinc-800">
                       <img
                         src={productModal.image}
                         alt="Önizleme"
@@ -3466,51 +3466,51 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-3 bg-slate-900/40 border border-slate-855 rounded-xl">
+              <div className="flex items-center space-x-3 p-3 bg-zinc-900/40 border border-zinc-855 rounded-xl">
                 <input
                   type="checkbox"
                   id="stockControl"
                   checked={productModal.isStockControlled}
                   onChange={(e) => setProductModal({ ...productModal, isStockControlled: e.target.checked })}
-                  className="w-4 h-4 accent-indigo-500"
+                  className="w-4 h-4 accent-amber-500"
                 />
-                <label htmlFor="stockControl" className="font-semibold text-slate-300 cursor-pointer">
+                <label htmlFor="stockControl" className="font-semibold text-zinc-300 cursor-pointer">
                   Basit Stok Takibi Aktif
                 </label>
               </div>
 
               {productModal.isStockControlled && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Mevcut Stok Miktarı</label>
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Mevcut Stok Miktarı</label>
                   <input
                     type="number"
                     value={productModal.stockLevel}
                     onChange={(e) => setProductModal({ ...productModal, stockLevel: parseFloat(e.target.value) || 0 })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                   />
                 </div>
               )}
 
               {/* Ek Seçenekler (Modifiers) Bölümü */}
-              <div className="border-t border-slate-800/80 pt-3">
-                <label className="block text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-2">
+              <div className="border-t border-zinc-800/80 pt-3">
+                <label className="block text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-2">
                   Ürün Ek Seçenekleri (Modifiers)
                 </label>
 
                 {/* Mevcut Seçenekler Checklist */}
                 {modifiers.length > 0 && (
                   <div className="mb-3">
-                    <span className="block text-[10px] text-slate-400 mb-1">Mevcut Seçeneklerden Bağla:</span>
-                    <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 max-h-[110px] overflow-y-auto grid grid-cols-2 gap-2 scrollbar-thin">
+                    <span className="block text-[10px] text-zinc-400 mb-1">Mevcut Seçeneklerden Bağla:</span>
+                    <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-2.5 max-h-[110px] overflow-y-auto grid grid-cols-2 gap-2 scrollbar-thin">
                       {modifiers.map((mod) => {
                         const isChecked = (productModal.modifierIds || []).includes(mod.id);
                         return (
-                          <label key={mod.id} className="flex items-center space-x-2 p-1.5 rounded-lg hover:bg-slate-800/50 cursor-pointer text-[10px] font-medium text-slate-300">
+                          <label key={mod.id} className="flex items-center space-x-2 p-1.5 rounded-lg hover:bg-zinc-800/50 cursor-pointer text-[10px] font-medium text-zinc-300">
                             <input
                               type="checkbox"
                               checked={isChecked}
                               onChange={() => handleToggleModifierInProduct(mod.id)}
-                              className="accent-indigo-500 rounded"
+                              className="accent-amber-500 rounded"
                             />
                             <span className="truncate">{mod.name} (+{mod.price} TL)</span>
                           </label>
@@ -3523,10 +3523,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 {/* Inline Yeni Eklenen Geçici Seçenekler Listesi */}
                 {(productModal.newModifiers || []).length > 0 && (
                   <div className="mb-3">
-                    <span className="block text-[10px] text-slate-400 mb-1">Yeni Eklenecek Seçenekler:</span>
+                    <span className="block text-[10px] text-zinc-400 mb-1">Yeni Eklenecek Seçenekler:</span>
                     <div className="flex flex-wrap gap-1.5">
                       {(productModal.newModifiers || []).map((m, idx) => (
-                        <span key={idx} className="bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded-lg flex items-center text-[10px] font-semibold">
+                        <span key={idx} className="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-2 py-0.5 rounded-lg flex items-center text-[10px] font-semibold">
                           <span>{m.name} (+{m.price} TL)</span>
                           <button
                             type="button"
@@ -3542,27 +3542,27 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 )}
 
                 {/* Hızlı Yeni Seçenek Tanımlama Girişleri */}
-                <div className="bg-slate-950/40 border border-slate-850 p-2.5 rounded-xl">
-                  <span className="block text-[10px] font-semibold text-slate-400 mb-1.5">Yeni Seçenek Oluştur & Ekle:</span>
+                <div className="bg-zinc-950/40 border border-zinc-850 p-2.5 rounded-xl">
+                  <span className="block text-[10px] font-semibold text-zinc-400 mb-1.5">Yeni Seçenek Oluştur & Ekle:</span>
                   <div className="flex items-center gap-1.5">
                     <input
                       type="text"
                       value={newModName}
                       onChange={(e) => setNewModName(e.target.value)}
                       placeholder="Seçenek adı (örn: Muzlu)"
-                      className="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[10px] text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                      className="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-[10px] text-zinc-200 focus:outline-none focus:border-amber-500/80"
                     />
                     <input
                       type="number"
                       value={newModPrice === '0' ? '' : newModPrice}
                       onChange={(e) => setNewModPrice(e.target.value)}
                       placeholder="+0 TL"
-                      className="w-16 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-[10px] text-slate-200 focus:outline-none focus:border-indigo-500/80"
+                      className="w-16 bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1.5 text-[10px] text-zinc-200 focus:outline-none focus:border-amber-500/80"
                     />
                     <button
                       type="button"
                       onClick={handleAddNewModInline}
-                      className="bg-indigo-650 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg transition text-[10px] cursor-pointer"
+                      className="bg-amber-650 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg transition text-[10px] cursor-pointer"
                     >
                       Ekle
                     </button>
@@ -3582,13 +3582,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setProductModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveProduct}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -3600,44 +3600,44 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* ADİSYON DETAY MODALI */}
       {selectedAdisyon && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-lg rounded-2xl p-6 shadow-2xl animate-scale-in flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+            <div className="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
               <h3 className="font-heading font-bold text-lg text-white flex items-center space-x-2">
-                <FileText className="w-5 h-5 text-indigo-400" />
+                <FileText className="w-5 h-5 text-amber-400" />
                 <span>Adisyon Detayı</span>
               </h3>
               <button
                 onClick={() => setSelectedAdisyon(null)}
-                className="text-slate-400 hover:text-white transition bg-slate-800 p-1.5 rounded-lg"
+                className="text-zinc-400 hover:text-white transition bg-zinc-800 p-1.5 rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex justify-between text-xs text-slate-300 mb-4 bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+            <div className="flex justify-between text-xs text-zinc-300 mb-4 bg-zinc-900/50 p-3 rounded-xl border border-zinc-800">
               <div className="space-y-1">
-                <div><span className="font-semibold text-slate-500">Masa:</span> <span className="font-bold text-white">{selectedAdisyon.tableName}</span></div>
-                <div><span className="font-semibold text-slate-500">Garson:</span> {selectedAdisyon.waiterName}</div>
-                {selectedAdisyon.customerName && <div><span className="font-semibold text-slate-500">Cari:</span> <span className="text-cyan-400 font-semibold">{selectedAdisyon.customerName}</span></div>}
+                <div><span className="font-semibold text-zinc-500">Masa:</span> <span className="font-bold text-white">{selectedAdisyon.tableName}</span></div>
+                <div><span className="font-semibold text-zinc-500">Garson:</span> {selectedAdisyon.waiterName}</div>
+                {selectedAdisyon.customerName && <div><span className="font-semibold text-zinc-500">Cari:</span> <span className="text-cyan-400 font-semibold">{selectedAdisyon.customerName}</span></div>}
               </div>
               <div className="space-y-1 text-right">
-                <div><span className="font-semibold text-slate-500">Tarih:</span> {new Date(selectedAdisyon.updatedAt).toLocaleString('tr-TR')}</div>
+                <div><span className="font-semibold text-zinc-500">Tarih:</span> {new Date(selectedAdisyon.updatedAt).toLocaleString('tr-TR')}</div>
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto scrollbar-thin pr-2 space-y-2 mb-4">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Sipariş İçeriği</h4>
+              <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Sipariş İçeriği</h4>
               {selectedAdisyon.items && selectedAdisyon.items.length > 0 ? (
                 selectedAdisyon.items.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-start bg-slate-900/40 p-2.5 rounded-xl text-xs border border-slate-800/50">
+                  <div key={idx} className="flex justify-between items-start bg-zinc-900/40 p-2.5 rounded-xl text-xs border border-zinc-800/50">
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-mono text-indigo-400 font-bold">{item.quantity}x</span>
-                        <span className="font-semibold text-slate-200">{item.productName}</span>
+                        <span className="font-mono text-amber-400 font-bold">{item.quantity}x</span>
+                        <span className="font-semibold text-zinc-200">{item.productName}</span>
                       </div>
                       {item.selectedModifiers && (
-                        <div className="text-[10px] text-slate-500 mt-1 pl-6">
+                        <div className="text-[10px] text-zinc-500 mt-1 pl-6">
                           {(() => {
                             try {
                               const mods = JSON.parse(item.selectedModifiers);
@@ -3653,12 +3653,12 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   </div>
                 ))
               ) : (
-                <div className="text-center p-4 text-slate-500 text-xs italic bg-slate-900/30 rounded-xl">Ürün detayı bulunamadı.</div>
+                <div className="text-center p-4 text-zinc-500 text-xs italic bg-zinc-900/30 rounded-xl">Ürün detayı bulunamadı.</div>
               )}
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-sm space-y-2 shrink-0">
-              <div className="flex justify-between text-slate-400">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm space-y-2 shrink-0">
+              <div className="flex justify-between text-zinc-400">
                 <span>Ara Toplam:</span>
                 <span>{selectedAdisyon.totalAmount.toFixed(2)} TL</span>
               </div>
@@ -3668,7 +3668,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <span>-{selectedAdisyon.discountAmount.toFixed(2)} TL</span>
                 </div>
               )}
-              <div className="flex justify-between text-white font-black text-base pt-2 border-t border-slate-800">
+              <div className="flex justify-between text-white font-black text-base pt-2 border-t border-zinc-800">
                 <span>Net Ödenen:</span>
                 <span className="text-emerald-400">{selectedAdisyon.paidAmount.toFixed(2)} TL</span>
               </div>
@@ -3680,24 +3680,24 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       {/* DAILY OPS TAB */}
       {activeTab === 'DAILY_OPS' && (
         <div className="space-y-6 animate-fade-in">
-          <div className="flex justify-between items-center bg-slate-900 p-5 rounded-2xl shadow-lg border border-slate-800">
+          <div className="flex justify-between items-center bg-zinc-900 p-5 rounded-2xl shadow-lg border border-zinc-800">
             <div>
               <h2 className="text-xl font-heading font-black text-white flex items-center space-x-2">
                 <Activity className="w-6 h-6 text-amber-400" />
                 <span>Gün İşlemleri (Gün Başı & Sonu)</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-zinc-400 mt-1">
                 Restoran operasyonunu başlatmak için gün başı, kapatmak için gün sonu yapmalısınız.
               </p>
               {activeWorkDay && (
-                <div className="mt-3 flex items-center space-x-4 bg-slate-950/40 border border-slate-800 p-3 rounded-xl max-w-md">
+                <div className="mt-3 flex items-center space-x-4 bg-zinc-950/40 border border-zinc-800 p-3 rounded-xl max-w-md">
                   <div className="text-xs">
-                    <span className="text-slate-400">Açılış Zamanı: </span>
+                    <span className="text-zinc-400">Açılış Zamanı: </span>
                     <span className="text-white font-semibold">{new Date(activeWorkDay.startTime).toLocaleString('tr-TR')}</span>
                   </div>
-                  <div className="h-4 w-[1px] bg-slate-800"></div>
+                  <div className="h-4 w-[1px] bg-zinc-800"></div>
                   <div className="text-xs">
-                    <span className="text-slate-400">Aktif Gün Cirosu: </span>
+                    <span className="text-zinc-400">Aktif Gün Cirosu: </span>
                     <span className="text-emerald-400 font-extrabold text-sm ml-1">{activeWorkDay.revenue?.toFixed(2) || '0.00'} TL</span>
                   </div>
                 </div>
@@ -3763,7 +3763,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400">
+                  <tr className="border-b border-zinc-800 text-zinc-400">
                     <th className="pb-3 font-semibold">Tarih</th>
                     <th className="pb-3 font-semibold">Başlangıç</th>
                     <th className="pb-3 font-semibold">Bitiş</th>
@@ -3773,25 +3773,25 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <th className="pb-3 font-semibold text-center">Rapor Detayı</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/50">
+                <tbody className="divide-y divide-zinc-800/50">
                   {workDays.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-8 text-center text-slate-500 italic">Henüz hiç gün kaydı yok.</td>
+                      <td colSpan={7} className="py-8 text-center text-zinc-500 italic">Henüz hiç gün kaydı yok.</td>
                     </tr>
                   ) : (
                     workDays.map((wd) => (
-                      <tr key={wd.id} className="hover:bg-slate-900/15 transition text-slate-300">
-                        <td className="py-3 font-medium text-slate-200">{new Date(wd.startTime).toLocaleDateString('tr-TR')}</td>
-                        <td className="py-3 text-slate-400">{new Date(wd.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
-                        <td className="py-3 text-slate-400">{wd.endTime ? new Date(wd.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '-'}</td>
+                      <tr key={wd.id} className="hover:bg-zinc-900/15 transition text-zinc-300">
+                        <td className="py-3 font-medium text-zinc-200">{new Date(wd.startTime).toLocaleDateString('tr-TR')}</td>
+                        <td className="py-3 text-zinc-400">{new Date(wd.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td className="py-3 text-zinc-400">{wd.endTime ? new Date(wd.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : '-'}</td>
                         <td className="py-3">
                           {wd.status === 'OPEN' ? (
                             <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded font-bold">AKTİF</span>
                           ) : (
-                            <span className="bg-slate-800 text-slate-400 px-2 py-1 rounded font-semibold">KAPALI</span>
+                            <span className="bg-zinc-800 text-zinc-400 px-2 py-1 rounded font-semibold">KAPALI</span>
                           )}
                         </td>
-                        <td className="py-3 text-center font-bold text-slate-300">{wd._count?.orders || 0}</td>
+                        <td className="py-3 text-center font-bold text-zinc-300">{wd._count?.orders || 0}</td>
                         <td className="py-3 text-right text-emerald-400 font-extrabold">{wd.revenue?.toFixed(2) || '0.00'} TL</td>
                         <td className="py-3 text-center">
                           <button
@@ -3799,7 +3799,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               setViewingWorkDay(wd);
                               setActiveTab('REPORTS');
                             }}
-                            className="bg-indigo-600/20 hover:bg-indigo-650 text-indigo-300 hover:text-white text-[10px] font-bold px-3 py-1 rounded-xl transition cursor-pointer"
+                            className="bg-amber-600/20 hover:bg-amber-650 text-amber-300 hover:text-white text-[10px] font-bold px-3 py-1 rounded-xl transition cursor-pointer"
                           >
                             Raporu İncele
                           </button>
@@ -3817,18 +3817,18 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
       {/* USERS TAB */}
       {activeTab === 'USERS' && (
         <div className="space-y-6 animate-fade-in">
-          <div className="flex justify-between items-center bg-slate-900 p-5 rounded-2xl shadow-lg border border-slate-800">
+          <div className="flex justify-between items-center bg-zinc-900 p-5 rounded-2xl shadow-lg border border-zinc-800">
             <div>
               <h2 className="text-xl font-heading font-black text-white flex items-center space-x-2">
-                <Users className="w-6 h-6 text-indigo-400" />
+                <Users className="w-6 h-6 text-amber-400" />
                 <span>Personel Yönetimi</span>
               </h2>
-              <p className="text-xs text-slate-400 mt-1">Garson ve Yöneticileri ekleyin, şifrelerini güncelleyin.</p>
+              <p className="text-xs text-zinc-400 mt-1">Garson ve Yöneticileri ekleyin, şifrelerini güncelleyin.</p>
             </div>
 
             <button
               onClick={() => setUserModal({ name: '', pinHash: '', role: 'WAITER', isActive: true })}
-              className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg transition flex items-center space-x-2 text-sm"
+              className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg transition flex items-center space-x-2 text-sm"
             >
               <Plus className="w-4 h-4" />
               <span>Yeni Personel Ekle</span>
@@ -3837,11 +3837,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {users.map((u) => (
-              <div key={u.id} className="glass-card p-4 rounded-2xl shadow-md border border-slate-800 relative">
+              <div key={u.id} className="glass-card p-4 rounded-2xl shadow-md border border-zinc-800 relative">
                 <div className="absolute top-4 right-4 flex space-x-2">
                   <button
                     onClick={() => setUserModal({ id: u.id, name: u.name, pinHash: u.pinHash, role: u.role, isActive: u.isActive })}
-                    className="p-1.5 bg-slate-800 hover:bg-indigo-500/20 text-slate-400 hover:text-indigo-400 rounded-lg transition"
+                    className="p-1.5 bg-zinc-800 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-400 rounded-lg transition"
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>
@@ -3851,22 +3851,22 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       const res = await fetch(`/api/admin/users?id=${u.id}`, { method: 'DELETE' });
                       if (res.ok) loadData();
                     }}
-                    className="p-1.5 bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 rounded-lg transition"
+                    className="p-1.5 bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 rounded-lg transition"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
                 <div className="flex items-center space-x-3 mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${u.role === 'ADMIN' ? 'bg-rose-500' : u.role === 'MANAGER' ? 'bg-amber-500' : u.role === 'CASHIER' ? 'bg-emerald-500' : 'bg-indigo-500'
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${u.role === 'ADMIN' ? 'bg-rose-500' : u.role === 'MANAGER' ? 'bg-amber-500' : u.role === 'CASHIER' ? 'bg-emerald-500' : 'bg-amber-500'
                     }`}>
                     {u.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-200">{u.name}</h4>
+                    <h4 className="font-bold text-zinc-200">{u.name}</h4>
                     <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' :
                         u.role === 'MANAGER' ? 'bg-amber-500/10 text-amber-400' :
                           u.role === 'CASHIER' ? 'bg-emerald-500/10 text-emerald-400' :
-                            'bg-indigo-500/10 text-indigo-400'
+                            'bg-amber-500/10 text-amber-400'
                       }`}>
                       {u.role === 'ADMIN' ? 'Yönetici (Admin)' :
                         u.role === 'MANAGER' ? 'Müdür (Manager)' :
@@ -3875,14 +3875,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     </span>
                   </div>
                 </div>
-                <div className="text-xs text-slate-400 border-t border-slate-800 pt-3">
-                  <span className="block mb-1">Giriş Şifresi (PIN): <strong className="text-slate-300 font-mono tracking-widest">{u.pinHash}</strong></span>
+                <div className="text-xs text-zinc-400 border-t border-zinc-800 pt-3">
+                  <span className="block mb-1">Giriş Şifresi (PIN): <strong className="text-zinc-300 font-mono tracking-widest">{u.pinHash}</strong></span>
                   <span className="block">Durum: {u.isActive ? <span className="text-emerald-400 font-semibold">Aktif</span> : <span className="text-rose-400">Pasif</span>}</span>
                 </div>
               </div>
             ))}
             {users.length === 0 && (
-              <div className="col-span-full text-center p-8 text-slate-500 italic glass-card rounded-2xl">
+              <div className="col-span-full text-center p-8 text-zinc-500 italic glass-card rounded-2xl">
                 Kayıtlı personel bulunamadı.
               </div>
             )}
@@ -3892,41 +3892,41 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* USER MODAL */}
       {userModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <Users className="w-5 h-5 text-indigo-400" />
+              <Users className="w-5 h-5 text-amber-400" />
               <span>{userModal.id ? 'Personel Düzenle' : 'Yeni Personel Ekle'}</span>
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ad Soyad</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Ad Soyad</label>
                 <input
                   type="text"
                   value={userModal.name}
                   onChange={(e) => setUserModal({ ...userModal, name: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Giriş Şifresi (4 Haneli PIN)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Giriş Şifresi (4 Haneli PIN)</label>
                 <input
                   type="text"
                   maxLength={4}
                   value={userModal.pinHash}
                   onChange={(e) => setUserModal({ ...userModal, pinHash: e.target.value.replace(/[^0-9]/g, '') })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none font-mono tracking-widest"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none font-mono tracking-widest"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Yetki Rolü</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Yetki Rolü</label>
                 <select
                   value={userModal.role}
                   onChange={(e) => setUserModal({ ...userModal, role: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 >
                   <option value="WAITER">Garson</option>
                   <option value="CASHIER">Kasiyer</option>
@@ -3941,15 +3941,15 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   id="userActive"
                   checked={userModal.isActive}
                   onChange={(e) => setUserModal({ ...userModal, isActive: e.target.checked })}
-                  className="w-4 h-4 accent-indigo-500"
+                  className="w-4 h-4 accent-amber-500"
                 />
-                <label htmlFor="userActive" className="font-semibold text-slate-300 cursor-pointer">Sisteme Giriş Yapabilir</label>
+                <label htmlFor="userActive" className="font-semibold text-zinc-300 cursor-pointer">Sisteme Giriş Yapabilir</label>
               </div>
 
               <div className="flex space-x-3 pt-4">
                 <button
                   onClick={() => setUserModal(null)}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition"
                 >
                   İptal
                 </button>
@@ -3976,7 +3976,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       alert('Hata');
                     }
                   }}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition"
                 >
                   Kaydet
                 </button>
@@ -3988,69 +3988,69 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* INGREDIENT MODAL */}
       {ingredientModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <Package className="w-5 h-5 text-indigo-400" />
+              <Package className="w-5 h-5 text-amber-400" />
               <span>{ingredientModal.id ? 'Malzemeyi Düzenle' : 'Yeni Malzeme Ekle'}</span>
             </h3>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Malzeme Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Malzeme Adı</label>
                 <input
                   type="text"
                   value={ingredientModal.name}
                   onChange={(e) => setIngredientModal({ ...ingredientModal, name: e.target.value })}
                   placeholder="Örn: Süt, Kahve Çekirdeği, Un"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Birim (Örn: kg, lt, adet)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Birim (Örn: kg, lt, adet)</label>
                 <input
                   type="text"
                   value={ingredientModal.unit}
                   onChange={(e) => setIngredientModal({ ...ingredientModal, unit: e.target.value })}
                   placeholder="Örn: kg, lt, adet"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               {!ingredientModal.id && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Başlangıç Stok Miktarı</label>
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Başlangıç Stok Miktarı</label>
                   <input
                     type="number"
                     value={ingredientModal.stockLevel === 0 ? '' : ingredientModal.stockLevel}
                     onChange={(e) => setIngredientModal({ ...ingredientModal, stockLevel: parseFloat(e.target.value) || 0 })}
                     placeholder="0.00"
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Birim Maliyeti (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Birim Maliyeti (TL)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={ingredientModal.costPerUnit === 0 ? '' : ingredientModal.costPerUnit}
                   onChange={(e) => setIngredientModal({ ...ingredientModal, costPerUnit: parseFloat(e.target.value) || 0 })}
                   placeholder="0.00 TL"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Minimum Stok Uyarısı Limiti</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Minimum Stok Uyarısı Limiti</label>
                 <input
                   type="number"
                   value={ingredientModal.minStockLevel === 0 ? '' : ingredientModal.minStockLevel}
                   onChange={(e) => setIngredientModal({ ...ingredientModal, minStockLevel: parseFloat(e.target.value) || 0 })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -4066,13 +4066,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setIngredientModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveIngredient}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -4084,19 +4084,19 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* STOCK ADJUSTMENT MODAL */}
       {stockAdjustmentModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
               <Package className="w-5 h-5 text-cyan-400" />
               <span>Stok Seviyesi Düzelt</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4">
+            <p className="text-[11px] text-zinc-400 mb-4">
               <strong>{stockAdjustmentModal.name}</strong> malzemesinin stok seviyesini artı veya eksi yönde değiştirin.
             </p>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">
                   Miktar Değişimi ({stockAdjustmentModal.unit})
                 </label>
                 <input
@@ -4105,18 +4105,18 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   value={stockAdjustmentModal.adjustmentQty}
                   onChange={(e) => setStockAdjustmentModal({ ...stockAdjustmentModal, adjustmentQty: e.target.value })}
                   placeholder="Örn: +5 veya -2.5"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Açıklama / Not</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Açıklama / Not</label>
                 <input
                   type="text"
                   value={stockAdjustmentModal.adjustmentNotes}
                   onChange={(e) => setStockAdjustmentModal({ ...stockAdjustmentModal, adjustmentNotes: e.target.value })}
                   placeholder="Örn: Fire tespiti, Sayım eksiği"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -4132,7 +4132,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setStockAdjustmentModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
@@ -4150,33 +4150,33 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* SUPPLIER MODAL */}
       {supplierModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-4 flex items-center space-x-2">
-              <Users className="w-5 h-5 text-indigo-400" />
+              <Users className="w-5 h-5 text-amber-400" />
               <span>{supplierModal.id ? 'Tedarikçi Bilgilerini Düzenle' : 'Yeni Tedarikçi Ekle'}</span>
             </h3>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Tedarikçi Adı / Ünvanı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Tedarikçi Adı / Ünvanı</label>
                 <input
                   type="text"
                   value={supplierModal.name}
                   onChange={(e) => setSupplierModal({ ...supplierModal, name: e.target.value })}
                   placeholder="Örn: Öz Karadeniz Gıda, Metro Toptancı"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Telefon (Opsiyonel)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Telefon (Opsiyonel)</label>
                 <input
                   type="text"
                   value={supplierModal.phone}
                   onChange={(e) => setSupplierModal({ ...supplierModal, phone: e.target.value })}
                   placeholder="Örn: 0212 555 4433"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -4192,13 +4192,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setSupplierModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveSupplier}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -4210,35 +4210,35 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* SUPPLIER INVOICE MODAL */}
       {supplierInvoiceModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
-              <Plus className="w-5 h-5 text-indigo-400" />
+              <Plus className="w-5 h-5 text-amber-400" />
               <span>Yeni Fatura / Borç Girişi</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4">
+            <p className="text-[11px] text-zinc-400 mb-4">
               <strong>{supplierInvoiceModal.supplierName}</strong> tedarikçisine olan borç bakiyemizi artırır.
             </p>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Fatura / Alış Tutarı (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Fatura / Alış Tutarı (TL)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={supplierInvoiceModal.amount}
                   onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, amount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Malzeme Alımıyla İlişkilendir (Opsiyonel)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Malzeme Alımıyla İlişkilendir (Opsiyonel)</label>
                 <select
                   value={supplierInvoiceModal.ingredientId || ''}
                   onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, ingredientId: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none"
                 >
                   <option value="">-- Malzeme Seçin --</option>
                   {ingredients.map(ing => (
@@ -4249,7 +4249,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
               {supplierInvoiceModal.ingredientId && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">
                     Satın Alınan Miktar ({ingredients.find(i => i.id === supplierInvoiceModal.ingredientId)?.unit || ''})
                   </label>
                   <input
@@ -4258,19 +4258,19 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     value={supplierInvoiceModal.quantity || ''}
                     onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, quantity: e.target.value })}
                     placeholder="0.00"
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                   />
                 </div>
               )}
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Fatura Notu / Açıklama</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Fatura Notu / Açıklama</label>
                 <input
                   type="text"
                   value={supplierInvoiceModal.note || ''}
                   onChange={(e) => setSupplierInvoiceModal({ ...supplierInvoiceModal, note: e.target.value })}
                   placeholder="Örn: Haftalık süt tedariği"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -4286,13 +4286,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setSupplierInvoiceModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handleSaveSupplierInvoice}
-                  className="flex-1 bg-indigo-650 hover:bg-indigo-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 bg-amber-650 hover:bg-amber-555 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Kaydet
                 </button>
@@ -4304,35 +4304,35 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* SUPPLIER PAYMENT MODAL */}
       {supplierPaymentModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-sm text-white mb-2 flex items-center space-x-2">
               <DollarSign className="w-5 h-5 text-emerald-400" />
               <span>Tedarikçi Cari Borç Ödemesi</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4">
+            <p className="text-[11px] text-zinc-400 mb-4">
               <strong>{supplierPaymentModal.supplierName}</strong> firmasına yapılan ödemeyi kaydeder, borcumuzu düşürür.
             </p>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ödenen Tutar (TL)</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Ödenen Tutar (TL)</label>
                 <input
                   type="number"
                   step="0.01"
                   value={supplierPaymentModal.amount}
                   onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, amount: e.target.value })}
                   placeholder="0.00"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Ödeme Yöntemi</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Ödeme Yöntemi</label>
                 <select
                   value={supplierPaymentModal.paymentMethod}
                   onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, paymentMethod: e.target.value as any })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none"
                 >
                   <option value="CASH">Nakit</option>
                   <option value="CREDIT_CARD">Kredi Kartı</option>
@@ -4341,13 +4341,13 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Açıklama / Not</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Açıklama / Not</label>
                 <input
                   type="text"
                   value={supplierPaymentModal.note || ''}
                   onChange={(e) => setSupplierPaymentModal({ ...supplierPaymentModal, note: e.target.value })}
                   placeholder="Örn: Garanti Bankasından havale yapıldı"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none"
                 />
               </div>
 
@@ -4363,7 +4363,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setSupplierPaymentModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
@@ -4399,7 +4399,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               <a
                 href="/GustoPOS-PrintServer.exe"
                 download="GustoPOS-PrintServer.exe"
-                className="active-press bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
+                className="active-press bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
               >
                 <Download className="w-3 h-3" />
                 <span>Uygulamayı İndir (.exe)</span>
@@ -4413,7 +4413,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setWindowsPrinters(wp);
                   }
                 }}
-                className="active-press bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
+                className="active-press bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-1.5 rounded-lg flex items-center space-x-1 cursor-pointer transition"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>Yenile</span>
@@ -4422,11 +4422,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
           </div>
 
           {/* Alt Sekme Seçici */}
-          <div className="flex bg-slate-950/80 border border-slate-800 p-1 rounded-xl">
+          <div className="flex bg-zinc-950/80 border border-zinc-800 p-1 rounded-xl">
             <button
               onClick={() => setPrinterSubTab('LIST')}
               className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
-                printerSubTab === 'LIST' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                printerSubTab === 'LIST' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Printer className="w-3.5 h-3.5" />
@@ -4435,7 +4435,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <button
               onClick={() => setPrinterSubTab('ASSIGNMENTS')}
               className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
-                printerSubTab === 'ASSIGNMENTS' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                printerSubTab === 'ASSIGNMENTS' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
@@ -4444,7 +4444,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
             <button
               onClick={() => setPrinterSubTab('RECEIPT')}
               className={`flex-1 text-center py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center justify-center space-x-1.5 ${
-                printerSubTab === 'RECEIPT' ? 'gradient-primary text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                printerSubTab === 'RECEIPT' ? 'gradient-primary text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               <Settings className="w-3.5 h-3.5" />
@@ -4459,7 +4459,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <h3 className="font-heading text-sm font-bold text-white">Tanımlı Yazıcılar</h3>
                 <button
                   onClick={() => setPrinterModal({ name: '', windowsName: '', type: 'KITCHEN', paperWidth: 80 })}
-                  className="active-press gradient-primary hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-xl font-semibold flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-indigo-500/20"
+                  className="active-press gradient-primary hover:bg-amber-500 text-white text-xs px-4 py-2 rounded-xl font-semibold flex items-center space-x-1.5 cursor-pointer shadow-lg shadow-amber-500/20"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Yeni Yazıcı Ekle</span>
@@ -4467,7 +4467,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               </div>
 
               {printers.length === 0 ? (
-                <div className="text-center py-12 text-slate-500 text-xs italic bg-slate-900/30 border border-dashed border-slate-800/80 rounded-xl">
+                <div className="text-center py-12 text-zinc-500 text-xs italic bg-zinc-900/30 border border-dashed border-zinc-800/80 rounded-xl">
                   Henüz tanımlı bir yazıcı bulunmuyor. Yukarıdan yeni yazıcı ekleyin.
                 </div>
               ) : (
@@ -4483,7 +4483,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                           </div>
                           <div>
                             <h4 className="font-heading font-bold text-white text-sm">{p.name}</h4>
-                            <p className="text-[10px] text-slate-400">{p.windowsName}</p>
+                            <p className="text-[10px] text-zinc-400">{p.windowsName}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-1">
@@ -4495,7 +4495,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                               type: p.type,
                               paperWidth: p.paperWidth,
                             })}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition cursor-pointer"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -4511,7 +4511,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                 alert(err.message || 'Yazıcı silinemedi.');
                               }
                             }}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 transition cursor-pointer"
+                            className="p-1.5 rounded-lg bg-zinc-800 hover:bg-rose-900/50 text-zinc-400 hover:text-rose-400 transition cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -4525,10 +4525,10 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         }`}>
                           {p.type === 'KITCHEN' ? 'Mutfak/Sipariş' : 'Hesap Fişi'}
                         </span>
-                        <span className="text-slate-500">|</span>
-                        <span className="text-slate-400">{p.paperWidth}mm</span>
-                        <span className="text-slate-500">|</span>
-                        <span className="text-slate-400">{(p.productAssignments || []).length} ürün atanmış</span>
+                        <span className="text-zinc-500">|</span>
+                        <span className="text-zinc-400">{p.paperWidth}mm</span>
+                        <span className="text-zinc-500">|</span>
+                        <span className="text-zinc-400">{(p.productAssignments || []).length} ürün atanmış</span>
                       </div>
                     </div>
                   ))}
@@ -4543,7 +4543,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-heading text-sm font-bold text-white">Ürün – Yazıcı Eşleştirme Matrisi</h3>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Hangi ürünün hangi mutfak/bar yazıcısından çıkacağını belirleyin.</p>
+                  <p className="text-[10px] text-zinc-400 mt-0.5">Hangi ürünün hangi mutfak/bar yazıcısından çıkacağını belirleyin.</p>
                 </div>
                 <button
                   onClick={async () => {
@@ -4564,7 +4564,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
               </div>
 
               {printers.length === 0 || menuCategories.length === 0 ? (
-                <div className="text-center py-12 text-slate-500 text-xs italic bg-slate-900/30 border border-dashed border-slate-800/80 rounded-xl">
+                <div className="text-center py-12 text-zinc-500 text-xs italic bg-zinc-900/30 border border-dashed border-zinc-800/80 rounded-xl">
                   Eşleştirme yapabilmek için en az bir yazıcı ve bir kategori tanımlanmış olmalıdır.
                 </div>
               ) : (
@@ -4572,11 +4572,11 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <table className="w-full border-collapse text-xs">
                     <thead>
                       <tr>
-                        <th className="text-left py-3 px-4 bg-slate-900/80 border border-slate-800 rounded-tl-xl font-semibold text-slate-300 sticky left-0 z-10 min-w-[160px]">
+                        <th className="text-left py-3 px-4 bg-zinc-900/80 border border-zinc-800 rounded-tl-xl font-semibold text-zinc-300 sticky left-0 z-10 min-w-[160px]">
                           Kategori
                         </th>
                         {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => (
-                          <th key={p.id} className="text-center py-3 px-4 bg-slate-900/80 border border-slate-800 font-semibold text-slate-300 min-w-[120px]">
+                          <th key={p.id} className="text-center py-3 px-4 bg-zinc-900/80 border border-zinc-800 font-semibold text-zinc-300 min-w-[120px]">
                             <div className="flex flex-col items-center space-y-1">
                               <Printer className="w-4 h-4 text-amber-400" />
                               <span>{p.name}</span>
@@ -4588,14 +4588,14 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     <tbody>
                       {menuCategories.map((cat: any) => (
                         <React.Fragment key={cat.id}>
-                          <tr className="bg-slate-800/40">
-                            <td colSpan={1 + printers.filter((p: any) => p.type === 'KITCHEN').length} className="py-2 px-4 border border-slate-800/60 font-bold text-slate-400 text-[10px] uppercase tracking-wider sticky left-0 bg-slate-900/90 z-10">
+                          <tr className="bg-zinc-800/40">
+                            <td colSpan={1 + printers.filter((p: any) => p.type === 'KITCHEN').length} className="py-2 px-4 border border-zinc-800/60 font-bold text-zinc-400 text-[10px] uppercase tracking-wider sticky left-0 bg-zinc-900/90 z-10">
                               KATEGORİ: {cat.name}
                             </td>
                           </tr>
                           {(cat.products || []).map((prod: any) => (
-                            <tr key={prod.id} className="hover:bg-slate-900/40 transition">
-                              <td className="py-2 px-4 border border-slate-800/60 font-medium text-slate-200 sticky left-0 bg-slate-950/90 z-10 pl-8">
+                            <tr key={prod.id} className="hover:bg-zinc-900/40 transition">
+                              <td className="py-2 px-4 border border-zinc-800/60 font-medium text-zinc-200 sticky left-0 bg-zinc-950/90 z-10 pl-8">
                                 • {prod.name}
                               </td>
                               {printers.filter((p: any) => p.type === 'KITCHEN').map((p: any) => {
@@ -4603,7 +4603,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                   a => a.printerId === p.id && a.productId === prod.id
                                 );
                                 return (
-                                  <td key={p.id} className="text-center py-2 px-4 border border-slate-800/60">
+                                  <td key={p.id} className="text-center py-2 px-4 border border-zinc-800/60">
                                     <button
                                       onClick={() => {
                                         setPrinterAssignments(prev => {
@@ -4616,8 +4616,8 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                                       }}
                                       className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all duration-200 cursor-pointer mx-auto ${
                                         isAssigned
-                                          ? 'bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30'
-                                          : 'bg-slate-900 border-slate-700 text-slate-600 hover:border-slate-500'
+                                          ? 'bg-amber-500 border-amber-400 text-white shadow-lg shadow-amber-500/30'
+                                          : 'bg-zinc-900 border-zinc-700 text-zinc-600 hover:border-zinc-500'
                                       }`}
                                     >
                                       {isAssigned && <Check className="w-3 h-3" />}
@@ -4646,150 +4646,150 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                 <div className="glass-card rounded-xl p-4 space-y-4">
                   {/* İşletme Bilgileri */}
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-300 mb-1">İşletme Adı</label>
+                    <label className="block text-[11px] font-semibold text-zinc-300 mb-1">İşletme Adı</label>
                     <input
                       type="text"
                       value={receiptSettings.businessName || ''}
                       onChange={(e) => setReceiptSettings({ ...receiptSettings, businessName: e.target.value })}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Adres Satır 1</label>
+                      <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Adres Satır 1</label>
                       <input
                         type="text"
                         value={receiptSettings.addressLine1 || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, addressLine1: e.target.value })}
                         placeholder="Örn: CADDE NO: 12"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Adres Satır 2</label>
+                      <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Adres Satır 2</label>
                       <input
                         type="text"
                         value={receiptSettings.addressLine2 || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, addressLine2: e.target.value })}
                         placeholder="Örn: ATAŞEHİR / İSTANBUL"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Telefon</label>
+                      <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Telefon</label>
                       <input
                         type="text"
                         value={receiptSettings.phone || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, phone: e.target.value })}
                         placeholder="0216 555 4433"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">Vergi No (VKN)</label>
+                      <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Vergi No (VKN)</label>
                       <input
                         type="text"
                         value={receiptSettings.taxNo || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, taxNo: e.target.value })}
                         placeholder="1234567890"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-800/60 pt-4">
-                    <h4 className="text-xs font-bold text-slate-300 mb-3">Alt Bilgi Metinleri</h4>
+                  <div className="border-t border-zinc-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-zinc-300 mb-3">Alt Bilgi Metinleri</h4>
                     <div className="space-y-2">
                       <input
                         type="text"
                         value={receiptSettings.footerLine1 || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine1: e.target.value })}
                         placeholder="Alt satır 1"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                       <input
                         type="text"
                         value={receiptSettings.footerLine2 || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine2: e.target.value })}
                         placeholder="Alt satır 2"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                       <input
                         type="text"
                         value={receiptSettings.footerLine3 || ''}
                         onChange={(e) => setReceiptSettings({ ...receiptSettings, footerLine3: e.target.value })}
                         placeholder="Alt satır 3"
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-800/60 pt-4">
-                    <h4 className="text-xs font-bold text-slate-300 mb-3">Görünüm Seçenekleri</h4>
+                  <div className="border-t border-zinc-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-zinc-300 mb-3">Görünüm Seçenekleri</h4>
                     <div className="space-y-3">
                       <label className="flex items-center justify-between cursor-pointer group">
-                        <span className="text-xs text-slate-300 group-hover:text-white transition">Garson Adını Göster</span>
+                        <span className="text-xs text-zinc-300 group-hover:text-white transition">Garson Adını Göster</span>
                         <div
                           onClick={() => setReceiptSettings({ ...receiptSettings, showWaiterName: !receiptSettings.showWaiterName })}
                           className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
-                            receiptSettings.showWaiterName ? 'bg-indigo-500' : 'bg-slate-700'
+                            receiptSettings.showWaiterName ? 'bg-amber-500' : 'bg-zinc-700'
                           }`}
                         >
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
-                            receiptSettings.showWaiterName ? 'translate-x-5' : ''
+                            receiptSettings.showWaiterName ? 'tranzinc-x-5' : ''
                           }`} />
                         </div>
                       </label>
                       <label className="flex items-center justify-between cursor-pointer group">
-                        <span className="text-xs text-slate-300 group-hover:text-white transition">Tarih / Saat Göster</span>
+                        <span className="text-xs text-zinc-300 group-hover:text-white transition">Tarih / Saat Göster</span>
                         <div
                           onClick={() => setReceiptSettings({ ...receiptSettings, showDateTime: !receiptSettings.showDateTime })}
                           className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
-                            receiptSettings.showDateTime ? 'bg-indigo-500' : 'bg-slate-700'
+                            receiptSettings.showDateTime ? 'bg-amber-500' : 'bg-zinc-700'
                           }`}
                         >
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
-                            receiptSettings.showDateTime ? 'translate-x-5' : ''
+                            receiptSettings.showDateTime ? 'tranzinc-x-5' : ''
                           }`} />
                         </div>
                       </label>
                       <label className="flex items-center justify-between cursor-pointer group">
-                        <span className="text-xs text-slate-300 group-hover:text-white transition">Sipariş Notunu Göster</span>
+                        <span className="text-xs text-zinc-300 group-hover:text-white transition">Sipariş Notunu Göster</span>
                         <div
                           onClick={() => setReceiptSettings({ ...receiptSettings, showOrderNote: !receiptSettings.showOrderNote })}
                           className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
-                            receiptSettings.showOrderNote ? 'bg-indigo-500' : 'bg-slate-700'
+                            receiptSettings.showOrderNote ? 'bg-amber-500' : 'bg-zinc-700'
                           }`}
                         >
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
-                            receiptSettings.showOrderNote ? 'translate-x-5' : ''
+                            receiptSettings.showOrderNote ? 'tranzinc-x-5' : ''
                           }`} />
                         </div>
                       </label>
                       <label className="flex items-center justify-between cursor-pointer group">
-                        <span className="text-xs text-slate-300 group-hover:text-white transition">Sipariş Onayında Mutfak Fişi Otomatik Yazdır</span>
+                        <span className="text-xs text-zinc-300 group-hover:text-white transition">Sipariş Onayında Mutfak Fişi Otomatik Yazdır</span>
                         <div
                           onClick={() => setReceiptSettings({ ...receiptSettings, autoPrintKitchen: !receiptSettings.autoPrintKitchen })}
                           className={`relative w-10 h-5 rounded-full transition-colors duration-200 cursor-pointer ${
-                            receiptSettings.autoPrintKitchen ? 'bg-indigo-500' : 'bg-slate-700'
+                            receiptSettings.autoPrintKitchen ? 'bg-amber-500' : 'bg-zinc-700'
                           }`}
                         >
                           <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
-                            receiptSettings.autoPrintKitchen ? 'translate-x-5' : ''
+                            receiptSettings.autoPrintKitchen ? 'tranzinc-x-5' : ''
                           }`} />
                         </div>
                       </label>
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-800/60 pt-4">
-                    <h4 className="text-xs font-bold text-slate-300 mb-2">Hesap Fişi Yazıcısı</h4>
+                  <div className="border-t border-zinc-800/60 pt-4">
+                    <h4 className="text-xs font-bold text-zinc-300 mb-2">Hesap Fişi Yazıcısı</h4>
                     <select
                       value={receiptSettings.receiptPrinterId || ''}
                       onChange={(e) => setReceiptSettings({ ...receiptSettings, receiptPrinterId: e.target.value || null })}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                     >
                       <option value="">-- Yazıcı Seçin --</option>
                       {printers.map((p: any) => (
@@ -4808,7 +4808,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                         setActionError(err.message || 'Ayarlar kaydedilemedi.');
                       }
                     }}
-                    className="active-press w-full gradient-primary text-white font-semibold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-indigo-500/20 cursor-pointer"
+                    className="active-press w-full gradient-primary text-white font-semibold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/20 cursor-pointer"
                   >
                     <Check className="w-4 h-4" />
                     <span>Ayarları Kaydet</span>
@@ -4822,16 +4822,16 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   <Eye className="w-4 h-4 text-teal-400" />
                   <span>Canlı Fiş Önizleme</span>
                 </h3>
-                <div className="bg-white text-slate-950 rounded-lg p-5 shadow-2xl font-mono text-xs max-h-[70vh] overflow-y-auto scrollbar-thin">
+                <div className="bg-white text-zinc-950 rounded-lg p-5 shadow-2xl font-mono text-xs max-h-[70vh] overflow-y-auto scrollbar-thin">
                   <div className="text-center space-y-0.5">
                     {receiptSettings.businessName && <h2 className="text-sm font-bold uppercase tracking-wider">{receiptSettings.businessName}</h2>}
-                    {receiptSettings.addressLine1 && <p className="text-[10px] text-slate-600">{receiptSettings.addressLine1}</p>}
-                    {receiptSettings.addressLine2 && <p className="text-[10px] text-slate-600">{receiptSettings.addressLine2}</p>}
-                    {receiptSettings.phone && <p className="text-[10px] text-slate-600">TEL: {receiptSettings.phone}</p>}
-                    {receiptSettings.taxNo && <p className="text-[10px] text-slate-600">VKN: {receiptSettings.taxNo}</p>}
-                    <p className="text-slate-400">---------------------------------</p>
+                    {receiptSettings.addressLine1 && <p className="text-[10px] text-zinc-600">{receiptSettings.addressLine1}</p>}
+                    {receiptSettings.addressLine2 && <p className="text-[10px] text-zinc-600">{receiptSettings.addressLine2}</p>}
+                    {receiptSettings.phone && <p className="text-[10px] text-zinc-600">TEL: {receiptSettings.phone}</p>}
+                    {receiptSettings.taxNo && <p className="text-[10px] text-zinc-600">VKN: {receiptSettings.taxNo}</p>}
+                    <p className="text-zinc-400">---------------------------------</p>
                     <p className="text-[10px] font-bold">ADİSYON DETAYI</p>
-                    <p className="text-slate-400">---------------------------------</p>
+                    <p className="text-zinc-400">---------------------------------</p>
                   </div>
 
                   <div className="space-y-1 mt-2">
@@ -4848,26 +4848,26 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                   </div>
 
                   <div className="mt-2">
-                    <p className="text-slate-400">---------------------------------</p>
+                    <p className="text-zinc-400">---------------------------------</p>
                     <div className="space-y-1">
                       <div className="flex justify-between"><span>2x Türk Kahvesi</span><span>120.00</span></div>
                       <div className="flex justify-between"><span>1x Latte</span><span>85.00</span></div>
                       <div className="flex justify-between"><span>1x Serpme Kahvaltı</span><span>350.00</span></div>
                     </div>
-                    <p className="text-slate-400">---------------------------------</p>
+                    <p className="text-zinc-400">---------------------------------</p>
                   </div>
 
                   <div className="space-y-1 mt-1">
                     <div className="flex justify-between"><span>Ara Toplam:</span><span>555.00 TL</span></div>
-                    <div className="flex justify-between font-bold text-sm border-t border-dashed border-slate-400 pt-1 mt-1">
+                    <div className="flex justify-between font-bold text-sm border-t border-dashed border-zinc-400 pt-1 mt-1">
                       <span>TOPLAM:</span><span>555.00 TL</span>
                     </div>
                   </div>
 
                   <div className="text-center pt-4 space-y-0.5">
-                    {receiptSettings.footerLine1 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine1}</p>}
-                    {receiptSettings.footerLine2 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine2}</p>}
-                    {receiptSettings.footerLine3 && <p className="text-[10px] text-slate-500">{receiptSettings.footerLine3}</p>}
+                    {receiptSettings.footerLine1 && <p className="text-[10px] text-zinc-500">{receiptSettings.footerLine1}</p>}
+                    {receiptSettings.footerLine2 && <p className="text-[10px] text-zinc-500">{receiptSettings.footerLine2}</p>}
+                    {receiptSettings.footerLine3 && <p className="text-[10px] text-zinc-500">{receiptSettings.footerLine3}</p>}
                   </div>
                 </div>
               </div>
@@ -4878,7 +4878,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
       {/* YAZICI EKLEME/DÜZENLEME MODALI */}
       {printerModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl animate-scale-in">
             <h3 className="font-heading font-bold text-base text-white mb-4 flex items-center space-x-2">
               <Printer className="w-5 h-5 text-teal-400" />
@@ -4887,23 +4887,23 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Yazıcı Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Yazıcı Adı</label>
                 <input
                   type="text"
                   value={printerModal.name}
                   onChange={(e) => setPrinterModal({ ...printerModal, name: e.target.value })}
                   placeholder="Örn: Mutfak Yazıcısı"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Windows Yazıcı Adı</label>
+                <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Windows Yazıcı Adı</label>
                 {printServerOnline && windowsPrinters.length > 0 ? (
                   <select
                     value={printerModal.windowsName}
                     onChange={(e) => setPrinterModal({ ...printerModal, windowsName: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                   >
                     <option value="">-- Yazıcı Seçin --</option>
                     {windowsPrinters.map((wp) => (
@@ -4919,7 +4919,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       value={printerModal.windowsName}
                       onChange={(e) => setPrinterModal({ ...printerModal, windowsName: e.target.value })}
                       placeholder="Örn: EPSON TM-T20II"
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                     />
                     <p className="text-[9px] text-amber-400 mt-1">
                       ⚠ Print server kapalı. Windows yazıcı adını elle girin veya print server'ı başlatın.
@@ -4930,22 +4930,22 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Yazıcı Tipi</label>
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Yazıcı Tipi</label>
                   <select
                     value={printerModal.type}
                     onChange={(e) => setPrinterModal({ ...printerModal, type: e.target.value })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                   >
                     <option value="KITCHEN">Mutfak / Sipariş Fişi</option>
                     <option value="RECEIPT">Hesap Fişi</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Kağıt Genişliği</label>
+                  <label className="block text-[11px] font-semibold text-zinc-300 mb-1">Kağıt Genişliği</label>
                   <select
                     value={printerModal.paperWidth}
                     onChange={(e) => setPrinterModal({ ...printerModal, paperWidth: parseInt(e.target.value) })}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
                   >
                     <option value={80}>80mm (Standart)</option>
                     <option value={58}>58mm (Dar)</option>
@@ -4965,7 +4965,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                     setPrinterModal(null);
                     setActionError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   Vazgeç
                 </button>
@@ -4986,7 +4986,7 @@ export default function AdminPanel({ onCloseAction, user }: AdminPanelProps) {
                       setActionError(err.message || 'Yazıcı kaydedilemedi.');
                     }
                   }}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   {printerModal.id ? 'Güncelle' : 'Ekle'}
                 </button>

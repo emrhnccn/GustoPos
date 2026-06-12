@@ -1,0 +1,41 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "CSS", "JavaScript", "comment", "blank", "total"
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\prisma\seed.js", "JavaScript", 0, 0, 0, -309, -12, -30, -351
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\categories\route.ts", "TypeScript", 94, 0, 0, 0, 4, 15, 113
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\customers\route.ts", "TypeScript", 131, 0, 0, 0, 4, 16, 151
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\ingredients\route.ts", "TypeScript", 114, 0, 0, 0, 8, 19, 141
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\logs\route.ts", "TypeScript", 24, 0, 0, 0, 0, 3, 27
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\modifiers\route.ts", "TypeScript", 83, 0, 0, 0, 2, 7, 92
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\printers\route.ts", "TypeScript", 109, 0, 0, 0, 9, 16, 134
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\products\route.ts", "TypeScript", 107, 0, 0, 0, 4, 13, 124
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\receipt-settings\route.ts", "TypeScript", 100, 0, 0, 0, 4, 8, 112
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\recipes\route.ts", "TypeScript", 62, 0, 0, 0, 5, 8, 75
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\reports\route.ts", "TypeScript", 323, 0, 0, 0, 29, 42, 394
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\supplier-payments\route.ts", "TypeScript", 96, 0, 0, 0, 11, 19, 126
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\suppliers\route.ts", "TypeScript", 59, 0, 0, 0, 5, 7, 71
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\tables\route.ts", "TypeScript", 103, 0, 0, 0, 1, 16, 120
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\users\route.ts", "TypeScript", 52, 0, 0, 0, 2, 9, 63
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\admin\workday\route.ts", "TypeScript", 103, 0, 0, 0, 3, 18, 124
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\auth\route.ts", "TypeScript", 37, 0, 0, 0, 0, 6, 43
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\categories\route.ts", "TypeScript", 15, 0, 0, 0, 0, 2, 17
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\orders\discount\route.ts", "TypeScript", 27, 0, 0, 0, 0, 5, 32
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\orders\item-action\route.ts", "TypeScript", 43, 0, 0, 0, 0, 5, 48
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\orders\pay\route.ts", "TypeScript", 32, 0, 0, 0, 2, 4, 38
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\orders\route.ts", "TypeScript", 21, 0, 0, 0, 0, 4, 25
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\tables\bill-request\route.ts", "TypeScript", 21, 0, 0, 0, 0, 4, 25
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\tables\route.ts", "TypeScript", 61, 0, 0, 0, 2, 7, 70
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\api\tables\transfer\route.ts", "TypeScript", 37, 0, 0, 0, 0, 4, 41
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\globals.css", "CSS", 0, 0, 184, 0, 0, 27, 211
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\layout.tsx", "TypeScript JSX", 0, 49, 0, 0, 0, 7, 56
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\app\page.tsx", "TypeScript JSX", 0, 110, 0, 0, 7, 16, 133
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\AdminPanel.tsx", "TypeScript JSX", 0, 4625, 0, 0, 112, 265, 5002
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\BackgroundOrbs.tsx", "TypeScript JSX", 0, 140, 0, 0, 0, 3, 143
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\CheckoutModal.tsx", "TypeScript JSX", 0, 899, 0, 0, 46, 92, 1037
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\FloorPlan.tsx", "TypeScript JSX", 0, 649, 0, 0, 40, 69, 758
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\POSInterface.tsx", "TypeScript JSX", 0, 897, 0, 0, 55, 92, 1044
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\components\PinLogin.tsx", "TypeScript JSX", 0, 125, 0, 0, 11, 19, 155
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\lib\api.ts", "TypeScript", 368, 0, 0, 0, 4, 35, 407
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\lib\cache.ts", "TypeScript", 126, 0, 0, 0, 5, 16, 147
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\lib\db.ts", "TypeScript", 11, 0, 0, 0, 5, 7, 23
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\lib\printService.ts", "TypeScript", 331, 0, 0, 0, 19, 60, 410
+"c:\Users\Cucen_Home\.gemini\antigravity-ide\scratch\pos-system\src\lib\services\pos.ts", "TypeScript", 825, 0, 0, 0, 62, 119, 1006
+"Total", "-", 3515, 7494, 184, -309, 449, 1054, 12387

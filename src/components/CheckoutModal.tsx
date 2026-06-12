@@ -142,7 +142,7 @@ export default function CheckoutModal({
 
   if (!order) {
     return (
-      <div className="flex-1 flex items-center justify-center p-6 text-slate-400">
+      <div className="flex-1 flex items-center justify-center p-6 text-zinc-400">
         Bu masada aktif bir adisyon bulunmuyor.
       </div>
     );
@@ -365,16 +365,16 @@ export default function CheckoutModal({
       {/* Sol Panel: Sipariş Detayları ve Ödeme Geçmişi */}
       <div className="flex-1 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-800 mb-4">
           <button
             onClick={onCloseAction}
-            className="active-press flex items-center space-x-2 text-slate-400 hover:text-white transition duration-200 cursor-pointer"
+            className="active-press flex items-center space-x-2 text-zinc-400 hover:text-white transition duration-200 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="font-heading font-semibold text-sm">Kat Planına Dön</span>
           </button>
           <div className="flex items-center space-x-2">
-            <span className="text-xs text-slate-400">Hesap:</span>
+            <span className="text-xs text-zinc-400">Hesap:</span>
             <span className="font-heading font-bold text-white text-base bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-xl">
               {table.name}
             </span>
@@ -382,11 +382,11 @@ export default function CheckoutModal({
         </div>
 
         {/* Ödeme Modu Seçici */}
-        <div className="flex bg-slate-950 p-1 border border-slate-800/80 rounded-xl mb-4 text-xs font-semibold">
+        <div className="flex bg-zinc-950 p-1 border border-zinc-800/80 rounded-xl mb-4 text-xs font-semibold">
           <button
             onClick={() => setIsSplitBilling(false)}
             className={`flex-1 text-center py-2 rounded-lg transition duration-150 cursor-pointer ${
-              !isSplitBilling ? 'gradient-primary text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+              !isSplitBilling ? 'gradient-primary text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Tutar Bazlı Ödeme
@@ -394,7 +394,7 @@ export default function CheckoutModal({
           <button
             onClick={() => setIsSplitBilling(true)}
             className={`flex-1 text-center py-2 rounded-lg transition duration-150 cursor-pointer ${
-              isSplitBilling ? 'gradient-accent text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+              isSplitBilling ? 'gradient-accent text-white shadow-md' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Alman Usulü (Ürün Bazlı Ödeme)
@@ -405,8 +405,8 @@ export default function CheckoutModal({
         <div className="flex-1 flex flex-col md:flex-row gap-4 overflow-hidden">
           
           {/* Sipariş Kalemleri Listesi */}
-          <div className="flex-1 flex flex-col border border-slate-800/80 rounded-xl p-3 bg-slate-950/20 overflow-hidden">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+          <div className="flex-1 flex flex-col border border-zinc-800/80 rounded-xl p-3 bg-zinc-950/20 overflow-hidden">
+            <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">
               {isSplitBilling ? 'Ödenen Ürünleri Seçin' : 'Adisyon Kalemleri'}
             </h3>
             
@@ -421,12 +421,12 @@ export default function CheckoutModal({
                   return (
                     <div 
                       key={item.id} 
-                      className={`flex justify-between items-center bg-slate-900/60 p-2.5 rounded-lg border transition ${
-                        isPaidItem ? 'border-emerald-950 bg-emerald-950/5 opacity-55' : 'border-slate-800/50'
+                      className={`flex justify-between items-center bg-zinc-900/60 p-2.5 rounded-lg border transition ${
+                        isPaidItem ? 'border-emerald-950 bg-emerald-950/5 opacity-55' : 'border-zinc-800/50'
                       }`}
                     >
                       <div>
-                        <div className="font-semibold text-slate-200 flex items-center">
+                        <div className="font-semibold text-zinc-200 flex items-center">
                           <span>{item.productName}</span>
                           {isPaidItem && (
                             <span className="ml-1.5 bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wide">
@@ -434,15 +434,15 @@ export default function CheckoutModal({
                             </span>
                           )}
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[10px] text-zinc-400">
                           {item.quantity} adet × {singlePrice.toFixed(2)} TL
                         </div>
                       </div>
 
                       <div className="flex items-center space-x-3">
-                        <div className="font-bold text-slate-100 text-right">
+                        <div className="font-bold text-zinc-100 text-right">
                           {item.status === 'COMPLIMENTARY' ? (
-                            <span className="text-purple-400 font-bold bg-purple-500/10 px-2 py-0.5 rounded-full text-[10px]">İkram</span>
+                            <span className="text-orange-400 font-bold bg-orange-500/10 px-2 py-0.5 rounded-full text-[10px]">İkram</span>
                           ) : (
                             `${(singlePrice * item.quantity).toFixed(2)} TL`
                           )}
@@ -450,19 +450,19 @@ export default function CheckoutModal({
 
                         {/* Alman Usulü Seçiciler */}
                         {isSplitBilling && !isPaidItem && (
-                          <div className="flex items-center space-x-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                          <div className="flex items-center space-x-1.5 bg-zinc-950 p-1 rounded-lg border border-zinc-800">
                             <button
                               onClick={() => handleSplitQtyChange(item.id, item.quantity, false)}
-                              className="bg-slate-800 text-white w-5 h-5 rounded flex items-center justify-center font-bold text-xs"
+                              className="bg-zinc-800 text-white w-5 h-5 rounded flex items-center justify-center font-bold text-xs"
                             >
                               -
                             </button>
-                            <span className="w-5 text-center font-bold text-slate-200">
+                            <span className="w-5 text-center font-bold text-zinc-200">
                               {splitQuantities[item.id] || 0}
                             </span>
                             <button
                               onClick={() => handleSplitQtyChange(item.id, item.quantity, true)}
-                              className="bg-slate-800 text-white w-5 h-5 rounded flex items-center justify-center font-bold text-xs"
+                              className="bg-zinc-800 text-white w-5 h-5 rounded flex items-center justify-center font-bold text-xs"
                             >
                               +
                             </button>
@@ -476,11 +476,11 @@ export default function CheckoutModal({
           </div>
 
           {/* Yapılmış Ödemelerin Geçmişi */}
-          <div className="w-full md:w-64 flex flex-col border border-slate-800/80 rounded-xl p-3 bg-slate-950/20 overflow-hidden">
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Ödeme Geçmişi</h3>
+          <div className="w-full md:w-64 flex flex-col border border-zinc-800/80 rounded-xl p-3 bg-zinc-950/20 overflow-hidden">
+            <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-2">Ödeme Geçmişi</h3>
             <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 text-xs scrollbar-thin">
               {order.payments.length === 0 ? (
-                <div className="text-center py-8 text-slate-500 italic">Henüz ödeme yapılmadı.</div>
+                <div className="text-center py-8 text-zinc-500 italic">Henüz ödeme yapılmadı.</div>
               ) : (
                 order.payments.map((p) => (
                   <div key={p.id} className="flex justify-between items-center bg-emerald-950/15 border border-emerald-900/30 p-2.5 rounded-lg">
@@ -489,11 +489,11 @@ export default function CheckoutModal({
                         {p.paymentMethod === 'CASH' ? 'Nakit' : p.paymentMethod === 'CREDIT_CARD' ? 'Kredi Kartı' : p.paymentMethod === 'MEAL_CARD' ? 'Yemek Kartı' : 'Cari (Veresiye)'}
                       </div>
                       {p.customer && (
-                        <div className="text-[9px] text-slate-400 font-semibold mt-0.5">
+                        <div className="text-[9px] text-zinc-400 font-semibold mt-0.5">
                           Müşteri: {p.customer.name}
                         </div>
                       )}
-                      <div className="text-[9px] text-slate-500">
+                      <div className="text-[9px] text-zinc-500">
                         {new Date(p.createdAt).toLocaleTimeString('tr-TR')}
                       </div>
                     </div>
@@ -507,13 +507,13 @@ export default function CheckoutModal({
       </div>
 
       {/* Sağ Panel: Tahsilat / NumPad & Hesap Kapatma Arayüzü */}
-      <div className="w-full md:w-96 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden border-t md:border-t-0 md:border-l border-slate-800">
+      <div className="w-full md:w-96 flex flex-col glass-card md:rounded-2xl p-4 overflow-hidden border-t md:border-t-0 md:border-l border-zinc-800">
         
         {/* Hesap Özeti Kartı */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2 mb-4">
-          <div className="flex justify-between text-xs text-slate-400">
+        <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 space-y-2 mb-4">
+          <div className="flex justify-between text-xs text-zinc-400">
             <span>Ara Toplam (Brüt)</span>
-            <span className="font-semibold text-slate-200">{subtotal.toFixed(2)} TL</span>
+            <span className="font-semibold text-zinc-200">{subtotal.toFixed(2)} TL</span>
           </div>
           {order.discountAmount > 0 && (
             <div className="flex justify-between text-xs text-rose-400">
@@ -525,9 +525,9 @@ export default function CheckoutModal({
             <span>Ödenen Tutar</span>
             <span className="font-semibold">+ {order.paidAmount.toFixed(2)} TL</span>
           </div>
-          <div className="border-t border-slate-800/80 pt-2 flex justify-between items-center">
+          <div className="border-t border-zinc-800/80 pt-2 flex justify-between items-center">
             <span className="text-sm font-bold text-white">Kalan Bakiye</span>
-            <span className="text-xl font-heading font-black text-indigo-300">
+            <span className="text-xl font-heading font-black text-amber-300">
               {remaining.toFixed(2)} TL
             </span>
           </div>
@@ -539,8 +539,8 @@ export default function CheckoutModal({
             onClick={() => setSelectedMethod('CASH')}
             className={`active-press py-3 rounded-xl border flex flex-col items-center justify-center space-y-1 transition duration-150 cursor-pointer ${
               selectedMethod === 'CASH'
-                ? 'bg-indigo-500/10 border-indigo-500 text-indigo-300 shadow-md shadow-indigo-500/10'
-                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-md shadow-amber-500/10'
+                : 'bg-zinc-900/40 border-zinc-800 text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <DollarSign className="w-4 h-4 text-emerald-400" />
@@ -551,11 +551,11 @@ export default function CheckoutModal({
             onClick={() => setSelectedMethod('CREDIT_CARD')}
             className={`active-press py-3 rounded-xl border flex flex-col items-center justify-center space-y-1 transition duration-150 cursor-pointer ${
               selectedMethod === 'CREDIT_CARD'
-                ? 'bg-indigo-500/10 border-indigo-500 text-indigo-300 shadow-md shadow-indigo-500/10'
-                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-md shadow-amber-500/10'
+                : 'bg-zinc-900/40 border-zinc-800 text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <CreditCard className="w-4 h-4 text-indigo-400" />
+            <CreditCard className="w-4 h-4 text-amber-400" />
             <span className="text-[10px] font-semibold">Kart</span>
           </button>
 
@@ -563,8 +563,8 @@ export default function CheckoutModal({
             onClick={() => setSelectedMethod('MEAL_CARD')}
             className={`active-press py-3 rounded-xl border flex flex-col items-center justify-center space-y-1 transition duration-150 cursor-pointer ${
               selectedMethod === 'MEAL_CARD'
-                ? 'bg-indigo-500/10 border-indigo-500 text-indigo-300 shadow-md shadow-indigo-500/10'
-                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-md shadow-amber-500/10'
+                : 'bg-zinc-900/40 border-zinc-800 text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <DollarSign className="w-4 h-4 text-orange-400" />
@@ -575,8 +575,8 @@ export default function CheckoutModal({
             onClick={() => setSelectedMethod('CARI')}
             className={`active-press py-3 rounded-xl border flex flex-col items-center justify-center space-y-1 transition duration-150 cursor-pointer ${
               selectedMethod === 'CARI'
-                ? 'bg-indigo-500/10 border-indigo-500 text-indigo-300 shadow-md shadow-indigo-500/10'
-                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-md shadow-amber-500/10'
+                : 'bg-zinc-900/40 border-zinc-800 text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <UserCheck className="w-4 h-4 text-cyan-400" />
@@ -586,12 +586,12 @@ export default function CheckoutModal({
 
         {/* Cari Müşteri Seçimi (Sadece CARI seçildiğinde görünür) */}
         {selectedMethod === 'CARI' && (
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 space-y-2">
-            <label className="block text-xs font-semibold text-slate-300">Cari Hesabı Seçin</label>
+          <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 mb-4 space-y-2">
+            <label className="block text-xs font-semibold text-zinc-300">Cari Hesabı Seçin</label>
             <select
               value={selectedCustomerId}
               onChange={(e) => setSelectedCustomerId(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-850 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2 text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
             >
               <option value="">-- Müşteri Seçin --</option>
               {customers.map((c) => (
@@ -610,12 +610,12 @@ export default function CheckoutModal({
             readOnly
             value={displayPaymentAmount ? `${displayPaymentAmount.toFixed(2)} TL` : '0.00 TL'}
             placeholder="0.00 TL"
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-center font-heading font-black text-lg text-white placeholder-slate-700 focus:outline-none"
+            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3 px-4 text-center font-heading font-black text-lg text-white placeholder-zinc-700 focus:outline-none"
           />
           {!isSplitBilling && paymentAmountInput && (
             <button
               onClick={() => setPaymentAmountInput('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+              className="absolute right-3 top-1/2 -tranzinc-y-1/2 text-zinc-500 hover:text-white"
             >
               <X className="w-4 h-4" />
             </button>
@@ -629,7 +629,7 @@ export default function CheckoutModal({
               key={num}
               onClick={() => handleNumPress(num)}
               disabled={isSplitBilling}
-              className="active-press bg-slate-900 hover:bg-slate-800 disabled:opacity-40 border border-slate-800/80 text-slate-200 font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer"
+              className="active-press bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 border border-zinc-800/80 text-zinc-200 font-semibold py-2.5 rounded-xl transition text-sm cursor-pointer"
             >
               {num}
             </button>
@@ -643,7 +643,7 @@ export default function CheckoutModal({
               key={amt}
               onClick={() => handleQuickAmount(amt)}
               disabled={isSplitBilling}
-              className="active-press bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-slate-300 font-semibold py-1.5 rounded-lg text-[10px] cursor-pointer"
+              className="active-press bg-zinc-800 hover:bg-zinc-700 disabled:opacity-40 text-zinc-300 font-semibold py-1.5 rounded-lg text-[10px] cursor-pointer"
             >
               {amt} TL
             </button>
@@ -653,7 +653,7 @@ export default function CheckoutModal({
         <button
           onClick={handleAllRemaining}
           disabled={isSplitBilling}
-          className="active-press w-full bg-indigo-500/10 hover:bg-indigo-500/20 disabled:opacity-40 border border-indigo-500/30 text-indigo-300 font-semibold py-2 rounded-xl text-xs mb-4 cursor-pointer"
+          className="active-press w-full bg-amber-500/10 hover:bg-amber-500/20 disabled:opacity-40 border border-amber-500/30 text-amber-300 font-semibold py-2 rounded-xl text-xs mb-4 cursor-pointer"
         >
           Kalan Tutarı Doldur ({remaining.toFixed(2)} TL)
         </button>
@@ -670,7 +670,7 @@ export default function CheckoutModal({
         )}
 
         {/* Alt İşlem Butonları */}
-        <div className="grid grid-cols-3 gap-2.5 border-t border-slate-800 pt-4">
+        <div className="grid grid-cols-3 gap-2.5 border-t border-zinc-800 pt-4">
           <button
             onClick={() => setDiscountModalOpen(true)}
             className="active-press bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 rounded-xl flex flex-col items-center justify-center space-y-1 transition text-[10px] cursor-pointer shadow-lg shadow-amber-600/10"
@@ -681,7 +681,7 @@ export default function CheckoutModal({
 
           <button
             onClick={() => setShowReceipt(true)}
-            className="active-press bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center space-y-1 transition text-[10px] cursor-pointer"
+            className="active-press bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold py-3 rounded-xl border border-zinc-700 flex flex-col items-center justify-center space-y-1 transition text-[10px] cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Fiş Önizle</span>
@@ -700,23 +700,23 @@ export default function CheckoutModal({
 
       {/* DISCOUNT MODAL */}
       {discountModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in">
             <h3 className="font-heading font-bold text-base text-white mb-2 flex items-center space-x-2">
               <Percent className="w-5 h-5 text-amber-400" />
               <span>Adisyon İndirimi</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4">
+            <p className="text-[11px] text-zinc-400 mb-4">
               Bu işlem yetkili onayı gerektirir. Lütfen indirim tipini, değerini ve <strong>Müdür PIN</strong> kodunu girin.
             </p>
 
             <div className="space-y-4">
               {/* Discount Type */}
-              <div className="flex bg-slate-950 border border-slate-800 p-1 rounded-xl">
+              <div className="flex bg-zinc-950 border border-zinc-800 p-1 rounded-xl">
                 <button
                   onClick={() => setDiscountType('percentage')}
                   className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition ${
-                    discountType === 'percentage' ? 'gradient-primary text-white' : 'text-slate-400'
+                    discountType === 'percentage' ? 'gradient-primary text-white' : 'text-zinc-400'
                   }`}
                 >
                   Yüzde (%)
@@ -724,7 +724,7 @@ export default function CheckoutModal({
                 <button
                   onClick={() => setDiscountType('amount')}
                   className={`flex-1 text-center py-1.5 rounded-lg text-xs font-semibold transition ${
-                    discountType === 'amount' ? 'gradient-primary text-white' : 'text-slate-400'
+                    discountType === 'amount' ? 'gradient-primary text-white' : 'text-zinc-400'
                   }`}
                 >
                   Tutar (TL)
@@ -733,7 +733,7 @@ export default function CheckoutModal({
 
               {/* Discount Value */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">
                   {discountType === 'percentage' ? 'İndirim Yüzdesi (%)' : 'İndirim Tutarı (TL)'}
                 </label>
                 <input
@@ -741,20 +741,20 @@ export default function CheckoutModal({
                   value={discountValue}
                   onChange={(e) => setDiscountValue(e.target.value)}
                   placeholder={discountType === 'percentage' ? 'Örn: 10' : 'Örn: 50'}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               {/* Admin PIN */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Müdür PIN Kodu</label>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Müdür PIN Kodu</label>
                 <input
                   type="password"
                   maxLength={4}
                   value={adminPin}
                   onChange={(e) => setAdminPin(e.target.value)}
                   placeholder="••••"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-center text-lg font-bold tracking-widest text-slate-100 focus:outline-none focus:border-amber-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 px-3 text-center text-lg font-bold tracking-widest text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
@@ -772,7 +772,7 @@ export default function CheckoutModal({
                     setAdminPin('');
                     setAuthError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   Vazgeç
                 </button>
@@ -791,11 +791,11 @@ export default function CheckoutModal({
 
       {/* THERMAL RECEIPT PREVIEW MODAL */}
       {showReceipt && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white text-slate-950 w-full max-w-sm rounded-lg p-6 shadow-2xl font-mono text-xs flex flex-col relative max-h-[90vh] animate-scale-in">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white text-zinc-950 w-full max-w-sm rounded-lg p-6 shadow-2xl font-mono text-xs flex flex-col relative max-h-[90vh] animate-scale-in">
             <button
               onClick={() => setShowReceipt(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-900"
+              className="absolute right-4 top-4 text-zinc-400 hover:text-zinc-900"
             >
               <X className="w-5 h-5" />
             </button>
@@ -807,20 +807,20 @@ export default function CheckoutModal({
                   {receiptSettings?.businessName || 'GUSTO RESTORAN'}
                 </h2>
                 {receiptSettings?.addressLine1 && (
-                  <p className="text-[10px] text-slate-600">{receiptSettings.addressLine1}</p>
+                  <p className="text-[10px] text-zinc-600">{receiptSettings.addressLine1}</p>
                 )}
                 {receiptSettings?.addressLine2 && (
-                  <p className="text-[10px] text-slate-600">{receiptSettings.addressLine2}</p>
+                  <p className="text-[10px] text-zinc-600">{receiptSettings.addressLine2}</p>
                 )}
                 {receiptSettings?.phone && (
-                  <p className="text-[10px] text-slate-600">TEL: {receiptSettings.phone}</p>
+                  <p className="text-[10px] text-zinc-600">TEL: {receiptSettings.phone}</p>
                 )}
                 {receiptSettings?.taxNo && (
-                  <p className="text-[10px] text-slate-600">VKN: {receiptSettings.taxNo}</p>
+                  <p className="text-[10px] text-zinc-600">VKN: {receiptSettings.taxNo}</p>
                 )}
-                <p className="text-[10px] text-slate-600">---------------------------------</p>
+                <p className="text-[10px] text-zinc-600">---------------------------------</p>
                 <p className="text-[10px] font-bold">ADİSYON DETAYI</p>
-                <p className="text-[10px] text-slate-600">---------------------------------</p>
+                <p className="text-[10px] text-zinc-600">---------------------------------</p>
               </div>
 
               <div className="space-y-1">
@@ -849,7 +849,7 @@ export default function CheckoutModal({
               </div>
 
               <div>
-                <p className="text-slate-600">---------------------------------</p>
+                <p className="text-zinc-600">---------------------------------</p>
                 <div className="space-y-1">
                   {order.items
                     .filter(item => item.status !== 'CANCELLED')
@@ -869,7 +869,7 @@ export default function CheckoutModal({
                       );
                     })}
                 </div>
-                <p className="text-slate-600">---------------------------------</p>
+                <p className="text-zinc-600">---------------------------------</p>
               </div>
 
               <div className="space-y-1 text-right">
@@ -878,16 +878,16 @@ export default function CheckoutModal({
                   <span>{subtotal.toFixed(2)} TL</span>
                 </div>
                 {order.discountAmount > 0 && (
-                  <div className="flex justify-between text-slate-700">
+                  <div className="flex justify-between text-zinc-700">
                     <span>Uygulanan İndirim:</span>
                     <span>-{order.discountAmount.toFixed(2)} TL</span>
                   </div>
                 )}
-                <div className="flex justify-between text-slate-700">
+                <div className="flex justify-between text-zinc-700">
                   <span>Ödenen Tutar:</span>
                   <span>{order.paidAmount.toFixed(2)} TL</span>
                 </div>
-                <div className="flex justify-between font-bold text-sm border-t border-dashed border-slate-400 pt-1">
+                <div className="flex justify-between font-bold text-sm border-t border-dashed border-zinc-400 pt-1">
                   <span>Kalan Borç:</span>
                   <span>{remaining.toFixed(2)} TL</span>
                 </div>
@@ -895,15 +895,15 @@ export default function CheckoutModal({
 
               {receiptSettings?.showOrderNote && order.note && (
                 <div className="text-left">
-                  <p className="text-slate-600">---------------------------------</p>
-                  <p className="text-[10px] text-slate-700">Not: {order.note}</p>
+                  <p className="text-zinc-600">---------------------------------</p>
+                  <p className="text-[10px] text-zinc-700">Not: {order.note}</p>
                 </div>
               )}
 
               <div className="text-center pt-4">
-                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine1 || 'BİZİ TERCİH ETTİĞİNİZ İÇİN'}</p>
-                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine2 || 'TEŞEKKÜR EDERİZ.'}</p>
-                <p className="text-[10px] text-slate-500">{receiptSettings?.footerLine3 || 'GUSTOPOS RESTORAN YAZILIMI'}</p>
+                <p className="text-[10px] text-zinc-500">{receiptSettings?.footerLine1 || 'BİZİ TERCİH ETTİĞİNİZ İÇİN'}</p>
+                <p className="text-[10px] text-zinc-500">{receiptSettings?.footerLine2 || 'TEŞEKKÜR EDERİZ.'}</p>
+                <p className="text-[10px] text-zinc-500">{receiptSettings?.footerLine3 || 'GUSTOPOS RESTORAN YAZILIMI'}</p>
               </div>
             </div>
 
@@ -968,7 +968,7 @@ export default function CheckoutModal({
                 }
               }}
               disabled={isPrinting}
-              className="mt-4 w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white py-2 rounded font-bold transition flex items-center justify-center space-x-1.5"
+              className="mt-4 w-full bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 text-white py-2 rounded font-bold transition flex items-center justify-center space-x-1.5"
             >
               <Printer className="w-4 h-4" />
               <span>{isPrinting ? 'Yazdırılıyor...' : 'Yazıcıya Gönder'}</span>
@@ -979,26 +979,26 @@ export default function CheckoutModal({
 
       {/* WAITER PAYMENT AUTH MODAL */}
       {paymentAuthModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="glass-panel w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-in text-xs">
             <h3 className="font-heading font-bold text-base text-white mb-2 flex items-center space-x-2">
-              <Lock className="w-5 h-5 text-indigo-400" />
+              <Lock className="w-5 h-5 text-amber-400" />
               <span>Ödeme Yetki Onayı</span>
             </h3>
-            <p className="text-[11px] text-slate-400 mb-4 font-sans">
+            <p className="text-[11px] text-zinc-400 mb-4 font-sans">
               Garsonların ödeme alması kısıtlanmıştır. Lütfen ödemeyi tamamlamak için bir <strong>Kasiyer, Müdür veya Yönetici PIN</strong> kodu girin.
             </p>
 
             <div className="space-y-4 font-sans">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Yetkili PIN Kodu</label>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Yetkili PIN Kodu</label>
                 <input
                   type="password"
                   maxLength={4}
                   value={paymentAuthPin}
                   onChange={(e) => setPaymentAuthPin(e.target.value)}
                   placeholder="••••"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-center text-lg font-bold tracking-widest text-slate-100 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 px-3 text-center text-lg font-bold tracking-widest text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
@@ -1015,14 +1015,14 @@ export default function CheckoutModal({
                     setPaymentAuthPin('');
                     setPaymentAuthError('');
                   }}
-                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
+                  className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs py-2.5 rounded-xl font-medium transition cursor-pointer"
                 >
                   İptal
                 </button>
                 <button
                   onClick={handlePaymentAuthSubmit}
                   disabled={paymentAuthPin.length < 4}
-                  className="flex-1 gradient-primary hover:bg-indigo-500 disabled:opacity-50 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
+                  className="flex-1 gradient-primary hover:bg-amber-500 disabled:opacity-50 text-white text-xs py-2.5 rounded-xl font-semibold transition cursor-pointer"
                 >
                   Onayla
                 </button>

@@ -90,8 +90,8 @@ export default function POSApplication() {
         <>
           {isLoading && tables.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center space-y-3">
-              <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-slate-400">Kat planı yükleniyor...</p>
+              <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-sm text-zinc-400">Kat planı yükleniyor...</p>
             </div>
           ) : (
             <FloorPlan
