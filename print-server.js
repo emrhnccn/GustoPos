@@ -122,9 +122,11 @@ try {
     exit 1
   }
   
+  $printJob.DefaultPageSettings.Margins = [System.Drawing.Printing.Margins]::new(0, 0, 0, 0)
+  
   $printJob.add_PrintPage({
     param($sender, $e)
-    $font = [System.Drawing.Font]::new('Consolas', 10)
+    $font = [System.Drawing.Font]::new('Consolas', 9)
     $brush = [System.Drawing.Brushes]::Black
     $rect = [System.Drawing.RectangleF]::new(0, 0, $e.PageBounds.Width, $e.PageBounds.Height)
     $format = [System.Drawing.StringFormat]::new()
