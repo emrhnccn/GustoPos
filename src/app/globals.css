@@ -3,25 +3,25 @@
 /* Body temel stili */
 body {
   overflow-x: hidden;
-  background-color: #000000;
+  background-color: #0c0a09; /* Very dark warm charcoal instead of pure black */
 }
 
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, sans-serif;
   --font-heading: var(--font-outfit), sans-serif;
 
-  --color-brand-bg: #000000;
-  --color-brand-card: #0a0a0a;
-  --color-brand-card-light: #141414;
-  --color-brand-border: #262626;
-  --color-brand-border-focus: #404040;
+  --color-brand-bg: #0c0a09;
+  --color-brand-card: #171412; /* Slightly lighter card bg for less darkness */
+  --color-brand-card-light: #292524;
+  --color-brand-border: #44403c;
+  --color-brand-border-focus: #78716c;
   
   --color-brand-primary: #f59e0b; /* Amber 500 */
   --color-brand-primary-hover: #d97706; /* Amber 600 */
   --color-brand-secondary: #ea580c; /* Orange 600 */
   
-  --color-status-empty-border: #27272a; /* zinc-800 */
-  --color-status-empty-bg: #09090b; /* zinc-950 */
+  --color-status-empty-border: #44403c; /* zinc-800 equivalent */
+  --color-status-empty-bg: #1c1917; /* zinc-950 equivalent */
   --color-status-occupied-border: #ea580c; /* orange-600 */
   --color-status-occupied-bg: #431407; /* orange-950 */
   --color-status-bill-border: #f59e0b; /* amber-500 */
@@ -30,60 +30,60 @@ body {
 
 /* Premium Glassmorphism & Custom Effects */
 .glass-card {
-  background: rgba(10, 10, 10, 0.7);
+  background: rgba(20, 18, 16, 0.7);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(245, 158, 11, 0.15); /* Subtle gold border */
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.25); /* More visible gold border */
+  box-shadow: 0 8px 32px 0 rgba(245, 158, 11, 0.05), inset 0 0 20px rgba(245, 158, 11, 0.02); /* Slight inner gold glow */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(245, 158, 11, 0.4); /* Gold hover border */
-  box-shadow: 0 8px 32px 0 rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.6); /* Gold hover border stronger */
+  box-shadow: 0 0 30px 2px rgba(245, 158, 11, 0.15), inset 0 0 20px rgba(245, 158, 11, 0.05); /* Outer gold glow on hover */
 }
 
 .glass-panel {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(12, 10, 9, 0.9);
   backdrop-filter: blur(24px);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 50px 0 rgba(245, 158, 11, 0.1);
 }
 
 /* Masa Durum Renkleri ve Neon Işıma (Glow) Efektleri */
 .table-empty {
-  background: linear-gradient(135deg, #09090b 0%, #000000 100%);
+  background: linear-gradient(135deg, #1c1917 0%, #0c0a09 100%);
   border: 1px solid var(--color-status-empty-border);
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.8);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .table-empty:hover {
-  border-color: #52525b;
-  box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.05);
+  border-color: #a8a29e;
+  box-shadow: 0 0 25px 2px rgba(168, 162, 158, 0.15); /* Light gold/stone glow */
   transform: translateY(-3px) scale(1.02);
 }
 
 .table-occupied {
   background: linear-gradient(135deg, #431407 0%, #7c2d12 100%);
   border: 1px solid var(--color-status-occupied-border);
-  box-shadow: 0 0 15px -3px rgba(234, 88, 12, 0.25);
+  box-shadow: 0 0 20px 2px rgba(234, 88, 12, 0.4); /* Stronger orange glow */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .table-occupied:hover {
   border-color: #f97316;
-  box-shadow: 0 0 25px 2px rgba(234, 88, 12, 0.5);
+  box-shadow: 0 0 35px 5px rgba(234, 88, 12, 0.6); /* Very strong orange glow on hover */
   transform: translateY(-3px) scale(1.02);
 }
 
 .table-bill-requested {
   background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
   border: 1px solid var(--color-status-bill-border);
-  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.3);
-  animation: pulse-glow 1.8s infinite alternate;
+  box-shadow: 0 0 20px 2px rgba(245, 158, 11, 0.4);
+  animation: pulse-glow 1.5s infinite alternate;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .table-bill-requested:hover {
   border-color: #fbbf24;
-  box-shadow: 0 0 25px 3px rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 35px 5px rgba(245, 158, 11, 0.7);
   transform: translateY(-3px) scale(1.02);
 }
 

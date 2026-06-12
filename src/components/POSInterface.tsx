@@ -233,7 +233,7 @@ export default function POSInterface({
   const handleUpdateNewItemQty = (index: number, increment: boolean) => {
     setNewItems((prev) => {
       const item = prev[index];
-      const newQty = increment ? item.quantity + 1 : item.quantity - 1;
+      const newQty = increment ? item.quantity + 0.5 : item.quantity - 0.5;
       if (newQty <= 0) {
         return prev.filter((_, i) => i !== index);
       }

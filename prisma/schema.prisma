@@ -121,7 +121,7 @@ model OrderItem {
   product            Product  @relation(fields: [productId], references: [id])
   productName        String
   unitPrice          Float
-  quantity           Int
+  quantity           Float
   note               String?  // Mutfak sipariş notu
   status             String   @default("ACTIVE") // "ACTIVE", "COMPLIMENTARY" (İkram), "CANCELLED" (İptal), "PAID" (Ödenmiş ürün koruması)
   cancelReason       String?
